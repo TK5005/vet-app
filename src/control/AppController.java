@@ -1,4 +1,7 @@
 package src.control;
+import javax.swing.table.TableModel;
+import javax.swing.event.TableModelListener;
+
 import src.model.DataModel;
 
 /**

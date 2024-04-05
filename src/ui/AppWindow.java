@@ -9,6 +9,7 @@ import src.control.AppController;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 
 /**
  * The AppWindow class represents the main window of the application.
@@ -49,10 +50,13 @@ public class AppWindow extends JFrame
         this.add(uiPanel);
 
         this.setIconImage(appLogoIcon.getImage());
+        
+        // Set minimum size and starting size of window to 1920 x 1080
+        this.setMinimumSize(new Dimension(1920, 1080));
+        this.setPreferredSize(new Dimension(1920, 1080));
 
         // Display the window
         this.pack();
-        this.setSize(800, 600);
         this.setVisible(true);
     }
 }

@@ -1,4 +1,6 @@
 package src;
+import java.awt.Dimension;
+
 import src.control.AppController;
 import src.model.DataModel;
 import src.ui.AppWindow;
