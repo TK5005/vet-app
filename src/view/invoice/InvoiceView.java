@@ -1,4 +1,4 @@
-package view;
+package view.invoice;
 
 import java.awt.CardLayout;
 

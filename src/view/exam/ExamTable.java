@@ -1,4 +1,4 @@
-package view;
+package view.exam;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JTable;

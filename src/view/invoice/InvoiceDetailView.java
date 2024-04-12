@@ -1,4 +1,4 @@
-package view;
+package view.invoice;
 
 import javax.swing.JPanel;
 import control.InvoiceController;

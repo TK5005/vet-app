@@ -1,4 +1,4 @@
-package view;
+package view.pet;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -9,7 +9,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import java.awt.Color;
-import model.Vaccination;
 
 public class PetVaccinationsTable extends JPanel implements IClientView
 {

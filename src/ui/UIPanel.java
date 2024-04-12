@@ -9,8 +9,8 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import control.AppController;
-import view.ClientPageView;
-import view.InvoiceView;
+import view.clientPatient.ClientPageView;
+import view.invoice.InvoiceView;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;

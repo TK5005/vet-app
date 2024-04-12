@@ -4,7 +4,7 @@ import model.DataModel;
 import model.Exam;
 import model.Invoice;
 import model.Pet;
-import view.InvoiceView;
+import view.invoice.InvoiceView;
 import model.Client;
 
 import java.time.LocalDateTime;
@@ -72,13 +72,14 @@ public class InvoiceController
         refreshViews();
     }
 
-    public Invoice[] getInvoices() {
-        return dataModel.getInvoices();
-    }
-
     public void addInvoice() {
         Invoice invoice = new Invoice();
         dataModel.addInvoice(invoice);
+        refreshViews();
+    }
+
+    public void removeInvoice(int invoiceID) {
+        dataModel.deleteInvoice(invoiceID);
         refreshViews();
     }
 
@@ -103,44 +104,6 @@ public class InvoiceController
         refreshViews();
     }
 
-    public void deleteInvoice(Invoice invoice) {
-        dataModel.deleteInvoice(invoice.getInvoiceNo());
-        refreshViews();
-    }
-
-    public Invoice getInvoice(int invoiceID) {
-        return dataModel.getInvoice(invoiceID);
-    }
-
-    public Client getClientByID(int clientID) {
-        return dataModel.getClient(clientID);
-    }
-
-    public Pet getPatientByID(int petID) {
-        return dataModel.getPet(petID);
-    }
-
-    public Pet getPatientByExamID(int examID) {
-        Exam exam = dataModel.getExam(examID);
-        return dataModel.getPet(exam.getPetID());
-    }
-
-    public Client[] getClients() {
-        return dataModel.getClients();
-    }
-
-    public Pet[] getPatientsByClientID(int clientID) {
-        return dataModel.getPets(clientID);
-    }
-
-    public Exam[] getExams() {
-        return dataModel.getExams();
-    }
-
-    public Exam getExam(int examID) {
-        return dataModel.getExam(examID);
-    }
-
     public int[] getExamIDs() {
         Exam[] exams = dataModel.getExams();
         int[] examIDs = new int[exams.length];
@@ -152,16 +115,33 @@ public class InvoiceController
 
     public int getCurrentInvoiceExamID() {
         Invoice invoice = dataModel.getInvoice(currentInvoiceID);
+        if(invoice == null)
+        {
+            return 0;
+        }
         return invoice.getExamID();
     }
 
     public String getCurrentInvoiceDateString() {
         Invoice invoice = dataModel.getInvoice(currentInvoiceID);
-        return invoice.getInvoiceDate().toString();
+        if(invoice == null)
+        {
+            return "";
+        }
+        LocalDateTime date = invoice.getInvoiceDate();
+        if(date != null)
+        {
+            return date.toString();
+        }
+        return "";
     }
 
     public String getCurrentInvoiceOwnerName() {
         Invoice invoice = dataModel.getInvoice(currentInvoiceID);
+        if(invoice == null)
+        {
+            return "";
+        }
         Pet pet = dataModel.getPet(dataModel.getExam(invoice.getExamID()).getPetID());
         Client client = dataModel.getClient(pet.getOwnerID());
         return client.getName();
@@ -169,12 +149,20 @@ public class InvoiceController
 
     public String getCurrentInvoicePetName() {
         Invoice invoice = dataModel.getInvoice(currentInvoiceID);
+        if(invoice == null)
+        {
+            return "";
+        }
         Pet pet = dataModel.getPet(dataModel.getExam(invoice.getExamID()).getPetID());
         return pet.getName();
     }
 
     public String getCurrentInvoiceStatus() {
         Invoice invoice = dataModel.getInvoice(currentInvoiceID);
+        if(invoice == null)
+        {
+            return "";
+        }
         return invoice.getStatusString();
     }
 
@@ -197,6 +185,10 @@ public class InvoiceController
 
     public String getCurrentInvoiceAmtDue() {
         Invoice invoice = dataModel.getInvoice(currentInvoiceID);
+        if(invoice == null)
+        {
+            return "";
+        }
         return Double.toString(invoice.getAmtDue());
     }
 

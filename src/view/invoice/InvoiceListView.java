@@ -1,4 +1,4 @@
-package view;
+package view.invoice;
 
 import java.awt.BorderLayout;
 
@@ -113,11 +113,14 @@ public class InvoiceListView extends JPanel implements IInvoiceView
     // Custom renderer
     class ButtonRenderer extends JPanel implements TableCellRenderer {
         private JButton viewButton;
+        private JButton removeButton;
     
         public ButtonRenderer() {
             setLayout(new FlowLayout(FlowLayout.CENTER));
-            viewButton = new JButton("View Details");
+            viewButton = new JButton("View");
+            removeButton = new JButton("Remove");
             add(viewButton);
+            add(removeButton);
         }
     
         @Override
@@ -140,14 +143,22 @@ public class InvoiceListView extends JPanel implements IInvoiceView
     
             panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
     
-            viewButton = new JButton("View Details");
+            viewButton = new JButton("View");
+            JButton removeButton = new JButton("Remove");
     
             panel.add(viewButton);
+            panel.add(removeButton);
 
             // Add action listener for the View button
             viewButton.addActionListener(e -> {
                 int invoiceID = (int)tableModel.getValueAt(currentRow, 0);
                 controller.showInvoiceDetail(invoiceID);
+            });
+
+            // Add action listener for the Remove button
+            removeButton.addActionListener(e -> {
+                int invoiceID = (int)tableModel.getValueAt(currentRow, 0);
+                controller.removeInvoice(invoiceID);
             });
         }
     

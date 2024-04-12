@@ -7,11 +7,11 @@ import model.DataModel;
 import model.Exam;
 import model.Pet;
 import model.Vet;
+import view.clientPatient.ClientPageView;
 import model.Tech;
 import model.Treatment;
 import model.Appointment;
 import model.Invoice;
-import view.ClientPageView;
 
 public class ClientController
 {
