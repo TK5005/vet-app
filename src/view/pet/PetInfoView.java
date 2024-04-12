@@ -1,4 +1,4 @@
-package view;
+package view.pet;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -13,6 +13,7 @@ import control.ClientController;
 import control.IClientView;
 import model.Client;
 import model.Pet;
+import view.exam.ExamTable;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

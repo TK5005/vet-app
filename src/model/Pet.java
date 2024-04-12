@@ -112,4 +112,9 @@ public class Pet
     public void setOwnerID(int ownerID) {
         this.ownerID = ownerID;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

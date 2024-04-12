@@ -1,4 +1,4 @@
-package view;
+package view.clientPatient;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;

@@ -1,8 +1,10 @@
-package view;
+package view.clientPatient;
 import javax.swing.*;
 
 import control.ClientController;
 import control.IClientView;
+import view.exam.ExamRecordView;
+import view.pet.PetInfoView;
 
 import java.awt.*;
 

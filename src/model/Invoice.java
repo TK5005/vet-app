@@ -4,11 +4,18 @@ import java.time.LocalDateTime;
 
 public class Invoice
 {
+    public static enum Status
+    {
+        PAID,
+        UNPAID,
+        OVERDUE
+    }
+
     private int invoiceNo;
     private int examID;
     private int clientID;
-    private double amtDue;
-    private String status;
+    private double amtDue = 0.0;
+    private Status status;
     private LocalDateTime invoiceDate;
 
     public int getInvoiceNo() {
@@ -43,15 +50,53 @@ public class Invoice
         this.amtDue = amtDue;
     }
 
-    public String getStatus() {
-        return status;
+    public Status getStatus() {
+        return this.status;
     }
 
-    public void setStatus(String status) {
+    public String getStatusString() {
+        if(this.status != null)
+        {
+            switch (this.status) {
+                case PAID:
+                    return "PAID";
+                case UNPAID:
+                    return "UNPAID";
+                case OVERDUE:
+                    return "OVERDUE";
+                default:
+                    return "";
+            }
+        } else {
+            return "";
+        }
+    }
+
+    public String getFormattedAmtDue() {
+        return String.format("$%.2f", amtDue);
+    }
+
+    public void setStatus(Status status) {
         this.status = status;
     }
 
+    public static String[] getStatusOptions()
+    {
+        String[] options = new String[Status.values().length];
+        int i = 0;
+        for(Status status : Status.values())
+        {
+            options[i] = status.toString();
+            i++;
+        }
+        return options;
+    }
+
     public LocalDateTime getInvoiceDate() {
+        if(invoiceDate == null)
+        {
+            return LocalDateTime.now();
+        }
         return invoiceDate;
     }
 

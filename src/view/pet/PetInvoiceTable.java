@@ -1,4 +1,4 @@
-package view;
+package view.pet;
 
 import java.awt.BorderLayout;
 
