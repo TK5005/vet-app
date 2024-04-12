@@ -1,14 +1,637 @@
-package src.model;
+package model;
 
-/**
- * DataModel is the model class for the application. It is responsible for
- * retrieving data from the database and returning it to the controller.
- */
+import java.util.ArrayList;
+import java.time.LocalDateTime;
+
 public class DataModel
 {
-    public String loadTestData()
+    private static DataModel instance;
+    private ArrayList<Client> clients;
+    private ArrayList<Pet> pets;
+    private ArrayList<Exam> exams;
+    private ArrayList<Vet> vets;
+    private ArrayList<Tech> techs;
+    private ArrayList<Treatment> treatments;
+    private ArrayList<Invoice> invoices;
+    private ArrayList<Vaccination> vaccinations;
+    private ArrayList<Appointment> appointments;
+
+    /**
+     * Constructor for the data model
+     */
+    private DataModel()
+    {
+        clients = new ArrayList<Client>();
+        pets = new ArrayList<Pet>();
+        exams = new ArrayList<Exam>();
+        vets = new ArrayList<Vet>();
+        techs = new ArrayList<Tech>();
+        treatments = new ArrayList<Treatment>();
+        invoices = new ArrayList<Invoice>();
+        vaccinations = new ArrayList<Vaccination>();
+        appointments = new ArrayList<Appointment>();
+        loadClients();
+        loadPets();
+        loadVets();
+        loadTechs();
+        loadExams();
+        loadTreatments();
+        loadAppointments();
+        loadVaccinations();
+        loadInvoices();
+    }
+
+    /**
+     * Get the instance of the data model
+     * @return The instance of the data model
+     */
+    public static DataModel getInstance()
+    {
+        if (instance == null) {
+            synchronized (DataModel.class) {
+                if (instance == null) {
+                    instance = new DataModel();
+                }
+            }
+        }
+        return instance;
+    }
+
+
+    // Client methods
+
+    /**
+     * Get all clients
+     * @return An array of clients
+     */
+    public Client[] getClients()
+    {
+        return clients.toArray(new Client[clients.size()]);
+    }
+
+    /**
+     * Add a new client
+     * @param client The client to add
+     */
+    public void addClient(Client client)
+    {
+        // Upate clientID so that it is unique
+        if(clients.size() > 0)
+        {
+            client.setClientID(clients.get(clients.size() - 1).getClientID() + 1);
+        }
+        else
+        {
+            client.setClientID(0);
+        }
+
+        // Add client to the list
+        clients.add(client);
+    }
+
+    /**
+     * Update a client
+     * @param clientID The client ID
+     * @param client The client to update
+     */
+    public void updateClient(int clientID, Client client)
+    {
+        // Update client based on clientID
+        for(int i = 0; i < clients.size(); i++)
+        {
+            if(clients.get(i).getClientID() == clientID)
+            {
+                clients.set(i, client);
+                break;
+            }
+        }
+    }
+
+    /**
+     * Delete a client
+     * @param clientID The client ID
+     */
+    public void deleteClient(int clientID)
+    {
+        // Delete client based on clientID
+        for(int i = 0; i < clients.size(); i++)
+        {
+            if(clients.get(i).getClientID() == clientID)
+            {
+                clients.remove(i);
+                break;
+            }
+        }
+    }
+
+    /**
+     * Get a client
+     * @param clientID The client ID
+     * @return The client object
+     */
+    public Client getClient(int clientID)
+    {
+        // Get client based on clientID
+        for(int i = 0; i < clients.size(); i++)
+        {
+            if(clients.get(i).getClientID() == clientID)
+            {
+                return clients.get(i);
+            }
+        }
+        return null;
+    }
+
+
+    // Pet methods
+
+    /**
+     * Add a new pet
+     * @param pet The pet to add
+     * @param clientID The client ID
+     */
+    public void addPet(Pet pet, int clientID)
+    {
+        // Upate patientID so that it is unique
+        if(pets.size() > 0)
+        {
+            pet.setPetID(pets.get(pets.size() - 1).getPetID() + 1);
+        }
+        else
+        {
+            pet.setPetID(0);
+        }
+
+        // Assign the client as the owner of the pet
+        pet.setOwnerID(clientID);
+
+        // Add pet to the list
+        pets.add(pet);
+    }
+
+    /**
+     * Get all pets for a client
+     * @param clientID The client ID
+     * @return An array of pets
+     */
+    public Pet[] getPets(int clientID)
+    {
+        ArrayList<Pet> clientPets = new ArrayList<Pet>();
+        for(int i = 0; i < pets.size(); i++)
+        {
+            if(pets.get(i).getOwnerID() == clientID)
+            {
+                clientPets.add(pets.get(i));
+            }
+        }
+        return clientPets.toArray(new Pet[clientPets.size()]);
+    }
+
+    /**
+     * Update a pet
+     * @param patientID The patient ID
+     * @param pet The new pet object
+     */
+    public void updatePet(int patientID, Pet pet)
+    {
+        // Update pet based on patientID
+        for(int i = 0; i < pets.size(); i++)
+        {
+            if(pets.get(i).getPetID() == patientID)
+            {
+                pets.set(i, pet);
+                break;
+            }
+        }
+    }
+
+    /**
+     * Delete a pet
+     * @param patientID The patient ID
+     */
+    public void deletePet(int patientID)
+    {
+        // Delete pet based on patientID
+        for(int i = 0; i < pets.size(); i++)
+        {
+            if(pets.get(i).getPetID() == patientID)
+            {
+                pets.remove(i);
+                break;
+            }
+        }
+    }
+
+    /**
+     * Get a pet
+     * @param patientID The patient ID
+     * @return The pet object
+     */
+    public Pet getPet(int patientID)
+    {
+        // Get pet based on patientID
+        for(int i = 0; i < pets.size(); i++)
+        {
+            if(pets.get(i).getPetID() == patientID)
+            {
+                return pets.get(i);
+            }
+        }
+        return null;
+    }
+
+
+    // Exam methods
+
+    /**
+     * Get all exams for a pet
+     * @param patientID The patient ID
+     * @return An array of exams
+     */
+    public Exam[] getExams(int patientID)
+    {
+        // Get exams based on patientID
+        ArrayList<Exam> patientExams = new ArrayList<Exam>();
+        for(int i = 0; i < exams.size(); i++)
+        {
+            if(exams.get(i).getPetID() == patientID)
+            {
+                patientExams.add(exams.get(i));
+            }
+        }
+        return patientExams.toArray(new Exam[patientExams.size()]);
+    }
+
+    /**
+     * Add a new exam
+     * @param exam The exam to add
+     * @param patientID The patient ID
+     */
+    public void addExam(Exam exam, int patientID)
+    {
+        // Upate examID so that it is unique
+        if(exams.size() > 0)
+        {
+            exam.setExamID(exams.get(exams.size() - 1).getExamID() + 1);
+        }
+        else
+        {
+            exam.setExamID(0);
+        }
+
+        // Assign the patient as the owner of the exam
+        exam.setPetID(patientID);
+
+        // Add exam to the list
+        exams.add(exam);
+    }
+
+    /**
+     * Update an exam
+     * @param examID The exam ID
+     * @param exam The new exam object
+     */
+    public void updateExam(int examID, Exam exam)
+    {
+        // Update exam based on examID
+        for(int i = 0; i < exams.size(); i++)
+        {
+            if(exams.get(i).getExamID() == examID)
+            {
+                exams.set(i, exam);
+                break;
+            }
+        }
+    }
+
+    /**
+     * Delete an exam
+     * @param examID The exam ID
+     */
+    public void deleteExam(int examID)
+    {
+        // Delete exam based on examID
+        for(int i = 0; i < exams.size(); i++)
+        {
+            if(exams.get(i).getExamID() == examID)
+            {
+                exams.remove(i);
+                break;
+            }
+        }
+    }
+
+    /**
+     * Get an Exam
+     * @param examID The exam ID
+     * @return The exam object
+     */
+    public Exam getExam(int examID)
+    {
+        // Get exam based on examID
+        for(int i = 0; i < exams.size(); i++)
+        {
+            if(exams.get(i).getExamID() == examID)
+            {
+                return exams.get(i);
+            }
+        }
+        return null;
+    }
+
+    // Vet and Tech methods
+
+    /**
+     * Get Vet
+     * @param vetID The vet ID
+     * @return The vet object
+     */
+    public Vet getVet(int vetID)
+    {
+        // Get vet based on vetID
+        for(int i = 0; i < vets.size(); i++)
+        {
+            if(vets.get(i).getEmpID() == vetID)
+            {
+                return vets.get(i);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get Tech
+     * @param techID The tech ID
+     * @return The tech object
+     */
+    public Tech getTech(int techID)
+    {
+        // Get tech based on techID
+        for(int i = 0; i < techs.size(); i++)
+        {
+            if(techs.get(i).getEmpID() == techID)
+            {
+                return techs.get(i);
+            }
+        }
+        return null;
+    }
+
+    public Treatment getTreatmentFromExamID(int examID)
+    {
+        // Get treatment based on examID
+        for(int i = 0; i < treatments.size(); i++)
+        {
+            if(treatments.get(i).getExamID() == examID)
+            {
+                return treatments.get(i);
+            }
+        }
+        return null;
+    }
+
+    public void updateTreatment(int treatmentID, Treatment treatment)
+    {
+        // Update treatment based on treatmentID
+        for(int i = 0; i < treatments.size(); i++)
+        {
+            if(treatments.get(i).getTreatmentID() == treatmentID)
+            {
+                treatments.set(i, treatment);
+                break;
+            }
+        }
+    }
+
+    public Vet[] getVets()
+    {
+        return vets.toArray(new Vet[vets.size()]);
+    }
+
+    public Tech[] getTechs()
+    {
+        return techs.toArray(new Tech[techs.size()]);
+    }
+
+    public Appointment[] getAppointments(int petID)
+    {
+        ArrayList<Appointment> petAppointments = new ArrayList<Appointment>();
+        for(int i = 0; i < appointments.size(); i++)
+        {
+            if(appointments.get(i).getPetID() == petID)
+            {
+                petAppointments.add(appointments.get(i));
+            }
+        }
+        return petAppointments.toArray(new Appointment[petAppointments.size()]);
+    }
+
+    public Invoice[] getInvoices(int petID)
+    {
+        ArrayList<Invoice> petInvoices = new ArrayList<Invoice>();
+        for(int i = 0; i < invoices.size(); i++)
+        {
+            if(invoices.get(i).getExamID() == petID)
+            {
+                petInvoices.add(invoices.get(i));
+            }
+        }
+        return petInvoices.toArray(new Invoice[petInvoices.size()]);
+    }
+
+    // Temp Data methods
+
+    /**
+     * Load clients into the data model
+     */
+    private void loadClients()
+    {
+        // Generate 5 random clients
+        for(int i = 0; i < 5; i++)
+        {
+            Client client = new Client();
+            client.setClientID(i);
+            client.setFirstName("Client" + i);
+            client.setLastName("Last" + i);
+            client.setEmail("client" + i + "@gmail.com");
+            client.setPhone("410-392-394" + i);
+            client.setStreet("1234 Main St");
+            client.setCity("Baltimore");
+            client.setState("MD");
+            client.setZip("2123" + i);
+            clients.add(client);
+        }
+    }
+
+    /**
+     * Load pets into the data model
+     */
+    private void loadPets()
+    {
+        // Generate 10 random pets and assign one of the clients to each pet as the owner
+        for(int i = 0; i < 10; i++)
+        {
+            Pet pet = new Pet();
+            pet.setPetID(i);
+            pet.setName("Pet" + i);
+            pet.setSpecies("Dog");
+            pet.setBreed("Labrador");
+            pet.setAge(5);
+            pet.setOwnerID(i % 5);
+            pet.setBirthdate(LocalDateTime.of(2015, 1, 1, 0, 0));
+            pets.add(pet);
+        }
+    }
+
+    /**
+     * Load exams into the data model
+     */
+    private void loadExams()
+    {
+        // Generate 10 exams and assign one to each pet via patientID also assign a vet and tech to each exam
+        for(int i = 0; i < 10; i++)
+        {
+            Exam exam = new Exam();
+            exam.setExamID(i);
+            exam.setPetID(i % 10);
+            exam.setDateTime(LocalDateTime.of(2021, 1, 1, 0, 0));
+            exam.setVetID(i % 5);
+            exam.setTechID(i % 5);
+            exam.setDescription("Exam Description");
+            exam.setWeight(50);
+            exam.setLocation("Exam Room");
+            exam.setVitals("Vitals");
+            exams.add(exam);
+        }
+    }
+
+    /**
+     * Load vets into the data model
+     */
+    private void loadVets()
+    {
+        // Generate 5 random vets
+        for(int i = 0; i < 5; i++)
+        {
+            Vet vet = new Vet();
+            vet.setEmpID(i);
+            vet.setFirstName("Vet" + i);
+            vet.setLastName("Last" + i);
+            vet.setPhone("410-392-394" + i);
+            vet.setStreet("1234 Main St");
+            vet.setCity("Baltimore");
+            vet.setState("MD");
+            vet.setZip("2123" + i);
+            vets.add(vet);
+        }
+    }
+
+    /**
+     * Load techs into the data model
+     */
+    private void loadTechs()
+    {
+        // Generate 5 random techs
+        for(int i = 0; i < 5; i++)
+        {
+            Tech tech = new Tech();
+            tech.setEmpID(i);
+            tech.setFirstName("Tech" + i);
+            tech.setLastName("Last" + i);
+            tech.setPhone("410-392-394" + i);
+            tech.setStreet("1234 Main St");
+            tech.setCity("Baltimore");
+            tech.setState("MD");
+            tech.setZip("2123" + i);
+            techs.add(tech);
+        }
+    }
+
+    private void loadTreatments()
+    {
+        // Generate 10 treatments and assign one to each exam via examID
+        for(int i = 0; i < 10; i++)
+        {
+            Treatment treatment = new Treatment();
+            treatment.setTreatmentID(i);
+            treatment.setExamID(i % 10);
+            treatment.setMedication("Medication");
+            treatment.setStartDate(LocalDateTime.of(2021, 1, 1, 0, 0));
+            treatment.setEndDate(LocalDateTime.of(2021, 1, 1, 0, 0));
+            treatment.setDirections("Directions");
+            treatments.add(treatment);
+        }
+    }
+
+    private void loadInvoices()
+    {
+        // Generate 10 invoices and assign one to each exam via examID
+        for(int i = 0; i < 10; i++)
+        {
+            Invoice invoice = new Invoice();
+            invoice.setInvoiceNo(i);
+            invoice.setExamID(i % 10);
+            invoice.setClientID(i % 5);
+            invoice.setAmtDue(100.00);
+            invoice.setStatus("Unpaid");
+            invoice.setInvoiceDate(LocalDateTime.of(2021, 1, 1, 0, 0));
+            invoices.add(invoice);
+        }
+    }
+
+    private void loadVaccinations()
+    {
+        // Generate 10 vaccinations and assign one to each pet via patientID
+        for(int i = 0; i < 10; i++)
+        {
+            Vaccination vaccination = new Vaccination();
+            vaccinations.add(vaccination);
+        }
+    }
+
+    private void loadAppointments()
+    {
+        // Generate 10 appointments and assign one to each client via clientID
+        for(int i = 0; i < 10; i++)
+        {
+            Appointment appointment = new Appointment();
+            appointment.setAppointmentID(i);
+            appointment.setClientID(i % 5);
+            appointment.setPetID(i % 10);
+            appointment.setStaffID(i % 5);
+            appointment.setAppointmentDate(LocalDateTime.of(2021, 1, 1, 0, 0));
+            appointment.setDescription("Appointment Description");
+            appointments.add(appointment);
+        }
+    }
+
+
+    /* Vien's Methods, to integrate */
+
+    public String[][] loadActivePatient()
     {
         System.out.println("Model responding to load test data request");
-        return "This is test data from the model";
+        //String[] columns = {"Patient", "Check In", "Location","Doctor/Tech","Reason for Visit"};
+        String[][] data = {{"Tom", "4/5/2024", "Exam1","test/test","Vaccination"},
+                            {"Mary","5/5/2024","Test","test/test","Trimming"}};
+        return data;
+    }
+    public String[][] loadTempAppointments()
+    {
+        String[][] data = {{"Smith Henry", "Brandy", "443-123-4567","4/28/2024 8:00AM","test"},
+                            {"Mary","Sassy","443-890-1234","5/23/2024 2:30PM","test"}};
+        return data;
+    }
+    public String[][] loadReview()
+    {
+        String[][] data = {{"Smith Henry", "Brandy", "443-123-4567","4/28/2024 8:00AM","test"},
+                            {"Mary","Sassy","443-890-1234","5/23/2024 2:30PM","test"}};
+        return data;
+    }
+    public String[][] loadMedication()
+    {
+        String[][] data = {{"Smith Henry", "Brandy", "443-123-4567","12","Yes"},
+                            {"Mary","Sassy","443-890-1234","5","No"}};
+        return data;
     }
 }
