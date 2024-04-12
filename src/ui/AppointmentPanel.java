@@ -1,7 +1,8 @@
-package src.ui;
+package ui;
+
 import javax.swing.JPanel;
 
-import src.control.AppController;
+import control.AppController;
 
 import javax.swing.JLabel;
 

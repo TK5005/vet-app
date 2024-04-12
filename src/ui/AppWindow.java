@@ -1,11 +1,11 @@
-package src.ui;
+package ui;
 import javax.swing.JFrame;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import src.control.AppController;
+import control.AppController;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -31,10 +31,10 @@ public class AppWindow extends JFrame
         UIPanel uiPanel = new UIPanel(controller);
 
         // Load the app logo image
-        ImageIcon appLogoIcon = new ImageIcon(AppWindow.class.getResource("../../images/appLogo.jpg"));
+        ImageIcon appLogoIcon = new ImageIcon(AppWindow.class.getResource("../images/appLogo.jpg"));
 
         // Load the header image
-        ImageIcon headerImage = new ImageIcon(AppWindow.class.getResource("../../images/fuzzyLogo.png"));
+        ImageIcon headerImage = new ImageIcon(AppWindow.class.getResource("../images/fuzzyLogo.png"));
         JLabel headerLabel = new JLabel(headerImage);
 
         // Create the header panel

@@ -1,11 +1,15 @@
-package src.ui;
+package ui;
+
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
-import src.control.AppController;
+import control.AppController;
+import view.ClientPageView;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -15,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.awt.Component;
 import java.awt.Dimension;
+
 
 /**
  * The main panel of the application that contains the navigation panel and the content panels.
@@ -46,15 +51,40 @@ public class UIPanel extends JPanel
 
         // Navigation buttons
         String[] navButtons = {"Dashboard", "Clients/Patients", "Appointments", "Invoices", "Inventory", "Administration"};
-
+        ImageIcon menu = new ImageIcon(UIPanel.class.getResource("/images/menu.png"));
+        ImageIcon armup = new ImageIcon(UIPanel.class.getResource("/images/armup.png"));
+        ImageIcon appointment = new ImageIcon(UIPanel.class.getResource("/images/appointment.png"));
+        ImageIcon invoice = new ImageIcon(UIPanel.class.getResource("/images/invoice.png"));
+        ImageIcon inventory = new ImageIcon(UIPanel.class.getResource("/images/inventory.png"));
+        ImageIcon admin = new ImageIcon(UIPanel.class.getResource("/images/lock.png"));
         for (String name : navButtons)
         {
-            JButton button = new JButton(name);
-            button.setAlignmentX(Component.LEFT_ALIGNMENT);
-            button.setMaximumSize(new Dimension(Integer.MAX_VALUE, button.getMinimumSize().height));
-            button.addActionListener(this::navButtonPressed);
-            navigationButtons.add(button);
-            navigationPanel.add(button);
+            JButton button = null;
+            if(name=="Dashboard"){
+                button = new JButton(menu);
+                loadImage(name, button, navigationPanel);
+            }
+            if(name=="Clients/Patients"){
+                button = new JButton(armup);
+                loadImage(name, button, navigationPanel);
+            }
+            if(name=="Appointments"){
+                button = new JButton(appointment);
+                loadImage(name, button, navigationPanel);
+            }
+            if(name=="Invoices"){
+                button = new JButton(invoice);
+                loadImage(name, button, navigationPanel);
+            }
+            if(name=="Inventory"){
+                button = new JButton(inventory);
+                loadImage(name, button, navigationPanel);
+            }
+            if(name=="Administration"){
+                button = new JButton(admin);
+                loadImage(name, button, navigationPanel);
+            }
+            
         }
 
         // Create and add application panels
@@ -62,9 +92,9 @@ public class UIPanel extends JPanel
         dashboardPanel.setBackground(Color.WHITE);
         cards.add(dashboardPanel, "Dashboard");
 
-        ClientPatientPanel clientPatientPanel = new ClientPatientPanel(controller);
-        clientPatientPanel.setBackground(Color.WHITE);
-        cards.add(clientPatientPanel, "Clients/Patients");
+        ClientPageView clientsView = new ClientPageView();
+        clientsView.setBackground(Color.WHITE);
+        cards.add(clientsView, "Clients/Patients");
 
         AppointmentPanel appointmentPanel = new AppointmentPanel(controller);
         appointmentPanel.setBackground(Color.WHITE);
@@ -88,6 +118,16 @@ public class UIPanel extends JPanel
         add(cards, BorderLayout.CENTER);
     }
 
+    private void loadImage(String name, JButton button,JPanel navigationPanel){
+        button.setText(name);
+        button.setContentAreaFilled(false);
+        button.setAlignmentX(Component.LEFT_ALIGNMENT);
+        button.setMaximumSize(new Dimension(Integer.MAX_VALUE, button.getMinimumSize().height));
+        button.addActionListener(this::navButtonPressed);
+        navigationButtons.add(button);
+        navigationPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+        navigationPanel.add(button);
+    }
     private void navButtonPressed(ActionEvent e)
     {
         JButton pressedButton = (JButton) e.getSource();

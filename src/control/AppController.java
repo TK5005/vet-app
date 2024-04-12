@@ -1,5 +1,9 @@
-package src.control;
-import src.model.DataModel;
+package control;
+
+import javax.swing.table.TableModel;
+import javax.swing.event.TableModelListener;
+
+import model.DataModel;
 
 /**
  * AppController is the controller class for the application. It is responsible for
@@ -10,16 +14,30 @@ public class AppController
 {
     DataModel model;
 
-    public AppController(DataModel model)
+    public AppController()
     {
-        this.model = model;
+        model = DataModel.getInstance();
     }
 
-    public String loadTestData()
+    public String[][] loadActivePatient()
     {
-        System.out.println("Asking model for test data");
-        String data = model.loadTestData();
+        String[][] data = model.loadActivePatient();
         System.out.println("Received data from model: " + data);
+        return data;
+    }
+    public String[][] loadAppointments()
+    {
+        String[][] data = model.loadTempAppointments();
+        return data;
+    }
+    public String[][] loadReview()
+    {
+        String[][] data = model.loadReview();
+        return data;
+    }
+    public String[][] loadMedication()
+    {
+        String[][] data = model.loadMedication();
         return data;
     }
 }
