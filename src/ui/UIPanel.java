@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 
 import control.AppController;
 import view.ClientPageView;
+import view.InvoiceView;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -101,9 +102,9 @@ public class UIPanel extends JPanel
         appointmentPanel.setBackground(Color.WHITE);
         cards.add(appointmentPanel, "Appointments");
 
-        InvoicePanel invoicePanel = new InvoicePanel(controller);
-        invoicePanel.setBackground(Color.WHITE);
-        cards.add(invoicePanel, "Invoices");
+        InvoiceView invoiceView = new InvoiceView();
+        invoiceView.setBackground(Color.WHITE);
+        cards.add(invoiceView, "Invoices");
 
         InventoryPanel inventoryPanel = new InventoryPanel(controller);
         inventoryPanel.setBackground(Color.WHITE);

@@ -110,16 +110,6 @@ public class Client
     @Override
     public String toString()
     {
-        return "Client{" +
-                "clientID=" + clientID +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", address='" + street + '\'' +
-                ", city='" + city + '\'' +
-                ", state='" + state + '\'' +
-                ", zip='" + zip + '\'' +
-                '}';
+        return getName();
     }
 }

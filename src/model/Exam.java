@@ -100,15 +100,6 @@ public class Exam
 
     @Override
     public String toString() {
-        return "Exam{" +
-                "examID=" + examID +
-                ", petID=" + petID +
-                ", date=" + dateTime +
-                ", vetID=" + vetID +
-                ", techID=" + techID +
-                ", description='" + description + '\'' +
-                ", weight=" + weight +
-                ", location='" + location + '\'' +
-                '}';
+        return Integer.toString(examID);
     }
 }

@@ -403,6 +403,11 @@ public class DataModel
         }
     }
 
+    public Exam[] getExams()
+    {
+        return exams.toArray(new Exam[exams.size()]);
+    }
+
     public Vet[] getVets()
     {
         return vets.toArray(new Vet[vets.size()]);
@@ -437,6 +442,66 @@ public class DataModel
             }
         }
         return petInvoices.toArray(new Invoice[petInvoices.size()]);
+    }
+
+    public Invoice[] getInvoices()
+    {
+        return invoices.toArray(new Invoice[invoices.size()]);
+    }
+
+    public void addInvoice(Invoice invoice)
+    {
+        // Upate invoiceNo so that it is unique
+        if(invoices.size() > 0)
+        {
+            invoice.setInvoiceNo(invoices.get(invoices.size() - 1).getInvoiceNo() + 1);
+        }
+        else
+        {
+            invoice.setInvoiceNo(0);
+        }
+
+        // Add invoice to the list
+        invoices.add(invoice);
+    }
+
+    public Invoice getInvoice(int invoiceID)
+    {
+        // Get invoice based on invoiceID
+        for(int i = 0; i < invoices.size(); i++)
+        {
+            if(invoices.get(i).getInvoiceNo() == invoiceID)
+            {
+                return invoices.get(i);
+            }
+        }
+        return null;
+    }
+
+    public void updateInvoice(int invoiceID, Invoice invoice)
+    {
+        // Update invoice based on invoiceID
+        for(int i = 0; i < invoices.size(); i++)
+        {
+            if(invoices.get(i).getInvoiceNo() == invoiceID)
+            {
+                invoices.set(i, invoice);
+                break;
+            }
+        }
+    }
+
+    public void deleteInvoice(int invoiceID)
+    {
+        // Delete invoice based on invoiceID
+        for(int i = 0; i < invoices.size(); i++)
+        {
+            if(invoices.get(i).getInvoiceNo() == invoiceID)
+            {
+                invoices.remove(i);
+                break;
+            }
+        }
     }
 
     // Temp Data methods
@@ -573,7 +638,7 @@ public class DataModel
             invoice.setExamID(i % 10);
             invoice.setClientID(i % 5);
             invoice.setAmtDue(100.00);
-            invoice.setStatus("Unpaid");
+            invoice.setStatus(Invoice.Status.UNPAID);
             invoice.setInvoiceDate(LocalDateTime.of(2021, 1, 1, 0, 0));
             invoices.add(invoice);
         }
@@ -610,7 +675,6 @@ public class DataModel
 
     public String[][] loadActivePatient()
     {
-        System.out.println("Model responding to load test data request");
         //String[] columns = {"Patient", "Check In", "Location","Doctor/Tech","Reason for Visit"};
         String[][] data = {{"Tom", "4/5/2024", "Exam1","test/test","Vaccination"},
                             {"Mary","5/5/2024","Test","test/test","Trimming"}};

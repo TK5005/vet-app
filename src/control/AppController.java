@@ -1,8 +1,5 @@
 package control;
 
-import javax.swing.table.TableModel;
-import javax.swing.event.TableModelListener;
-
 import model.DataModel;
 
 /**
@@ -22,7 +19,6 @@ public class AppController
     public String[][] loadActivePatient()
     {
         String[][] data = model.loadActivePatient();
-        System.out.println("Received data from model: " + data);
         return data;
     }
     public String[][] loadAppointments()
