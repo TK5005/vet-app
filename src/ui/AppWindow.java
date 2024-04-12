@@ -31,10 +31,10 @@ public class AppWindow extends JFrame
         UIPanel uiPanel = new UIPanel(controller);
 
         // Load the app logo image
-        ImageIcon appLogoIcon = new ImageIcon(AppWindow.class.getResource("../images/appLogo.jpg"));
+        ImageIcon appLogoIcon = new ImageIcon(AppWindow.class.getResource("../appLogo.jpg"));
 
         // Load the header image
-        ImageIcon headerImage = new ImageIcon(AppWindow.class.getResource("../images/fuzzyLogo.png"));
+        ImageIcon headerImage = new ImageIcon(AppWindow.class.getResource("../fuzzyLogo.png"));
         JLabel headerLabel = new JLabel(headerImage);
 
         // Create the header panel
