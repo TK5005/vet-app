@@ -1,7 +1,6 @@
 package model;
 
-public class Client
-{
+public class Client {
     private int clientID;
     private String firstName;
     private String lastName;
@@ -12,104 +11,84 @@ public class Client
     private String state;
     private int zip;
 
-    public String getName()
-    {
+    public String getName() {
         return firstName + " " + lastName;
     }
 
-    public int getClientID()
-    {
+    public int getClientID() {
         return clientID;
     }
 
-    public void setClientID(int clientID)
-    {
+    public void setClientID(int clientID) {
         this.clientID = clientID;
     }
 
-    public String getFirstName()
-    {
+    public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(String firstName)
-    {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
-    public String getLastName()
-    {
+    public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName)
-    {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
-    public String getEmail()
-    {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email)
-    {
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    public String getPhone()
-    {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(String phone)
-    {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    public String getStreet()
-    {
+    public String getStreet() {
         return street;
     }
 
-    public void setStreet(String street)
-    {
+    public void setStreet(String street) {
         this.street = street;
     }
 
-    public String getCity()
-    {
+    public String getCity() {
         return city;
     }
 
-    public void setCity(String city)
-    {
+    public void setCity(String city) {
         this.city = city;
     }
 
-    public String getState()
-    {
+    public String getState() {
         return state;
     }
 
-    public void setState(String state)
-    {
+    public void setState(String state) {
         this.state = state;
     }
 
-    public int getZip()
-    {
+    public int getZip() {
         return zip;
     }
 
-    public void setZip(int zip)
-    {
+    public void setZip(int zip) {
         this.zip = zip;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return getName();
     }
 }

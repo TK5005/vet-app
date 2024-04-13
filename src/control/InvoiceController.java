@@ -10,19 +10,8 @@ import model.Client;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class InvoiceController 
-{
-    private DataModel dataModel;
-    private ArrayList<IInvoiceView> views;
-    private InvoiceView invoiceView;
-    private int currentInvoiceID;
-
+public class InvoiceController {
     private static InvoiceController instance;
-
-    private InvoiceController() {
-        dataModel = DataModel.getInstance();
-        views = new ArrayList<>();
-    }
 
     public static InvoiceController getInstance() {
         if (instance == null) {
@@ -35,13 +24,23 @@ public class InvoiceController
         return instance;
     }
 
-    public void registerView(IInvoiceView view)
-    {
+    private DataModel dataModel;
+    private ArrayList<IInvoiceView> views;
+
+    private InvoiceView invoiceView;
+
+    private int currentInvoiceID;
+
+    private InvoiceController() {
+        dataModel = DataModel.getInstance();
+        views = new ArrayList<>();
+    }
+
+    public void registerView(IInvoiceView view) {
         views.add(view);
     }
 
-    public void refreshViews()
-    {
+    public void refreshViews() {
         for (IInvoiceView view : views) {
             view.refresh();
         }
@@ -75,14 +74,12 @@ public class InvoiceController
         return dataModel.getExam(examID);
     }
 
-    public void showInvoiceList()
-    {
+    public void showInvoiceList() {
         invoiceView.showListView();
         refreshViews();
     }
 
-    public void showInvoiceDetail(int invoiceID)
-    {
+    public void showInvoiceDetail(int invoiceID) {
         currentInvoiceID = invoiceID;
         invoiceView.showDetailView();
         refreshViews();
@@ -99,15 +96,12 @@ public class InvoiceController
         refreshViews();
     }
 
-    public void updateInvoice(int invoiceID, int examID, String status, LocalDate invoiceDate, String amtDue)
-    {
+    public void updateInvoice(int invoiceID, int examID, String status, LocalDate invoiceDate, String amtDue) {
         Invoice invoice = dataModel.getInvoice(invoiceID);
         invoice.setExamID(examID);
         invoice.setClientID(dataModel.getPet(dataModel.getExam(examID).getPetID()).getOwnerID());
-        for(Invoice.Status s : Invoice.Status.values())
-        {
-            if(s.toString().equals(status))
-            {
+        for (Invoice.Status s : Invoice.Status.values()) {
+            if (s.toString().equals(status)) {
                 invoice.setStatus(s);
             }
         }
@@ -128,8 +122,7 @@ public class InvoiceController
         return Invoice.getStatusOptions();
     }
 
-    public Object[][] getInvoiceTableData()
-    {
+    public Object[][] getInvoiceTableData() {
         Invoice[] invoices = dataModel.getInvoices();
         Object[][] tableData = new Object[invoices.length][6];
         for (int i = 0; i < invoices.length; i++) {
@@ -140,12 +133,11 @@ public class InvoiceController
             String invoiceDate = "";
             LocalDate date = invoices[i].getInvoiceDate();
             String amtDue = invoices[i].getFormattedAmtDue();
-            if(date != null)
-            {
+            if (date != null) {
                 invoiceDate = date.toString();
             }
             String status = invoices[i].getStatusString();
-            tableData[i] = new Object[]{invoiceID, clientName, petName, invoiceDate, amtDue, status, ""};
+            tableData[i] = new Object[] { invoiceID, clientName, petName, invoiceDate, amtDue, status, "" };
         }
         return tableData;
     }

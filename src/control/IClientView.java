@@ -1,6 +1,5 @@
 package control;
 
-public interface IClientView
-{
+public interface IClientView {
     void refresh();
 }

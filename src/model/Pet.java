@@ -2,8 +2,7 @@ package model;
 
 import java.time.LocalDate;
 
-public class Pet
-{
+public class Pet {
     private int petID;
     private int ownerID;
     private String name;
@@ -15,7 +14,7 @@ public class Pet
     private int weight;
     private long microchipNumber;
     private long rabiesTag;
-    
+
     public int getPetID() {
         return petID;
     }

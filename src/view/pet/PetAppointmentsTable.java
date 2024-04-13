@@ -1,37 +1,33 @@
 package view.pet;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import java.awt.Color;
 
-import control.IClientView;
 import control.ClientController;
+import control.IClientView;
 
-public class PetAppointmentsTable extends JPanel implements IClientView
-{
+public class PetAppointmentsTable extends JPanel implements IClientView {
     private ClientController clientController;
     private DefaultTableModel tableModel;
 
-    public PetAppointmentsTable()
-    {
+    public PetAppointmentsTable() {
         clientController = ClientController.getInstance();
         clientController.registerView(this);
         createUI();
     }
 
-    public void createUI()
-    {
+    public void createUI() {
         JPanel appointmentTable = createAppointmentTable();
         this.add(appointmentTable, BorderLayout.CENTER);
     }
 
-    private JPanel createAppointmentTable()
-    {
+    private JPanel createAppointmentTable() {
         JPanel appointmentPanel = new JPanel();
         appointmentPanel.setLayout(new BorderLayout());
 
@@ -63,15 +59,13 @@ public class PetAppointmentsTable extends JPanel implements IClientView
         return appointmentPanel;
     }
 
-    public void refresh()
-    {
+    public void refresh() {
         // Clear the table
         tableModel.setRowCount(0);
 
         Object[][] tableData = clientController.getPetAppointmentData();
 
-        for(Object[] rowData : tableData)
-        {
+        for (Object[] rowData : tableData) {
             tableModel.addRow(rowData);
         }
     }

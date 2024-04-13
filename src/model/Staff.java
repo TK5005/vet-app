@@ -2,8 +2,7 @@ package model;
 
 import java.time.LocalDate;
 
-public class Staff
-{
+public class Staff {
     private int empID;
     private String firstName;
     private String lastName;
@@ -16,8 +15,7 @@ public class Staff
     private String state;
     private int zip;
 
-    public String getName()
-    {
+    public String getName() {
         return firstName + " " + lastName;
     }
 

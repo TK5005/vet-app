@@ -1,49 +1,31 @@
 package control;
 
-import java.util.ArrayList;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
+import model.Appointment;
 import model.Client;
 import model.DataModel;
 import model.Exam;
+import model.Invoice;
 import model.Pet;
-import model.Vet;
-import view.clientPatient.ClientPageView;
 import model.Tech;
 import model.Treatment;
-import model.Appointment;
-import model.Invoice;
+import model.Vet;
+import view.clientPatient.ClientPageView;
 
-public class ClientController
-{
+public class ClientController {
     private static ClientController instance;
-    private DataModel dataModel;
-    private ArrayList<IClientView> views;
-    private ClientPageView clientPage;
-    private int currentPetID = -1;
-    private int currentClientID = -1;
-    private int currentExamID = -1;
-
-    /**
-     * Constructor for the client controller
-     */
-    private ClientController()
-    {
-        dataModel = DataModel.getInstance();
-        views = new ArrayList<>();
-    }
 
     /**
      * Get the instance of the client controller
+     * 
      * @return The instance of the client controller
      */
-    public static ClientController getInstance()
-    {
+    public static ClientController getInstance() {
         if (instance == null) {
-            synchronized (ClientController.class)
-            {
+            synchronized (ClientController.class) {
                 if (instance == null) {
                     instance = new ClientController();
                 }
@@ -52,67 +34,65 @@ public class ClientController
         return instance;
     }
 
-    public void registerView(IClientView view)
-    {
+    private DataModel dataModel;
+    private ArrayList<IClientView> views;
+    private ClientPageView clientPage;
+    private int currentPetID = -1;
+    private int currentClientID = -1;
+
+    private int currentExamID = -1;
+
+    /**
+     * Constructor for the client controller
+     */
+    private ClientController() {
+        dataModel = DataModel.getInstance();
+        views = new ArrayList<>();
+    }
+
+    public void registerView(IClientView view) {
         views.add(view);
     }
 
-    /**
-     * Refresh the views
-     */
-    private void refreshViews()
-    {
-        for (IClientView view : views) {
-            view.refresh();
-        }
-    }
-
-    public void setCurrentPetID(int currentPetID)
-    {
+    public void setCurrentPetID(int currentPetID) {
         this.currentPetID = currentPetID;
     }
 
-    public int getCurrentPetID()
-    {
+    public int getCurrentPetID() {
         return currentPetID;
     }
 
-    public void setCurrentClientID(int currentClientID)
-    {
+    public void setCurrentClientID(int currentClientID) {
         this.currentClientID = currentClientID;
     }
 
-    public int getCurrentClientID()
-    {
+    public int getCurrentClientID() {
         return currentClientID;
     }
 
-    public void setCurrentExamID(int currentExamID)
-    {
+    public void setCurrentExamID(int currentExamID) {
         this.currentExamID = currentExamID;
     }
 
-    public int getCurrentExamID()
-    {
+    public int getCurrentExamID() {
         return currentExamID;
+    }
+
+    /**
+     * Get all clients
+     * 
+     * @return An array of clients
+     */
+    public Client[] getClients() {
+        return dataModel.getClients();
     }
 
     // Client methods
 
     /**
-     * Get all clients
-     * @return An array of clients
-     */
-    public Client[] getClients()
-    {
-        return dataModel.getClients();
-    }
-
-    /**
      * Add a new client
      */
-    public void addClient()
-    {
+    public void addClient() {
         Client client = new Client();
         client.setFirstName("New");
         client.setLastName("Client");
@@ -124,8 +104,7 @@ public class ClientController
      * Update a client
      */
     public void updateClient(int clientID, String fName, String lName,
-            String phone, String email, String street, String city, String state, int zip)
-    {
+            String phone, String email, String street, String city, String state, int zip) {
         Client client = dataModel.getClient(clientID);
         client.setFirstName(fName);
         client.setLastName(lName);
@@ -142,42 +121,42 @@ public class ClientController
 
     /**
      * Delete a client
+     * 
      * @param clientID The client ID
      */
-    public void deleteClient(int clientID)
-    {
+    public void deleteClient(int clientID) {
         dataModel.deleteClient(clientID);
         refreshViews();
     }
 
     /**
      * Get a client
+     * 
      * @param clientID The client ID
      * @return The client object
      */
-    public Client getClient(int clientID)
-    {
+    public Client getClient(int clientID) {
         return dataModel.getClient(clientID);
+    }
+
+    /**
+     * Get all pets for a client
+     * 
+     * @param clientID The client ID
+     * @return An array of pets
+     */
+    public Pet[] getPets(int clientID) {
+        return dataModel.getPets(clientID);
     }
 
     // Pet methods
 
     /**
-     * Get all pets for a client
-     * @param clientID The client ID
-     * @return An array of pets
-     */
-    public Pet[] getPets(int clientID)
-    {
-        return dataModel.getPets(clientID);
-    }
-
-    /**
      * Add a new pet
+     * 
      * @param clientID The client ID
      */
-    public void addPet()
-    {
+    public void addPet() {
         Pet pet = new Pet();
         pet.setName("New Pet");
         dataModel.addPet(pet, this.getCurrentClientID());
@@ -188,8 +167,7 @@ public class ClientController
      * Update a pet
      */
     public void updatePet(int petID, String name, String sex, String color, String species,
-                            String breed, LocalDate birthdate, int weight, long microchipNumber, long rabiesTag)
-    {
+            String breed, LocalDate birthdate, int weight, long microchipNumber, long rabiesTag) {
         Pet pet = dataModel.getPet(petID);
         pet.setName(name);
         pet.setSex(sex);
@@ -206,43 +184,42 @@ public class ClientController
 
     /**
      * Delete a pet
+     * 
      * @param petID The pet ID
      */
-    public void deletePet(int petID)
-    {
+    public void deletePet(int petID) {
         dataModel.deletePet(petID);
         refreshViews();
     }
 
     /**
      * Get a pet
+     * 
      * @param petID The pet ID
      * @return The pet object
      */
-    public Pet getPet(int petID)
-    {
+    public Pet getPet(int petID) {
         return dataModel.getPet(petID);
     }
 
+    /**
+     * Get all exams for a pet
+     * 
+     * @param petID The pet ID
+     * @return An array of exams
+     */
+    public Exam[] getExams(int petID) {
+        return dataModel.getExams(petID);
+    }
 
     // Exam methods
 
     /**
-     * Get all exams for a pet
-     * @param petID The pet ID
-     * @return An array of exams
-     */
-    public Exam[] getExams(int petID)
-    {
-        return dataModel.getExams(petID);
-    }
-
-    /**
      * Add a new exam
+     * 
      * @param patientID The patient ID
      */
-    public void addExam()
-    {
+    public void addExam() {
         Exam exam = new Exam();
         exam.setDescription("New Exam");
         int examID = dataModel.addExam(exam, this.getCurrentPetID());
@@ -250,8 +227,7 @@ public class ClientController
         refreshViews();
     }
 
-    public void addTreatment(int examID)
-    {
+    public void addTreatment(int examID) {
         Treatment treatment = new Treatment();
         treatment.setExamID(examID);
         treatment.setStartDate(LocalDate.now());
@@ -262,12 +238,13 @@ public class ClientController
 
     /**
      * Update an exam
+     * 
      * @param examID The exam ID
-     * @param exam The new exam object
+     * @param exam   The new exam object
      */
-    public void updateExam(int examID, LocalDate date, LocalTime time, int vetID, int techID, String description, String vitals,
-                            int weight, String location)
-    {
+    public void updateExam(int examID, LocalDate date, LocalTime time, int vetID, int techID, String description,
+            String vitals,
+            int weight, String location) {
         Exam exam = dataModel.getExam(examID);
         exam.setVetID(vetID);
         exam.setTechID(techID);
@@ -280,69 +257,60 @@ public class ClientController
         dataModel.updateExam(examID, exam);
     }
 
-    public void updateTreatment(int treatmentID, Treatment treatment)
-    {
+    public void updateTreatment(int treatmentID, Treatment treatment) {
         dataModel.updateTreatment(treatmentID, treatment);
     }
 
     /**
      * Get an Exam
+     * 
      * @param examID The exam ID
      * @return The exam object
      */
-    public Exam getExam(int examID)
-    {
+    public Exam getExam(int examID) {
         return dataModel.getExam(examID);
     }
 
     /**
      * Delete an exam
+     * 
      * @param examID The exam ID
      */
-    public void deleteExam(int examID)
-    {
+    public void deleteExam(int examID) {
         dataModel.deleteExam(examID);
         refreshViews();
     }
 
-    public Tech[] getTechs()
-    {
+    public Tech[] getTechs() {
         return dataModel.getTechs();
     }
 
     // Vet and Tech Methods
-    public Vet getVet(int vetID)
-    {
+    public Vet getVet(int vetID) {
         return dataModel.getVet(vetID);
     }
 
-    public Tech getTech(int techID)
-    {
+    public Tech getTech(int techID) {
         return dataModel.getTech(techID);
     }
 
-    public Treatment getTreatmentFromExamID(int examID)
-    {
+    public Treatment getTreatmentFromExamID(int examID) {
         return dataModel.getTreatmentFromExamID(examID);
     }
 
-    public Vet[] getVets()
-    {
+    public Vet[] getVets() {
         return dataModel.getVets();
     }
 
-    public Appointment[] getAppointments(int petID)
-    {
+    public Appointment[] getAppointments(int petID) {
         return dataModel.getAppointments(petID);
     }
 
-    public Invoice[] getInvoices(int petID)
-    {
+    public Invoice[] getInvoices(int petID) {
         return dataModel.getInvoices(petID);
     }
 
-    public Object[][] getPetAppointmentData()
-    {
+    public Object[][] getPetAppointmentData() {
         Appointment[] appointments = dataModel.getAppointments(currentPetID);
         Object[][] tableData = new Object[appointments.length][2];
         for (int i = 0; i < appointments.length; i++) {
@@ -352,23 +320,23 @@ public class ClientController
         return tableData;
     }
 
-    // Page navigation methods
-
     /**
      * Set the client page
+     * 
      * @param clientPage The client page
      */
-    public void setClientPage(ClientPageView clientPage)
-    {
+    public void setClientPage(ClientPageView clientPage) {
         this.clientPage = clientPage;
     }
 
+    // Page navigation methods
+
     /**
      * Show the client info page
+     * 
      * @param clientID The client ID
      */
-    public void showClientInfo(int clientID)
-    {
+    public void showClientInfo(int clientID) {
         this.setCurrentClientID(clientID);
         refreshViews();
         clientPage.showClientInfo();
@@ -377,8 +345,7 @@ public class ClientController
     /**
      * Close the client info page
      */
-    public void closeClientInfoView()
-    {
+    public void closeClientInfoView() {
         this.setCurrentClientID(-1);
         clientPage.closeClientInfoView();
         refreshViews();
@@ -386,10 +353,10 @@ public class ClientController
 
     /**
      * Show the exam info page
+     * 
      * @param examID The exam ID
      */
-    public void showExamInfo(int examID)
-    {
+    public void showExamInfo(int examID) {
         this.setCurrentExamID(examID);
         refreshViews();
         clientPage.showExamInfo();
@@ -397,10 +364,10 @@ public class ClientController
 
     /**
      * Show the pet info page
+     * 
      * @param patientID The patient ID
      */
-    public void showPetInfo(int petID)
-    {
+    public void showPetInfo(int petID) {
         this.setCurrentPetID(petID);
         refreshViews();
         clientPage.showPetInfo();
@@ -409,8 +376,7 @@ public class ClientController
     /**
      * Close the pet info page
      */
-    public void closePetInfoView()
-    {
+    public void closePetInfoView() {
         this.setCurrentPetID(-1);
         clientPage.closePetInfoView();
         refreshViews();
@@ -419,10 +385,18 @@ public class ClientController
     /**
      * Close the exam info page
      */
-    public void closeExamInfoView()
-    {
+    public void closeExamInfoView() {
         this.setCurrentExamID(-1);
         clientPage.closeExamInfoView();
         refreshViews();
+    }
+
+    /**
+     * Refresh the views
+     */
+    private void refreshViews() {
+        for (IClientView view : views) {
+            view.refresh();
+        }
     }
 }

@@ -1,11 +1,9 @@
 package model;
 
-public class Vet extends Staff
-{
+public class Vet extends Staff {
     private long licenseNumber;
 
-    public Vet()
-    {
+    public Vet() {
         super();
     }
 

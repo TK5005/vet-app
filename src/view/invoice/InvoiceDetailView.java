@@ -1,28 +1,26 @@
 package view.invoice;
 
-import javax.swing.JPanel;
-import control.InvoiceController;
-import control.IInvoiceView;
-
 import java.awt.BorderLayout;
-import javax.swing.JTextField;
-import javax.swing.JLabel;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-
 import java.awt.FlowLayout;
 import java.time.LocalDate;
 
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 import com.github.lgooddatepicker.components.DatePicker;
 
+import control.IInvoiceView;
+import control.InvoiceController;
 import model.Client;
-import model.Invoice;
 import model.Exam;
+import model.Invoice;
 import model.Pet;
 
-public class InvoiceDetailView extends JPanel implements IInvoiceView
-{
+public class InvoiceDetailView extends JPanel implements IInvoiceView {
     private InvoiceController controller;
 
     private JTextField invoiceIDField;
@@ -37,8 +35,7 @@ public class InvoiceDetailView extends JPanel implements IInvoiceView
     private JButton saveButton;
     private JButton closeButton;
 
-    public InvoiceDetailView()
-    {
+    public InvoiceDetailView() {
         this.controller = InvoiceController.getInstance();
         controller.registerView(this);
         statusOptions = controller.getStatusOptions();
@@ -46,11 +43,10 @@ public class InvoiceDetailView extends JPanel implements IInvoiceView
         createUI();
         createActionListeners();
     }
-    
-    public void refresh()
-    {
+
+    public void refresh() {
         examSelection.removeAllItems();
-        
+
         int[] examIDs = controller.getExamIDs();
         for (int id : examIDs) {
             examSelection.addItem(id);
@@ -66,8 +62,7 @@ public class InvoiceDetailView extends JPanel implements IInvoiceView
 
         Invoice invoice = controller.getInvoice(controller.getCurrentInvoiceID());
 
-        if(invoice != null)
-        {
+        if (invoice != null) {
             examSelection.setSelectedItem(invoice.getExamID());
             invoiceIDField.setText(Integer.toString(invoice.getInvoiceID()));
             invoiceDateField.setDate(invoice.getInvoiceDate());
@@ -83,8 +78,7 @@ public class InvoiceDetailView extends JPanel implements IInvoiceView
         }
     }
 
-    private void createActionListeners()
-    {
+    private void createActionListeners() {
         saveButton.addActionListener(e -> {
             updateInvoice();
         });
@@ -94,9 +88,8 @@ public class InvoiceDetailView extends JPanel implements IInvoiceView
         });
 
         examSelection.addActionListener(e -> {
-            try
-            {
-                int examID = (int)examSelection.getSelectedItem();
+            try {
+                int examID = (int) examSelection.getSelectedItem();
                 Exam exam = controller.getExam(examID);
                 Client client = controller.getClient(controller.getPet(exam.getPetID()).getOwnerID());
                 Pet pet = controller.getPet(exam.getPetID());
@@ -105,13 +98,12 @@ public class InvoiceDetailView extends JPanel implements IInvoiceView
             } catch (NullPointerException ex) {
                 // Do nothing
             }
-            
+
         });
     }
 
-    private void updateInvoice()
-    {
-        int examID = (int)examSelection.getSelectedItem();
+    private void updateInvoice() {
+        int examID = (int) examSelection.getSelectedItem();
         String amtDue = invoiceAmtField.getText();
         String status = (String) invoiceStatusField.getSelectedItem();
         LocalDate invoiceDate = invoiceDateField.getDate();
@@ -119,10 +111,9 @@ public class InvoiceDetailView extends JPanel implements IInvoiceView
         controller.updateInvoice(controller.getCurrentInvoiceID(), examID, status, invoiceDate, amtDue);
     }
 
-    private void createUI()
-    {
+    private void createUI() {
         setLayout(new BorderLayout());
-    
+
         JPanel headerPanel = createHeaderPanel();
         add(headerPanel, BorderLayout.NORTH);
 
@@ -130,8 +121,7 @@ public class InvoiceDetailView extends JPanel implements IInvoiceView
         add(invoiceFieldPanel, BorderLayout.CENTER);
     }
 
-    private JPanel createHeaderPanel()
-    {
+    private JPanel createHeaderPanel() {
         JPanel headerPanel = new JPanel();
         headerPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
@@ -148,8 +138,7 @@ public class InvoiceDetailView extends JPanel implements IInvoiceView
         return headerPanel;
     }
 
-    private JPanel createInvoiceFieldPanel()
-    {
+    private JPanel createInvoiceFieldPanel() {
         JPanel invoiceDataFields = new JPanel();
         invoiceDataFields.setLayout(new FlowLayout(FlowLayout.LEFT));
 
@@ -168,7 +157,7 @@ public class InvoiceDetailView extends JPanel implements IInvoiceView
         ownerNameField.setEditable(false);
         ownerNamePanel.add(ownerNameLabel);
         ownerNamePanel.add(ownerNameField);
-    
+
         JPanel petNamePanel = new JPanel();
         petNamePanel.setLayout(new BoxLayout(petNamePanel, BoxLayout.Y_AXIS));
         JLabel petNameLabel = new JLabel("Pet Name");
