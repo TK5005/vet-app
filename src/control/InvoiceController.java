@@ -7,7 +7,7 @@ import model.Pet;
 import view.invoice.InvoiceView;
 import model.Client;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class InvoiceController 
@@ -99,7 +99,7 @@ public class InvoiceController
         refreshViews();
     }
 
-    public void updateInvoice(int invoiceID, int examID, String status, String invoiceDate, String amtDue)
+    public void updateInvoice(int invoiceID, int examID, String status, LocalDate invoiceDate, String amtDue)
     {
         Invoice invoice = dataModel.getInvoice(invoiceID);
         invoice.setExamID(examID);
@@ -111,12 +111,7 @@ public class InvoiceController
                 invoice.setStatus(s);
             }
         }
-        try {
-            invoice.setInvoiceDate(LocalDateTime.parse(invoiceDate));
-        } catch (Exception e) {}
-        try {
-            invoice.setAmtDue(Double.parseDouble(amtDue));
-        } catch (Exception e) {}
+        invoice.setInvoiceDate(invoiceDate);
         refreshViews();
     }
 
@@ -143,7 +138,7 @@ public class InvoiceController
             String clientName = dataModel.getClient(invoices[i].getClientID()).getName();
             String petName = dataModel.getPet(exam.getPetID()).getName();
             String invoiceDate = "";
-            LocalDateTime date = invoices[i].getInvoiceDate();
+            LocalDate date = invoices[i].getInvoiceDate();
             String amtDue = invoices[i].getFormattedAmtDue();
             if(date != null)
             {

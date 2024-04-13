@@ -12,6 +12,9 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 
 import java.awt.FlowLayout;
+import java.time.LocalDate;
+
+import com.github.lgooddatepicker.components.DatePicker;
 
 import model.Client;
 import model.Invoice;
@@ -25,7 +28,7 @@ public class InvoiceDetailView extends JPanel implements IInvoiceView
     private JTextField invoiceIDField;
     private JTextField ownerNameField;
     private JTextField petNameField;
-    private JTextField invoiceDateField;
+    private DatePicker invoiceDateField;
     private JTextField invoiceAmtField;
     private JComboBox<String> invoiceStatusField;
     private JComboBox<Integer> examSelection;
@@ -67,7 +70,7 @@ public class InvoiceDetailView extends JPanel implements IInvoiceView
         {
             examSelection.setSelectedItem(invoice.getExamID());
             invoiceIDField.setText(Integer.toString(invoice.getInvoiceID()));
-            invoiceDateField.setText(invoice.getInvoiceDate().toString());
+            invoiceDateField.setDate(invoice.getInvoiceDate());
 
             Client client = controller.getClient(invoice.getClientID());
             ownerNameField.setText(client.getName());
@@ -111,7 +114,7 @@ public class InvoiceDetailView extends JPanel implements IInvoiceView
         int examID = (int)examSelection.getSelectedItem();
         String amtDue = invoiceAmtField.getText();
         String status = (String) invoiceStatusField.getSelectedItem();
-        String invoiceDate = invoiceDateField.getText();
+        LocalDate invoiceDate = invoiceDateField.getDate();
 
         controller.updateInvoice(controller.getCurrentInvoiceID(), examID, status, invoiceDate, amtDue);
     }
@@ -177,8 +180,7 @@ public class InvoiceDetailView extends JPanel implements IInvoiceView
         JPanel invoiceDatePanel = new JPanel();
         invoiceDatePanel.setLayout(new BoxLayout(invoiceDatePanel, BoxLayout.Y_AXIS));
         JLabel invoiceDateLabel = new JLabel("Invoice Date");
-        invoiceDateField = new JTextField(10);
-        invoiceDateField.setEditable(true);
+        invoiceDateField = new DatePicker();
         invoiceDatePanel.add(invoiceDateLabel);
         invoiceDatePanel.add(invoiceDateField);
 

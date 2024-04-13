@@ -664,7 +664,7 @@ public class DataModel
             invoice.setClientID(i % 5);
             invoice.setAmtDue(100.00);
             invoice.setStatus(Invoice.Status.UNPAID);
-            invoice.setInvoiceDate(LocalDateTime.of(2021, 1, 1, 0, 0));
+            invoice.setInvoiceDate(LocalDate.of(2021, 1, 1));
             invoices.add(invoice);
         }
     }

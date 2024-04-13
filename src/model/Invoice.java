@@ -1,6 +1,6 @@
 package model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class Invoice
 {
@@ -16,7 +16,7 @@ public class Invoice
     private int clientID;
     private double amtDue = 0.0;
     private Status status;
-    private LocalDateTime invoiceDate;
+    private LocalDate invoiceDate;
 
     public int getInvoiceID() {
         return invoiceID;
@@ -92,15 +92,11 @@ public class Invoice
         return options;
     }
 
-    public LocalDateTime getInvoiceDate() {
-        if(invoiceDate == null)
-        {
-            return LocalDateTime.now();
-        }
+    public LocalDate getInvoiceDate() {
         return invoiceDate;
     }
 
-    public void setInvoiceDate(LocalDateTime invoiceDate) {
+    public void setInvoiceDate(LocalDate invoiceDate) {
         this.invoiceDate = invoiceDate;
     }
 }
