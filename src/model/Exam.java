@@ -1,13 +1,14 @@
 package model;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class Exam
 {
     private int examID;
     private int petID;
-    private LocalDateTime dateTime;
+    private LocalDate date;
+    private LocalTime time;
     private int vetID;
     private int techID;
     private String description;
@@ -44,18 +45,20 @@ public class Exam
         this.petID = petID;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setDateTime(LocalDateTime date) {
-        this.dateTime = date;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
-    public String getTime() {
-        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("HH:mm:ss");
-        String formattedDate = dateTime.format(myFormatObj);
-        return formattedDate;
+    public LocalTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalTime time) {
+        this.time = time;
     }
 
     public int getVetID() {

@@ -99,7 +99,7 @@ public class ExamTable extends JPanel implements IClientView
 
         // Populate the table with pet data
         for (Exam exam : exams) {
-            Object[] rowData = {exam, exam.getDateTime(), ""};
+            Object[] rowData = {exam, exam.getDate(), ""};
             tableModel.addRow(rowData);
         }
     }

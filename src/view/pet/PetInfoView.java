@@ -17,10 +17,12 @@ import model.Pet;
 import view.exam.ExamTable;
 
 import java.text.NumberFormat;
+import java.time.LocalDate;
 
 import java.time.format.DateTimeFormatter;
 
 import java.awt.Dimension;
+import com.github.lgooddatepicker.components.DatePicker;
 
 import java.text.ParsePosition;
 
@@ -32,7 +34,7 @@ public class PetInfoView extends JPanel implements IClientView {
     private JTextField colorField;
     private JTextField speciesField;
     private JTextField breedField;
-    private JFormattedTextField dateOfBirthField;
+    private DatePicker dateOfBirthPicker;
     private JFormattedTextField microchipField;
     private JFormattedTextField rabiesTagField;
     private JFormattedTextField weightField;
@@ -51,7 +53,6 @@ public class PetInfoView extends JPanel implements IClientView {
     private PetVaccinationsTable vaccinationsPanel;
     private PetInvoiceTable invoicesPanel;
     private NumberFormat numberFormat;
-    private DateTimeFormatter dateFormat;
 
     public PetInfoView() {
         clientController = ClientController.getInstance();
@@ -62,8 +63,6 @@ public class PetInfoView extends JPanel implements IClientView {
     }
 
     private void configureFormatters() {
-        dateFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        
         numberFormat = NumberFormat.getNumberInstance();
         numberFormat.setGroupingUsed(false);
     }
@@ -185,9 +184,9 @@ public class PetInfoView extends JPanel implements IClientView {
         JPanel dateOfBirthPanel = new JPanel();
         dateOfBirthPanel.setLayout(new BoxLayout(dateOfBirthPanel, BoxLayout.Y_AXIS));
         JLabel dateOfBirthLabel = new JLabel("Date of Birth:");
-        dateOfBirthField = new JFormattedTextField(dateFormat);
+        dateOfBirthPicker = new DatePicker();
         dateOfBirthPanel.add(dateOfBirthLabel);
-        dateOfBirthPanel.add(dateOfBirthField);
+        dateOfBirthPanel.add(dateOfBirthPicker);
         contentPanel.add(dateOfBirthPanel);
 
         JPanel microchipPanel = new JPanel();
@@ -245,7 +244,7 @@ public class PetInfoView extends JPanel implements IClientView {
 
     private void updatePet()
     {
-        String petBirthDate = dateOfBirthField.getText();
+        LocalDate dateOfBirth = dateOfBirthPicker.getDate();
         String name = nameField.getText();
         String species = speciesField.getText();
         String breed = breedField.getText();
@@ -256,7 +255,7 @@ public class PetInfoView extends JPanel implements IClientView {
         long rabiesTag = numberFormat.parse(rabiesTagField.getText(), new ParsePosition(0)).longValue();
 
         clientController.updatePet(clientController.getCurrentPetID(), name, sex, color, species, breed,
-                            petBirthDate, weight, microchipNumber, rabiesTag);
+        dateOfBirth, weight, microchipNumber, rabiesTag);
     }
 
     public void refresh() {
@@ -273,10 +272,7 @@ public class PetInfoView extends JPanel implements IClientView {
             microchipField.setText(Long.toString(pet.getMicrochipNumber()));
             rabiesTagField.setText(Long.toString(pet.getRabiesTag()));
             weightField.setText(Long.toString(pet.getWeight()));
-            if (pet.getBirthdate() != null) {
-                String dob = pet.getBirthdate().format(dateFormat);
-                dateOfBirthField.setText(dob);
-            }
+            dateOfBirthPicker.setDate(pet.getBirthdate());
         }
     }
 }

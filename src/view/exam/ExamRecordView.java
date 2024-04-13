@@ -22,28 +22,30 @@ import javax.swing.JFormattedTextField;
 
 import java.util.Date;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.text.DateFormat;
 import java.text.NumberFormat;
-import java.text.ParseException;
 import java.time.ZoneId;
+import java.time.LocalTime;
 
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 import java.awt.Component;
 
+import com.github.lgooddatepicker.components.DatePicker;
+import com.github.lgooddatepicker.components.TimePicker;
+
 public class ExamRecordView extends JPanel implements IClientView
 {
     ClientController clientController;
 
-    Treatment treatment;
     JTextField petNameField;
     JTextField examIDField;
     JComboBox<Vet> examinerBox;
     JComboBox<Tech> techBox;
     JTextField locationField;
-    JFormattedTextField dateTimeField;
+    DatePicker dateField;
+    TimePicker timeField;
     JFormattedTextField weightField;
     JTextArea descriptionField;
     JTextArea vitalsField;
@@ -54,14 +56,13 @@ public class ExamRecordView extends JPanel implements IClientView
 
     JTextField treatmentIDField;
     JTextField medicationField;
-    JFormattedTextField treatmentStartDateField;
-    JFormattedTextField treatmentEndDateField;
+    DatePicker treatmentStartDateField;
+    DatePicker treatmentEndDateField;
     JTextArea treatmentDirectionsField;
 
     JButton saveButton;
     JButton closeButton;
 
-    DateFormat dateFormat;
     NumberFormat numberFormat;
 
 
@@ -75,7 +76,6 @@ public class ExamRecordView extends JPanel implements IClientView
 
     private void configureFormatters()
     {
-        dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         numberFormat = NumberFormat.getNumberInstance();
         numberFormat.setMaximumFractionDigits(3);
     }
@@ -194,14 +194,14 @@ public class ExamRecordView extends JPanel implements IClientView
         JPanel treatmentStartDatePanel = new JPanel();
         treatmentStartDatePanel.setLayout(new BoxLayout(treatmentStartDatePanel, BoxLayout.Y_AXIS));
         JLabel treatmentStartDateLabel = new JLabel("Start Date");
-        treatmentStartDateField = new JFormattedTextField(dateFormat);
+        treatmentStartDateField = new DatePicker();
         treatmentStartDatePanel.add(treatmentStartDateLabel);
         treatmentStartDatePanel.add(treatmentStartDateField);
 
         JPanel treatmentEndDatePanel = new JPanel();
         treatmentEndDatePanel.setLayout(new BoxLayout(treatmentEndDatePanel, BoxLayout.Y_AXIS));
         JLabel treatmentEndDateLabel = new JLabel("End Date");
-        treatmentEndDateField = new JFormattedTextField(dateFormat);
+        treatmentEndDateField = new DatePicker();
         treatmentEndDatePanel.add(treatmentEndDateLabel);
         treatmentEndDatePanel.add(treatmentEndDateField);
 
@@ -262,12 +262,19 @@ public class ExamRecordView extends JPanel implements IClientView
         locationPanel.add(locationLabel);
         locationPanel.add(locationField);
 
-        JPanel dateTimePanel = new JPanel();
-        dateTimePanel.setLayout(new BoxLayout(dateTimePanel, BoxLayout.Y_AXIS));
+        JPanel datePanel = new JPanel();
+        datePanel.setLayout(new BoxLayout(datePanel, BoxLayout.Y_AXIS));
         JLabel dateTimeLabel = new JLabel("Date/Time");
-        dateTimeField = new JFormattedTextField(dateFormat);
-        dateTimePanel.add(dateTimeLabel);
-        dateTimePanel.add(dateTimeField);
+        dateField = new DatePicker();
+        datePanel.add(dateTimeLabel);
+        datePanel.add(dateField);
+
+        JPanel timePanel = new JPanel();
+        timePanel.setLayout(new BoxLayout(timePanel, BoxLayout.Y_AXIS));
+        JLabel timeLabel = new JLabel("Time");
+        timeField = new TimePicker();
+        timePanel.add(timeLabel);
+        timePanel.add(timeField);
 
         JPanel weightPanel = new JPanel();
         weightPanel.setLayout(new BoxLayout(weightPanel, BoxLayout.Y_AXIS));
@@ -280,7 +287,8 @@ public class ExamRecordView extends JPanel implements IClientView
         examDataFields.add(examinerPanel);
         examDataFields.add(techPanel);
         examDataFields.add(locationPanel);
-        examDataFields.add(dateTimePanel);
+        examDataFields.add(datePanel);
+        examDataFields.add(timePanel);
         examDataFields.add(weightPanel);
 
         return examDataFields;
@@ -309,43 +317,26 @@ public class ExamRecordView extends JPanel implements IClientView
 
     private void updateExam()
     {
-        String dateTime = dateTimeField.getText();
+        LocalDate date = dateField.getDate();
         int vetID = ((Vet)examinerBox.getSelectedItem()).getEmpID();
         int techID = ((Tech)techBox.getSelectedItem()).getEmpID();
         String description = descriptionField.getText();
         String vitals = vitalsField.getText();
         int weight = Integer.parseInt(weightField.getText());
         String location = locationField.getText();
-
-        clientController.updateExam(clientController.getCurrentExamID(), dateTime, vetID, techID, description, vitals, weight, location);
+        LocalTime time = timeField.getTime();
+        clientController.updateExam(clientController.getCurrentExamID(), date, time, vetID, techID, description, vitals, weight, location);
     }
 
     private void updateTreatment()
     {
-        Date startDate = (Date)treatmentStartDateField.getValue();
-        Date endDate = (Date)treatmentEndDateField.getValue();
-
+        Treatment treatment = clientController.getTreatmentFromExamID(clientController.getCurrentExamID());
+        LocalDate startDate = treatmentStartDateField.getDate();
+        LocalDate endDate = treatmentEndDateField.getDate();
         treatment.setMedication(medicationField.getText());
         treatment.setDirections(treatmentDirectionsField.getText());
-        if (startDate != null)
-        {
-            LocalDate start = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            if(start != null)
-            {
-                treatment.setStartDate(start);
-            
-            }
-        }
-
-        if (endDate != null)
-        {
-            LocalDate end = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            if(end != null)
-            {
-                treatment.setEndDate(end);
-            }
-        }
-
+        treatment.setStartDate(startDate);
+        treatment.setEndDate(endDate);
         clientController.updateTreatment(treatment.getTreatmentID(), treatment);
     }
 
@@ -365,11 +356,8 @@ public class ExamRecordView extends JPanel implements IClientView
             examinerBox.setSelectedItem(clientController.getVet(exam.getVetID()));
             techBox.setSelectedItem(clientController.getTech(exam.getTechID()));
             locationField.setText(exam.getLocation());
-            try
-            {
-                dateTimeField.setText(exam.getDateTime().toString());
-            }
-            catch(Exception e){}
+            dateField.setDate(exam.getDate());
+            timeField.setTime(exam.getTime());
             weightField.setText(Long.toString(exam.getWeight()));
             descriptionField.setText(exam.getDescription());
             vitalsField.setText(exam.getVitals());
@@ -378,17 +366,13 @@ public class ExamRecordView extends JPanel implements IClientView
 
     private void refreshTreatment()
     {
-        treatment = clientController.getTreatmentFromExamID(clientController.getCurrentExamID());
+        Treatment treatment = clientController.getTreatmentFromExamID(clientController.getCurrentExamID());
         if(treatment != null)
         {
             treatmentIDField.setText(Integer.toString(treatment.getTreatmentID()));
             medicationField.setText(treatment.getMedication());
-            try
-            {
-                treatmentStartDateField.setText(treatment.getStartDate().toString());
-                treatmentEndDateField.setText(treatment.getEndDate().toString());
-            }
-            catch(Exception e){}
+            treatmentStartDateField.setDate(treatment.getStartDate());
+            treatmentEndDateField.setDate(treatment.getEndDate());
             treatmentDirectionsField.setText(treatment.getDirections());
         }
     }

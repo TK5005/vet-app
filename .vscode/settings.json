@@ -3,5 +3,7 @@
         "images",
         "src"
     ],
-    "java.project.referencedLibraries": []
+    "java.project.referencedLibraries": [
+        "ref/LGoodDatePicker-11.2.1.jar"
+    ]
 }

@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.time.LocalDate;
+import java.time.LocalTime; 
 
 public class DataModel
 {
@@ -582,7 +583,8 @@ public class DataModel
             Exam exam = new Exam();
             exam.setExamID(i);
             exam.setPetID(i % 10);
-            exam.setDateTime(LocalDateTime.of(2021, 1, 1, 0, 0));
+            exam.setDate(LocalDate.of(2021, 1, 1));
+            exam.setTime(LocalTime.of(8, 0));
             exam.setVetID(i % 5);
             exam.setTechID(i % 5);
             exam.setDescription("Exam Description");

@@ -2,6 +2,8 @@ package control;
 
 import java.util.ArrayList;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import model.Client;
 import model.DataModel;
@@ -186,7 +188,7 @@ public class ClientController
      * Update a pet
      */
     public void updatePet(int petID, String name, String sex, String color, String species,
-                            String breed, String birthdate, int weight, long microchipNumber, long rabiesTag)
+                            String breed, LocalDate birthdate, int weight, long microchipNumber, long rabiesTag)
     {
         Pet pet = dataModel.getPet(petID);
         pet.setName(name);
@@ -194,11 +196,7 @@ public class ClientController
         pet.setColor(color);
         pet.setSpecies(species);
         pet.setBreed(breed);
-        if(birthdate != null && !birthdate.isEmpty())
-        {
-            String[] date = birthdate.split("/");
-            pet.setBirthdate(LocalDate.of(Integer.parseInt(date[2]), Integer.parseInt(date[0]), Integer.parseInt(date[1])));
-        }
+        pet.setBirthdate(birthdate);
         pet.setWeight(weight);
         pet.setMicrochipNumber(microchipNumber);
         pet.setRabiesTag(rabiesTag);
@@ -267,7 +265,7 @@ public class ClientController
      * @param examID The exam ID
      * @param exam The new exam object
      */
-    public void updateExam(int examID, String dateTime, int vetID, int techID, String description, String vitals,
+    public void updateExam(int examID, LocalDate date, LocalTime time, int vetID, int techID, String description, String vitals,
                             int weight, String location)
     {
         Exam exam = dataModel.getExam(examID);
@@ -277,10 +275,8 @@ public class ClientController
         exam.setVitals(vitals);
         exam.setWeight(weight);
         exam.setLocation(location);
-        if(dateTime != null && !dateTime.isEmpty())
-        {
-            //TODO: Set exam Date and Time
-        }
+        exam.setDate(date);
+        exam.setTime(time);
         dataModel.updateExam(examID, exam);
     }
 
