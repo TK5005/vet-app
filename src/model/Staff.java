@@ -1,6 +1,6 @@
 package model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class Staff
 {
@@ -8,13 +8,13 @@ public class Staff
     private String firstName;
     private String lastName;
     private String sex;
-    private LocalDateTime dob;
+    private LocalDate dob;
     private String ssn;
     private String phone;
     private String street;
     private String city;
     private String state;
-    private String zip;
+    private int zip;
 
     public String getName()
     {
@@ -53,11 +53,11 @@ public class Staff
         this.sex = sex;
     }
 
-    public LocalDateTime getDob() {
+    public LocalDate getDob() {
         return dob;
     }
 
-    public void setDob(LocalDateTime dob) {
+    public void setDob(LocalDate dob) {
         this.dob = dob;
     }
 
@@ -101,11 +101,11 @@ public class Staff
         this.state = state;
     }
 
-    public String getZip() {
+    public int getZip() {
         return zip;
     }
 
-    public void setZip(String zip) {
+    public void setZip(int zip) {
         this.zip = zip;
     }
 }

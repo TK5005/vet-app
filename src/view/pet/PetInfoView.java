@@ -56,10 +56,16 @@ public class PetInfoView extends JPanel implements IClientView {
     public PetInfoView() {
         clientController = ClientController.getInstance();
         clientController.registerView(this);
+        
+        configureFormatters();
+        createUI();
+    }
+
+    private void configureFormatters() {
+        dateFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        
         numberFormat = NumberFormat.getNumberInstance();
         numberFormat.setGroupingUsed(false);
-        dateFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        createUI();
     }
 
     private void createUI() {
@@ -245,11 +251,12 @@ public class PetInfoView extends JPanel implements IClientView {
         String breed = breedField.getText();
         String color = colorField.getText();
         String sex = sexField.getText();
-        long weight = numberFormat.parse(weightField.getText(), new ParsePosition(0)).longValue();
+        int weight = numberFormat.parse(weightField.getText(), new ParsePosition(0)).intValue();
         long microchipNumber = numberFormat.parse(microchipField.getText(), new ParsePosition(0)).longValue();
         long rabiesTag = numberFormat.parse(rabiesTagField.getText(), new ParsePosition(0)).longValue();
 
-        clientController.updatePet(name, sex, color, species, breed, petBirthDate, weight, microchipNumber, rabiesTag);
+        clientController.updatePet(clientController.getCurrentPetID(), name, sex, color, species, breed,
+                            petBirthDate, weight, microchipNumber, rabiesTag);
     }
 
     public void refresh() {

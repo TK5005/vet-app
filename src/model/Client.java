@@ -2,7 +2,7 @@ package model;
 
 public class Client
 {
-    private long clientID;
+    private int clientID;
     private String firstName;
     private String lastName;
     private String email;
@@ -10,19 +10,19 @@ public class Client
     private String street;
     private String city;
     private String state;
-    private String zip;
+    private int zip;
 
     public String getName()
     {
         return firstName + " " + lastName;
     }
 
-    public long getClientID()
+    public int getClientID()
     {
         return clientID;
     }
 
-    public void setClientID(long clientID)
+    public void setClientID(int clientID)
     {
         this.clientID = clientID;
     }
@@ -97,12 +97,12 @@ public class Client
         this.state = state;
     }
 
-    public String getZip()
+    public int getZip()
     {
         return zip;
     }
 
-    public void setZip(String zip)
+    public void setZip(int zip)
     {
         this.zip = zip;
     }

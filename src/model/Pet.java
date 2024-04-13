@@ -4,23 +4,23 @@ import java.time.LocalDate;
 
 public class Pet
 {
-    private long petID;
-    private long ownerID;
+    private int petID;
+    private int ownerID;
     private String name;
     private String sex;
     private String color;
     private String species;
     private String breed;
     private LocalDate birthdate;
-    private long weight;
+    private int weight;
     private long microchipNumber;
     private long rabiesTag;
     
-    public long getPetID() {
+    public int getPetID() {
         return petID;
     }
 
-    public void setPetID(long petID) {
+    public void setPetID(int petID) {
         this.petID = petID;
     }
 
@@ -72,11 +72,11 @@ public class Pet
         this.birthdate = birthdate;
     }
 
-    public long getWeight() {
+    public int getWeight() {
         return weight;
     }
 
-    public void setWeight(long weight) {
+    public void setWeight(int weight) {
         this.weight = weight;
     }
 
@@ -96,11 +96,11 @@ public class Pet
         this.rabiesTag = rabiesTag;
     }
 
-    public long getOwnerID() {
+    public int getOwnerID() {
         return ownerID;
     }
 
-    public void setOwnerID(long ownerID) {
+    public void setOwnerID(int ownerID) {
         this.ownerID = ownerID;
     }
 

@@ -11,22 +11,22 @@ public class Invoice
         OVERDUE
     }
 
-    private long invoiceNo;
-    private long examID;
-    private long clientID;
+    private int invoiceID;
+    private int examID;
+    private int clientID;
     private double amtDue = 0.0;
     private Status status;
     private LocalDateTime invoiceDate;
 
-    public long getInvoiceNo() {
-        return invoiceNo;
+    public int getInvoiceID() {
+        return invoiceID;
     }
 
-    public void setInvoiceNo(long invoiceNo) {
-        this.invoiceNo = invoiceNo;
+    public void setInvoiceID(int invoiceID) {
+        this.invoiceID = invoiceID;
     }
 
-    public long getExamID() {
+    public int getExamID() {
         return examID;
     }
 
@@ -34,11 +34,11 @@ public class Invoice
         this.examID = examID;
     }
 
-    public long getClientID() {
+    public int getClientID() {
         return clientID;
     }
 
-    public void setClientID(long clientID) {
+    public void setClientID(int clientID) {
         this.clientID = clientID;
     }
 

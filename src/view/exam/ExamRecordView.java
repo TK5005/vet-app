@@ -18,10 +18,14 @@ import model.Vet;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.time.ZoneId;
 
@@ -32,15 +36,15 @@ import java.awt.Component;
 public class ExamRecordView extends JPanel implements IClientView
 {
     ClientController clientController;
-    Exam exam;
+
     Treatment treatment;
     JTextField petNameField;
     JTextField examIDField;
     JComboBox<Vet> examinerBox;
     JComboBox<Tech> techBox;
     JTextField locationField;
-    JTextField dateTimeField;
-    JTextField weightField;
+    JFormattedTextField dateTimeField;
+    JFormattedTextField weightField;
     JTextArea descriptionField;
     JTextArea vitalsField;
     JButton detailsButton;
@@ -50,19 +54,30 @@ public class ExamRecordView extends JPanel implements IClientView
 
     JTextField treatmentIDField;
     JTextField medicationField;
-    JTextField treatmentStartDateField;
-    JTextField treatmentEndDateField;
+    JFormattedTextField treatmentStartDateField;
+    JFormattedTextField treatmentEndDateField;
     JTextArea treatmentDirectionsField;
 
     JButton saveButton;
     JButton closeButton;
+
+    DateFormat dateFormat;
+    NumberFormat numberFormat;
 
 
     public ExamRecordView()
     {
         clientController = ClientController.getInstance();
         clientController.registerView(this);
+        configureFormatters();
         createUI();
+    }
+
+    private void configureFormatters()
+    {
+        dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        numberFormat = NumberFormat.getNumberInstance();
+        numberFormat.setMaximumFractionDigits(3);
     }
 
     private void createUI()
@@ -179,14 +194,14 @@ public class ExamRecordView extends JPanel implements IClientView
         JPanel treatmentStartDatePanel = new JPanel();
         treatmentStartDatePanel.setLayout(new BoxLayout(treatmentStartDatePanel, BoxLayout.Y_AXIS));
         JLabel treatmentStartDateLabel = new JLabel("Start Date");
-        treatmentStartDateField = new JTextField(10);
+        treatmentStartDateField = new JFormattedTextField(dateFormat);
         treatmentStartDatePanel.add(treatmentStartDateLabel);
         treatmentStartDatePanel.add(treatmentStartDateField);
 
         JPanel treatmentEndDatePanel = new JPanel();
         treatmentEndDatePanel.setLayout(new BoxLayout(treatmentEndDatePanel, BoxLayout.Y_AXIS));
         JLabel treatmentEndDateLabel = new JLabel("End Date");
-        treatmentEndDateField = new JTextField(10);
+        treatmentEndDateField = new JFormattedTextField(dateFormat);
         treatmentEndDatePanel.add(treatmentEndDateLabel);
         treatmentEndDatePanel.add(treatmentEndDateField);
 
@@ -250,14 +265,14 @@ public class ExamRecordView extends JPanel implements IClientView
         JPanel dateTimePanel = new JPanel();
         dateTimePanel.setLayout(new BoxLayout(dateTimePanel, BoxLayout.Y_AXIS));
         JLabel dateTimeLabel = new JLabel("Date/Time");
-        dateTimeField = new JTextField(10);
+        dateTimeField = new JFormattedTextField(dateFormat);
         dateTimePanel.add(dateTimeLabel);
         dateTimePanel.add(dateTimeField);
 
         JPanel weightPanel = new JPanel();
         weightPanel.setLayout(new BoxLayout(weightPanel, BoxLayout.Y_AXIS));
         JLabel weightLabel = new JLabel("Weight");
-        weightField = new JTextField(10);
+        weightField = new JFormattedTextField(numberFormat);
         weightPanel.add(weightLabel);
         weightPanel.add(weightField);
 
@@ -294,54 +309,43 @@ public class ExamRecordView extends JPanel implements IClientView
 
     private void updateExam()
     {
-        LocalDateTime date = null;
-        try
-        {
-            date = getDateFromText(dateTimeField.getText());
-            if(date != null)
-            {
-                exam.setDateTime(date);
-            }
-        }
-        catch(Exception ex){}
-        try
-        {
-            int weight = Integer.parseInt(weightField.getText());
-            exam.setWeight(weight);
-        } catch (NumberFormatException e){}
-        exam.setVetID(((Vet)examinerBox.getSelectedItem()).getEmpID());
-        exam.setTechID(((Tech)techBox.getSelectedItem()).getEmpID());
-        exam.setLocation(locationField.getText());
-        exam.setDescription(descriptionField.getText());
-        exam.setVitals(vitalsField.getText());
-        clientController.updateExam(exam.getExamID(), exam);
+        String dateTime = dateTimeField.getText();
+        int vetID = ((Vet)examinerBox.getSelectedItem()).getEmpID();
+        int techID = ((Tech)techBox.getSelectedItem()).getEmpID();
+        String description = descriptionField.getText();
+        String vitals = vitalsField.getText();
+        int weight = Integer.parseInt(weightField.getText());
+        String location = locationField.getText();
+
+        clientController.updateExam(clientController.getCurrentExamID(), dateTime, vetID, techID, description, vitals, weight, location);
     }
 
     private void updateTreatment()
     {
-        LocalDateTime startDate = null;
-        LocalDateTime endDate = null;
-        try
-        {
-            startDate = getDateFromText(treatmentStartDateField.getText());
-            if(startDate != null)
-            {
-                treatment.setStartDate(startDate);
-            }
-        }
-        catch(Exception ex){}
-        try
-        {
-            endDate = getDateFromText(treatmentEndDateField.getText());
-            if(endDate != null)
-            {
-                treatment.setEndDate(endDate);
-            }
-        }
-        catch(Exception ex){}
+        Date startDate = (Date)treatmentStartDateField.getValue();
+        Date endDate = (Date)treatmentEndDateField.getValue();
 
         treatment.setMedication(medicationField.getText());
         treatment.setDirections(treatmentDirectionsField.getText());
+        if (startDate != null)
+        {
+            LocalDate start = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            if(start != null)
+            {
+                treatment.setStartDate(start);
+            
+            }
+        }
+
+        if (endDate != null)
+        {
+            LocalDate end = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            if(end != null)
+            {
+                treatment.setEndDate(end);
+            }
+        }
+
         clientController.updateTreatment(treatment.getTreatmentID(), treatment);
     }
 
@@ -353,7 +357,7 @@ public class ExamRecordView extends JPanel implements IClientView
 
     private void refreshExam()
     {
-        exam = clientController.getExam(clientController.getCurrentExamID());
+        Exam exam = clientController.getExam(clientController.getCurrentExamID());
         if(exam != null)
         {
             petNameField.setText(clientController.getPet(exam.getPetID()).getName());
@@ -387,21 +391,6 @@ public class ExamRecordView extends JPanel implements IClientView
             catch(Exception e){}
             treatmentDirectionsField.setText(treatment.getDirections());
         }
-    }
-
-    private LocalDateTime getDateFromText(String dateTime)
-    {
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
-        Date date = null;
-        try
-        {
-            date = sdf.parse(dateTime);
-        }
-        catch(ParseException e)
-        {
-            e.printStackTrace();
-        }
-        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 
     private class VetComboBoxRenderer extends JLabel implements ListCellRenderer<Vet>

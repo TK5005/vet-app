@@ -1,34 +1,19 @@
 package model;
 
-import java.util.ArrayList;
-
 public class Vet extends Staff
 {
-    private int licenseNumber;
-    private ArrayList<Specialty> specialties;
+    private long licenseNumber;
 
     public Vet()
     {
-        specialties = new ArrayList<>();
+        super();
     }
 
-    public int getLicenseNumber() {
+    public long getLicenseNumber() {
         return licenseNumber;
     }
 
-    public void setLicenseNumber(int licenseNumber) {
+    public void setLicenseNumber(long licenseNumber) {
         this.licenseNumber = licenseNumber;
-    }
-
-    public ArrayList<Specialty> getSpecialties() {
-        return specialties;
-    }
-
-    public void addSpecialty(Specialty specialty) {
-        specialties.add(specialty);
-    }
-
-    public void removeSpecialty(Specialty specialty) {
-        specialties.remove(specialty);
     }
 }

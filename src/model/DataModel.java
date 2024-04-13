@@ -95,7 +95,7 @@ public class DataModel
      * @param clientID The client ID
      * @param client The client to update
      */
-    public void updateClient(long clientID, Client client)
+    public void updateClient(int clientID, Client client)
     {
         // Update client based on clientID
         for(int i = 0; i < clients.size(); i++)
@@ -151,7 +151,7 @@ public class DataModel
      * @param pet The pet to add
      * @param clientID The client ID
      */
-    public void addPet(Pet pet, long clientID)
+    public void addPet(Pet pet, int clientID)
     {
         // Upate patientID so that it is unique
         if(pets.size() > 0)
@@ -210,7 +210,7 @@ public class DataModel
      * Delete a pet
      * @param patientID The patient ID
      */
-    public void deletePet(Long patientID)
+    public void deletePet(int patientID)
     {
         // Delete pet based on patientID
         for(int i = 0; i < pets.size(); i++)
@@ -268,7 +268,7 @@ public class DataModel
      * @param exam The exam to add
      * @param patientID The patient ID
      */
-    public void addExam(Exam exam, long patientID)
+    public int addExam(Exam exam, int petID)
     {
         // Upate examID so that it is unique
         if(exams.size() > 0)
@@ -281,10 +281,28 @@ public class DataModel
         }
 
         // Assign the patient as the owner of the exam
-        exam.setPetID(patientID);
+        exam.setPetID(petID);
 
         // Add exam to the list
         exams.add(exam);
+        return exam.getExamID();
+    }
+
+    public int addTreatment(Treatment treatment)
+    {
+        // Upate treatmentID so that it is unique
+        if(treatments.size() > 0)
+        {
+            treatment.setTreatmentID(treatments.get(treatments.size() - 1).getTreatmentID() + 1);
+        }
+        else
+        {
+            treatment.setTreatmentID(0);
+        }
+
+        // Add treatment to the list
+        treatments.add(treatment);
+        return treatment.getTreatmentID();
     }
 
     /**
@@ -455,11 +473,11 @@ public class DataModel
         // Upate invoiceNo so that it is unique
         if(invoices.size() > 0)
         {
-            invoice.setInvoiceNo(invoices.get(invoices.size() - 1).getInvoiceNo() + 1);
+            invoice.setInvoiceID(invoices.get(invoices.size() - 1).getInvoiceID() + 1);
         }
         else
         {
-            invoice.setInvoiceNo(0);
+            invoice.setInvoiceID(0);
         }
 
         // Add invoice to the list
@@ -471,7 +489,7 @@ public class DataModel
         // Get invoice based on invoiceID
         for(int i = 0; i < invoices.size(); i++)
         {
-            if(invoices.get(i).getInvoiceNo() == invoiceID)
+            if(invoices.get(i).getInvoiceID() == invoiceID)
             {
                 return invoices.get(i);
             }
@@ -484,7 +502,7 @@ public class DataModel
         // Update invoice based on invoiceID
         for(int i = 0; i < invoices.size(); i++)
         {
-            if(invoices.get(i).getInvoiceNo() == invoiceID)
+            if(invoices.get(i).getInvoiceID() == invoiceID)
             {
                 invoices.set(i, invoice);
                 break;
@@ -497,7 +515,7 @@ public class DataModel
         // Delete invoice based on invoiceID
         for(int i = 0; i < invoices.size(); i++)
         {
-            if(invoices.get(i).getInvoiceNo() == invoiceID)
+            if(invoices.get(i).getInvoiceID() == invoiceID)
             {
                 invoices.remove(i);
                 break;
@@ -524,7 +542,7 @@ public class DataModel
             client.setStreet("1234 Main St");
             client.setCity("Baltimore");
             client.setState("MD");
-            client.setZip("2123" + i);
+            client.setZip(Integer.parseInt("2123" + i));
             clients.add(client);
         }
     }
@@ -591,7 +609,7 @@ public class DataModel
             vet.setStreet("1234 Main St");
             vet.setCity("Baltimore");
             vet.setState("MD");
-            vet.setZip("2123" + i);
+            vet.setZip(Integer.parseInt("2123" + i));
             vets.add(vet);
         }
     }
@@ -612,7 +630,7 @@ public class DataModel
             tech.setStreet("1234 Main St");
             tech.setCity("Baltimore");
             tech.setState("MD");
-            tech.setZip("2123" + i);
+            tech.setZip(Integer.parseInt("2123" + i));
             techs.add(tech);
         }
     }
@@ -626,8 +644,8 @@ public class DataModel
             treatment.setTreatmentID(i);
             treatment.setExamID(i % 10);
             treatment.setMedication("Medication");
-            treatment.setStartDate(LocalDateTime.of(2021, 1, 1, 0, 0));
-            treatment.setEndDate(LocalDateTime.of(2021, 1, 1, 0, 0));
+            treatment.setStartDate(LocalDate.of(2021, 1, 1));
+            treatment.setEndDate(LocalDate.of(2021, 1, 1));
             treatment.setDirections("Directions");
             treatments.add(treatment);
         }
@@ -639,7 +657,7 @@ public class DataModel
         for(int i = 0; i < 10; i++)
         {
             Invoice invoice = new Invoice();
-            invoice.setInvoiceNo(i);
+            invoice.setInvoiceID(i);
             invoice.setExamID(i % 10);
             invoice.setClientID(i % 5);
             invoice.setAmtDue(100.00);
