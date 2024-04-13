@@ -59,6 +59,22 @@ public class InvoiceController
         return currentInvoiceID;
     }
 
+    public Invoice getInvoice(int invoiceID) {
+        return dataModel.getInvoice(invoiceID);
+    }
+
+    public Client getClient(int clientID) {
+        return dataModel.getClient(clientID);
+    }
+
+    public Pet getPet(int petID) {
+        return dataModel.getPet(petID);
+    }
+
+    public Exam getExam(int examID) {
+        return dataModel.getExam(examID);
+    }
+
     public void showInvoiceList()
     {
         invoiceView.showListView();
@@ -83,9 +99,9 @@ public class InvoiceController
         refreshViews();
     }
 
-    public void updateInvoice(int examID, String status, String invoiceDate, String amtDue)
+    public void updateInvoice(int invoiceID, int examID, String status, String invoiceDate, String amtDue)
     {
-        Invoice invoice = dataModel.getInvoice(currentInvoiceID);
+        Invoice invoice = dataModel.getInvoice(invoiceID);
         invoice.setExamID(examID);
         invoice.setClientID(dataModel.getPet(dataModel.getExam(examID).getPetID()).getOwnerID());
         for(Invoice.Status s : Invoice.Status.values())
@@ -113,83 +129,8 @@ public class InvoiceController
         return examIDs;
     }
 
-    public int getCurrentInvoiceExamID() {
-        Invoice invoice = dataModel.getInvoice(currentInvoiceID);
-        if(invoice == null)
-        {
-            return 0;
-        }
-        return invoice.getExamID();
-    }
-
-    public String getCurrentInvoiceDateString() {
-        Invoice invoice = dataModel.getInvoice(currentInvoiceID);
-        if(invoice == null)
-        {
-            return "";
-        }
-        LocalDateTime date = invoice.getInvoiceDate();
-        if(date != null)
-        {
-            return date.toString();
-        }
-        return "";
-    }
-
-    public String getCurrentInvoiceOwnerName() {
-        Invoice invoice = dataModel.getInvoice(currentInvoiceID);
-        if(invoice == null)
-        {
-            return "";
-        }
-        Pet pet = dataModel.getPet(dataModel.getExam(invoice.getExamID()).getPetID());
-        Client client = dataModel.getClient(pet.getOwnerID());
-        return client.getName();
-    }
-
-    public String getCurrentInvoicePetName() {
-        Invoice invoice = dataModel.getInvoice(currentInvoiceID);
-        if(invoice == null)
-        {
-            return "";
-        }
-        Pet pet = dataModel.getPet(dataModel.getExam(invoice.getExamID()).getPetID());
-        return pet.getName();
-    }
-
-    public String getCurrentInvoiceStatus() {
-        Invoice invoice = dataModel.getInvoice(currentInvoiceID);
-        if(invoice == null)
-        {
-            return "";
-        }
-        return invoice.getStatusString();
-    }
-
     public String[] getStatusOptions() {
         return Invoice.getStatusOptions();
-    }
-
-    public String getOwnerFromExamID(int examID)
-    {
-        Pet pet = dataModel.getPet(dataModel.getExam(examID).getPetID());
-        Client client = dataModel.getClient(pet.getOwnerID());
-        return client.getName();
-    }
-
-    public String getPetFromExamID(int examID)
-    {
-        Pet pet = dataModel.getPet(dataModel.getExam(examID).getPetID());
-        return pet.getName();
-    }
-
-    public String getCurrentInvoiceAmtDue() {
-        Invoice invoice = dataModel.getInvoice(currentInvoiceID);
-        if(invoice == null)
-        {
-            return "";
-        }
-        return Double.toString(invoice.getAmtDue());
     }
 
     public Object[][] getInvoiceTableData()
@@ -198,7 +139,7 @@ public class InvoiceController
         Object[][] tableData = new Object[invoices.length][6];
         for (int i = 0; i < invoices.length; i++) {
             Exam exam = dataModel.getExam(invoices[i].getExamID());
-            int invoiceNo = invoices[i].getInvoiceNo();
+            int invoiceID = invoices[i].getInvoiceID();
             String clientName = dataModel.getClient(invoices[i].getClientID()).getName();
             String petName = dataModel.getPet(exam.getPetID()).getName();
             String invoiceDate = "";
@@ -209,7 +150,7 @@ public class InvoiceController
                 invoiceDate = date.toString();
             }
             String status = invoices[i].getStatusString();
-            tableData[i] = new Object[]{invoiceNo, clientName, petName, invoiceDate, amtDue, status, ""};
+            tableData[i] = new Object[]{invoiceID, clientName, petName, invoiceDate, amtDue, status, ""};
         }
         return tableData;
     }

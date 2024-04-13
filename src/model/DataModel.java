@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class DataModel
 {
@@ -111,7 +112,7 @@ public class DataModel
      * Delete a client
      * @param clientID The client ID
      */
-    public void deleteClient(int clientID)
+    public void deleteClient(long clientID)
     {
         // Delete client based on clientID
         for(int i = 0; i < clients.size(); i++)
@@ -129,7 +130,7 @@ public class DataModel
      * @param clientID The client ID
      * @return The client object
      */
-    public Client getClient(int clientID)
+    public Client getClient(long clientID)
     {
         // Get client based on clientID
         for(int i = 0; i < clients.size(); i++)
@@ -174,7 +175,7 @@ public class DataModel
      * @param clientID The client ID
      * @return An array of pets
      */
-    public Pet[] getPets(int clientID)
+    public Pet[] getPets(long clientID)
     {
         ArrayList<Pet> clientPets = new ArrayList<Pet>();
         for(int i = 0; i < pets.size(); i++)
@@ -192,7 +193,7 @@ public class DataModel
      * @param patientID The patient ID
      * @param pet The new pet object
      */
-    public void updatePet(int patientID, Pet pet)
+    public void updatePet(long patientID, Pet pet)
     {
         // Update pet based on patientID
         for(int i = 0; i < pets.size(); i++)
@@ -227,7 +228,7 @@ public class DataModel
      * @param patientID The patient ID
      * @return The pet object
      */
-    public Pet getPet(int patientID)
+    public Pet getPet(long patientID)
     {
         // Get pet based on patientID
         for(int i = 0; i < pets.size(); i++)
@@ -248,7 +249,7 @@ public class DataModel
      * @param patientID The patient ID
      * @return An array of exams
      */
-    public Exam[] getExams(int patientID)
+    public Exam[] getExams(long patientID)
     {
         // Get exams based on patientID
         ArrayList<Exam> patientExams = new ArrayList<Exam>();
@@ -267,7 +268,7 @@ public class DataModel
      * @param exam The exam to add
      * @param patientID The patient ID
      */
-    public void addExam(Exam exam, int patientID)
+    public int addExam(Exam exam, int petID)
     {
         // Upate examID so that it is unique
         if(exams.size() > 0)
@@ -280,10 +281,28 @@ public class DataModel
         }
 
         // Assign the patient as the owner of the exam
-        exam.setPetID(patientID);
+        exam.setPetID(petID);
 
         // Add exam to the list
         exams.add(exam);
+        return exam.getExamID();
+    }
+
+    public int addTreatment(Treatment treatment)
+    {
+        // Upate treatmentID so that it is unique
+        if(treatments.size() > 0)
+        {
+            treatment.setTreatmentID(treatments.get(treatments.size() - 1).getTreatmentID() + 1);
+        }
+        else
+        {
+            treatment.setTreatmentID(0);
+        }
+
+        // Add treatment to the list
+        treatments.add(treatment);
+        return treatment.getTreatmentID();
     }
 
     /**
@@ -291,7 +310,7 @@ public class DataModel
      * @param examID The exam ID
      * @param exam The new exam object
      */
-    public void updateExam(int examID, Exam exam)
+    public void updateExam(long examID, Exam exam)
     {
         // Update exam based on examID
         for(int i = 0; i < exams.size(); i++)
@@ -308,7 +327,7 @@ public class DataModel
      * Delete an exam
      * @param examID The exam ID
      */
-    public void deleteExam(int examID)
+    public void deleteExam(long examID)
     {
         // Delete exam based on examID
         for(int i = 0; i < exams.size(); i++)
@@ -326,7 +345,7 @@ public class DataModel
      * @param examID The exam ID
      * @return The exam object
      */
-    public Exam getExam(int examID)
+    public Exam getExam(long examID)
     {
         // Get exam based on examID
         for(int i = 0; i < exams.size(); i++)
@@ -346,7 +365,7 @@ public class DataModel
      * @param vetID The vet ID
      * @return The vet object
      */
-    public Vet getVet(int vetID)
+    public Vet getVet(long vetID)
     {
         // Get vet based on vetID
         for(int i = 0; i < vets.size(); i++)
@@ -364,7 +383,7 @@ public class DataModel
      * @param techID The tech ID
      * @return The tech object
      */
-    public Tech getTech(int techID)
+    public Tech getTech(long techID)
     {
         // Get tech based on techID
         for(int i = 0; i < techs.size(); i++)
@@ -377,7 +396,7 @@ public class DataModel
         return null;
     }
 
-    public Treatment getTreatmentFromExamID(int examID)
+    public Treatment getTreatmentFromExamID(long examID)
     {
         // Get treatment based on examID
         for(int i = 0; i < treatments.size(); i++)
@@ -390,7 +409,7 @@ public class DataModel
         return null;
     }
 
-    public void updateTreatment(int treatmentID, Treatment treatment)
+    public void updateTreatment(long treatmentID, Treatment treatment)
     {
         // Update treatment based on treatmentID
         for(int i = 0; i < treatments.size(); i++)
@@ -418,7 +437,7 @@ public class DataModel
         return techs.toArray(new Tech[techs.size()]);
     }
 
-    public Appointment[] getAppointments(int petID)
+    public Appointment[] getAppointments(long petID)
     {
         ArrayList<Appointment> petAppointments = new ArrayList<Appointment>();
         for(int i = 0; i < appointments.size(); i++)
@@ -431,7 +450,7 @@ public class DataModel
         return petAppointments.toArray(new Appointment[petAppointments.size()]);
     }
 
-    public Invoice[] getInvoices(int petID)
+    public Invoice[] getInvoices(long petID)
     {
         ArrayList<Invoice> petInvoices = new ArrayList<Invoice>();
         for(int i = 0; i < invoices.size(); i++)
@@ -454,23 +473,23 @@ public class DataModel
         // Upate invoiceNo so that it is unique
         if(invoices.size() > 0)
         {
-            invoice.setInvoiceNo(invoices.get(invoices.size() - 1).getInvoiceNo() + 1);
+            invoice.setInvoiceID(invoices.get(invoices.size() - 1).getInvoiceID() + 1);
         }
         else
         {
-            invoice.setInvoiceNo(0);
+            invoice.setInvoiceID(0);
         }
 
         // Add invoice to the list
         invoices.add(invoice);
     }
 
-    public Invoice getInvoice(int invoiceID)
+    public Invoice getInvoice(long invoiceID)
     {
         // Get invoice based on invoiceID
         for(int i = 0; i < invoices.size(); i++)
         {
-            if(invoices.get(i).getInvoiceNo() == invoiceID)
+            if(invoices.get(i).getInvoiceID() == invoiceID)
             {
                 return invoices.get(i);
             }
@@ -478,12 +497,12 @@ public class DataModel
         return null;
     }
 
-    public void updateInvoice(int invoiceID, Invoice invoice)
+    public void updateInvoice(long invoiceID, Invoice invoice)
     {
         // Update invoice based on invoiceID
         for(int i = 0; i < invoices.size(); i++)
         {
-            if(invoices.get(i).getInvoiceNo() == invoiceID)
+            if(invoices.get(i).getInvoiceID() == invoiceID)
             {
                 invoices.set(i, invoice);
                 break;
@@ -491,12 +510,12 @@ public class DataModel
         }
     }
 
-    public void deleteInvoice(int invoiceID)
+    public void deleteInvoice(long invoiceID)
     {
         // Delete invoice based on invoiceID
         for(int i = 0; i < invoices.size(); i++)
         {
-            if(invoices.get(i).getInvoiceNo() == invoiceID)
+            if(invoices.get(i).getInvoiceID() == invoiceID)
             {
                 invoices.remove(i);
                 break;
@@ -523,7 +542,7 @@ public class DataModel
             client.setStreet("1234 Main St");
             client.setCity("Baltimore");
             client.setState("MD");
-            client.setZip("2123" + i);
+            client.setZip(Integer.parseInt("2123" + i));
             clients.add(client);
         }
     }
@@ -538,12 +557,16 @@ public class DataModel
         {
             Pet pet = new Pet();
             pet.setPetID(i);
-            pet.setName("Pet" + i);
-            pet.setSpecies("Dog");
-            pet.setBreed("Labrador");
-            pet.setAge(5);
             pet.setOwnerID(i % 5);
-            pet.setBirthdate(LocalDateTime.of(2015, 1, 1, 0, 0));
+            pet.setName("Pet" + i);
+            pet.setSex("M");
+            pet.setColor("Color");
+            pet.setSpecies("Species");
+            pet.setBreed("Breed");
+            pet.setBirthdate(LocalDate.of(2021, 1, 1));
+            pet.setWeight(50);
+            pet.setMicrochipNumber(123456789);
+            pet.setRabiesTag(987654321);
             pets.add(pet);
         }
     }
@@ -586,7 +609,7 @@ public class DataModel
             vet.setStreet("1234 Main St");
             vet.setCity("Baltimore");
             vet.setState("MD");
-            vet.setZip("2123" + i);
+            vet.setZip(Integer.parseInt("2123" + i));
             vets.add(vet);
         }
     }
@@ -607,7 +630,7 @@ public class DataModel
             tech.setStreet("1234 Main St");
             tech.setCity("Baltimore");
             tech.setState("MD");
-            tech.setZip("2123" + i);
+            tech.setZip(Integer.parseInt("2123" + i));
             techs.add(tech);
         }
     }
@@ -621,8 +644,8 @@ public class DataModel
             treatment.setTreatmentID(i);
             treatment.setExamID(i % 10);
             treatment.setMedication("Medication");
-            treatment.setStartDate(LocalDateTime.of(2021, 1, 1, 0, 0));
-            treatment.setEndDate(LocalDateTime.of(2021, 1, 1, 0, 0));
+            treatment.setStartDate(LocalDate.of(2021, 1, 1));
+            treatment.setEndDate(LocalDate.of(2021, 1, 1));
             treatment.setDirections("Directions");
             treatments.add(treatment);
         }
@@ -634,7 +657,7 @@ public class DataModel
         for(int i = 0; i < 10; i++)
         {
             Invoice invoice = new Invoice();
-            invoice.setInvoiceNo(i);
+            invoice.setInvoiceID(i);
             invoice.setExamID(i % 10);
             invoice.setClientID(i % 5);
             invoice.setAmtDue(100.00);

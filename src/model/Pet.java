@@ -1,6 +1,6 @@
 package model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class Pet
 {
@@ -11,11 +11,10 @@ public class Pet
     private String color;
     private String species;
     private String breed;
-    private LocalDateTime birthdate;
-    private int age;
+    private LocalDate birthdate;
     private int weight;
-    private int microchipNumber;
-    private int rabiesTag;
+    private long microchipNumber;
+    private long rabiesTag;
     
     public int getPetID() {
         return petID;
@@ -65,20 +64,12 @@ public class Pet
         this.breed = breed;
     }
 
-    public LocalDateTime getBirthdate() {
+    public LocalDate getBirthdate() {
         return birthdate;
     }
 
-    public void setBirthdate(LocalDateTime birthdate) {
+    public void setBirthdate(LocalDate birthdate) {
         this.birthdate = birthdate;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
     }
 
     public int getWeight() {
@@ -89,19 +80,19 @@ public class Pet
         this.weight = weight;
     }
 
-    public int getMicrochipNumber() {
+    public long getMicrochipNumber() {
         return microchipNumber;
     }
 
-    public void setMicrochipNumber(int microchipNumber) {
+    public void setMicrochipNumber(long microchipNumber) {
         this.microchipNumber = microchipNumber;
     }
 
-    public int getRabiesTag() {
+    public long getRabiesTag() {
         return rabiesTag;
     }
 
-    public void setRabiesTag(int rabiesTag) {
+    public void setRabiesTag(long rabiesTag) {
         this.rabiesTag = rabiesTag;
     }
 

@@ -13,6 +13,11 @@ import javax.swing.JComboBox;
 
 import java.awt.FlowLayout;
 
+import model.Client;
+import model.Invoice;
+import model.Exam;
+import model.Pet;
+
 public class InvoiceDetailView extends JPanel implements IInvoiceView
 {
     private InvoiceController controller;
@@ -42,7 +47,6 @@ public class InvoiceDetailView extends JPanel implements IInvoiceView
     public void refresh()
     {
         examSelection.removeAllItems();
-    
         
         int[] examIDs = controller.getExamIDs();
         for (int id : examIDs) {
@@ -57,13 +61,23 @@ public class InvoiceDetailView extends JPanel implements IInvoiceView
             invoiceStatusField.addItem(status);
         }
 
-        examSelection.setSelectedItem(controller.getCurrentInvoiceExamID());
-        invoiceIDField.setText(Integer.toString(controller.getCurrentInvoiceID()));
-        invoiceDateField.setText(controller.getCurrentInvoiceDateString());
-        ownerNameField.setText(controller.getCurrentInvoiceOwnerName());
-        petNameField.setText(controller.getCurrentInvoicePetName());
-        invoiceAmtField.setText(controller.getCurrentInvoiceAmtDue());
-        invoiceStatusField.setSelectedItem(controller.getCurrentInvoiceStatus());
+        Invoice invoice = controller.getInvoice(controller.getCurrentInvoiceID());
+
+        if(invoice != null)
+        {
+            examSelection.setSelectedItem(invoice.getExamID());
+            invoiceIDField.setText(Integer.toString(invoice.getInvoiceID()));
+            invoiceDateField.setText(invoice.getInvoiceDate().toString());
+
+            Client client = controller.getClient(invoice.getClientID());
+            ownerNameField.setText(client.getName());
+            Exam exam = controller.getExam(invoice.getExamID());
+            Pet pet = controller.getPet(exam.getPetID());
+            petNameField.setText(pet.getName());
+
+            invoiceAmtField.setText(Double.toString(invoice.getAmtDue()));
+            invoiceStatusField.setSelectedItem(invoice.getStatusString());
+        }
     }
 
     private void createActionListeners()
@@ -80,8 +94,11 @@ public class InvoiceDetailView extends JPanel implements IInvoiceView
             try
             {
                 int examID = (int)examSelection.getSelectedItem();
-                ownerNameField.setText(controller.getOwnerFromExamID(examID));
-                petNameField.setText(controller.getPetFromExamID(examID));
+                Exam exam = controller.getExam(examID);
+                Client client = controller.getClient(controller.getPet(exam.getPetID()).getOwnerID());
+                Pet pet = controller.getPet(exam.getPetID());
+                ownerNameField.setText(client.getName());
+                petNameField.setText(pet.getName());
             } catch (NullPointerException ex) {
                 // Do nothing
             }
@@ -92,10 +109,11 @@ public class InvoiceDetailView extends JPanel implements IInvoiceView
     private void updateInvoice()
     {
         int examID = (int)examSelection.getSelectedItem();
+        String amtDue = invoiceAmtField.getText();
         String status = (String) invoiceStatusField.getSelectedItem();
         String invoiceDate = invoiceDateField.getText();
-        String amtDue = invoiceAmtField.getText();
-        controller.updateInvoice(examID, status, invoiceDate, amtDue);
+
+        controller.updateInvoice(controller.getCurrentInvoiceID(), examID, status, invoiceDate, amtDue);
     }
 
     private void createUI()

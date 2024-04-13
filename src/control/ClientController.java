@@ -1,6 +1,7 @@
 package control;
 
 import java.util.ArrayList;
+import java.time.LocalDate;
 
 import model.Client;
 import model.DataModel;
@@ -69,24 +70,24 @@ public class ClientController
         this.currentPetID = currentPetID;
     }
 
-    public void setCurrentClientID(int currentClientID)
-    {
-        this.currentClientID = currentClientID;
-    }
-
-    public void setCurrentExamID(int currentExamID)
-    {
-        this.currentExamID = currentExamID;
-    }
-
     public int getCurrentPetID()
     {
         return currentPetID;
     }
 
+    public void setCurrentClientID(int currentClientID)
+    {
+        this.currentClientID = currentClientID;
+    }
+
     public int getCurrentClientID()
     {
         return currentClientID;
+    }
+
+    public void setCurrentExamID(int currentExamID)
+    {
+        this.currentExamID = currentExamID;
     }
 
     public int getCurrentExamID()
@@ -119,11 +120,20 @@ public class ClientController
 
     /**
      * Update a client
-     * @param clientID The client ID
-     * @param client The new client object
      */
-    public void updateClient(int clientID, Client client)
+    public void updateClient(int clientID, String fName, String lName,
+            String phone, String email, String street, String city, String state, int zip)
     {
+        Client client = dataModel.getClient(clientID);
+        client.setFirstName(fName);
+        client.setLastName(lName);
+        client.setPhone(phone);
+        client.setEmail(email);
+        client.setStreet(street);
+        client.setCity(city);
+        client.setState(state);
+        client.setZip(zip);
+
         dataModel.updateClient(clientID, client);
         refreshViews();
     }
@@ -147,7 +157,6 @@ public class ClientController
     {
         return dataModel.getClient(clientID);
     }
-
 
     // Pet methods
 
@@ -175,12 +184,25 @@ public class ClientController
 
     /**
      * Update a pet
-     * @param petID The pet ID
-     * @param pet The new pet object
      */
-    public void updatePet(int petID, Pet pet)
+    public void updatePet(int petID, String name, String sex, String color, String species,
+                            String breed, String birthdate, int weight, long microchipNumber, long rabiesTag)
     {
-        dataModel.updatePet(petID, pet);
+        Pet pet = dataModel.getPet(petID);
+        pet.setName(name);
+        pet.setSex(sex);
+        pet.setColor(color);
+        pet.setSpecies(species);
+        pet.setBreed(breed);
+        if(birthdate != null && !birthdate.isEmpty())
+        {
+            String[] date = birthdate.split("/");
+            pet.setBirthdate(LocalDate.of(Integer.parseInt(date[2]), Integer.parseInt(date[0]), Integer.parseInt(date[1])));
+        }
+        pet.setWeight(weight);
+        pet.setMicrochipNumber(microchipNumber);
+        pet.setRabiesTag(rabiesTag);
+        dataModel.updatePet(currentPetID, pet);
         refreshViews();
     }
 
@@ -225,8 +247,19 @@ public class ClientController
     {
         Exam exam = new Exam();
         exam.setDescription("New Exam");
-        dataModel.addExam(exam, this.getCurrentPetID());
+        int examID = dataModel.addExam(exam, this.getCurrentPetID());
+        addTreatment(examID);
         refreshViews();
+    }
+
+    public void addTreatment(int examID)
+    {
+        Treatment treatment = new Treatment();
+        treatment.setExamID(examID);
+        treatment.setStartDate(LocalDate.now());
+        treatment.setEndDate(LocalDate.now());
+        treatment.setDirections("New Treatment");
+        dataModel.addTreatment(treatment);
     }
 
     /**
@@ -234,8 +267,20 @@ public class ClientController
      * @param examID The exam ID
      * @param exam The new exam object
      */
-    public void updateExam(int examID, Exam exam)
+    public void updateExam(int examID, String dateTime, int vetID, int techID, String description, String vitals,
+                            int weight, String location)
     {
+        Exam exam = dataModel.getExam(examID);
+        exam.setVetID(vetID);
+        exam.setTechID(techID);
+        exam.setDescription(description);
+        exam.setVitals(vitals);
+        exam.setWeight(weight);
+        exam.setLocation(location);
+        if(dateTime != null && !dateTime.isEmpty())
+        {
+            //TODO: Set exam Date and Time
+        }
         dataModel.updateExam(examID, exam);
     }
 
@@ -290,6 +335,26 @@ public class ClientController
         return dataModel.getVets();
     }
 
+    public Appointment[] getAppointments(int petID)
+    {
+        return dataModel.getAppointments(petID);
+    }
+
+    public Invoice[] getInvoices(int petID)
+    {
+        return dataModel.getInvoices(petID);
+    }
+
+    public Object[][] getPetAppointmentData()
+    {
+        Appointment[] appointments = dataModel.getAppointments(currentPetID);
+        Object[][] tableData = new Object[appointments.length][2];
+        for (int i = 0; i < appointments.length; i++) {
+            tableData[i][0] = appointments[i].getAppointmentDate();
+            tableData[i][1] = appointments[i].getDescription();
+        }
+        return tableData;
+    }
 
     // Page navigation methods
 
@@ -363,15 +428,5 @@ public class ClientController
         this.setCurrentExamID(-1);
         clientPage.closeExamInfoView();
         refreshViews();
-    }
-
-    public Appointment[] getAppointments(int petID)
-    {
-        return dataModel.getAppointments(petID);
-    }
-
-    public Invoice[] getInvoices(int petID)
-    {
-        return dataModel.getInvoices(petID);
     }
 }

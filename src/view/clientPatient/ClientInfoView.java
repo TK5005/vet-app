@@ -2,6 +2,7 @@ package view.clientPatient;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -20,6 +21,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.NumberFormat;
+
 import javax.swing.SwingConstants;
 import javax.swing.JScrollPane;
 import java.awt.Color;
@@ -27,7 +30,7 @@ import java.awt.Color;
 public class ClientInfoView extends JPanel implements IClientView
 {
     private ClientController clientController;
-    private Client client;
+
     private JButton saveButton;
     private JButton closeButton;
     private JTextField clientIDField;
@@ -37,17 +40,26 @@ public class ClientInfoView extends JPanel implements IClientView
     private JTextField streetField;
     private JTextField cityField;
     private JTextField stateField;
-    private JTextField zipField;
+    private JFormattedTextField zipField;
     private JTextField phoneField;
     private JButton addPetButton;
     private DefaultTableModel tableModel;
     private JTable petTable;
+    private NumberFormat zipFormat;
 
     public ClientInfoView()
     {
         clientController = ClientController.getInstance();
         clientController.registerView(this);
+        configureFormatters();
         createUI();
+    }
+
+    private void configureFormatters()
+    {
+        zipFormat = NumberFormat.getIntegerInstance();
+        zipFormat.setGroupingUsed(false);
+        zipFormat.setMaximumIntegerDigits(5);
     }
 
     private void createUI()
@@ -134,7 +146,7 @@ public class ClientInfoView extends JPanel implements IClientView
         JPanel zipPanel = new JPanel();
         zipPanel.setLayout(new BoxLayout(zipPanel, BoxLayout.Y_AXIS));
         zipPanel.add(new JLabel("Zip"));
-        zipField = new JTextField(10);
+        zipField = new JFormattedTextField(zipFormat);
         zipPanel.add(zipField);
 
         JPanel phonePanel = new JPanel();
@@ -223,33 +235,36 @@ public class ClientInfoView extends JPanel implements IClientView
 
     public void refresh()
     {
-        this.client = clientController.getClient(clientController.getCurrentClientID());
+        Client client = clientController.getClient(clientController.getCurrentClientID());
+        
         if(client != null)
         {
-            clientIDField.setText(String.valueOf(client.getClientID()));
+            clientIDField.setText(Integer.toString(client.getClientID()));
             firstNameField.setText(client.getFirstName());
             lastNameField.setText(client.getLastName());
             emailField.setText(client.getEmail());
             streetField.setText(client.getStreet());
             cityField.setText(client.getCity());
             stateField.setText(client.getState());
-            zipField.setText(client.getZip());
+            zipField.setText(Integer.toString(client.getZip()));
             phoneField.setText(client.getPhone());
-            refreshPetTable();
         }
+
+        refreshPetTable();
     }
 
     private void updateClient()
     {
-        client.setFirstName(firstNameField.getText());
-        client.setLastName(lastNameField.getText());
-        client.setEmail(emailField.getText());
-        client.setStreet(streetField.getText());
-        client.setCity(cityField.getText());
-        client.setState(stateField.getText());
-        client.setZip(zipField.getText());
-        client.setPhone(phoneField.getText());
-        clientController.updateClient(client.getClientID(), client);
+        String fName = firstNameField.getText();
+        String lName = lastNameField.getText();
+        String email = emailField.getText();
+        String street = streetField.getText();
+        String city = cityField.getText();
+        String state = stateField.getText();
+        int zip = Integer.parseInt(zipField.getText());
+        String phone = phoneField.getText();
+
+        clientController.updateClient(clientController.getCurrentClientID(), fName, lName, phone, email, street, city, state, zip);
     }
 
     private void refreshPetTable()
@@ -258,7 +273,7 @@ public class ClientInfoView extends JPanel implements IClientView
         tableModel.setRowCount(0);
 
         // Get the pets data from ClientController
-        Pet[] pets = clientController.getPets(client.getClientID());
+        Pet[] pets = clientController.getPets(clientController.getCurrentClientID());
 
         // Populate the table with pet data
         for (Pet pet : pets) {

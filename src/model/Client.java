@@ -10,7 +10,7 @@ public class Client
     private String street;
     private String city;
     private String state;
-    private String zip;
+    private int zip;
 
     public String getName()
     {
@@ -97,12 +97,12 @@ public class Client
         this.state = state;
     }
 
-    public String getZip()
+    public int getZip()
     {
         return zip;
     }
 
-    public void setZip(String zip)
+    public void setZip(int zip)
     {
         this.zip = zip;
     }

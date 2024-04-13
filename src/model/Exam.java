@@ -100,6 +100,6 @@ public class Exam
 
     @Override
     public String toString() {
-        return Integer.toString(examID);
+        return Long.toString(examID);
     }
 }
