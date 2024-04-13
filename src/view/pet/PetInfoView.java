@@ -5,6 +5,7 @@ import java.awt.CardLayout;
 import java.awt.FlowLayout;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -15,14 +16,15 @@ import model.Client;
 import model.Pet;
 import view.exam.ExamTable;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.text.NumberFormat;
+
+import java.time.format.DateTimeFormatter;
+
 import java.awt.Dimension;
 
+import java.text.ParsePosition;
+
 public class PetInfoView extends JPanel implements IClientView {
-    private Pet pet;
     private JTextField nameField;
     private JTextField patientIDField;
     private JTextField clientNameField;
@@ -30,11 +32,10 @@ public class PetInfoView extends JPanel implements IClientView {
     private JTextField colorField;
     private JTextField speciesField;
     private JTextField breedField;
-    private JTextField dateOfBirthField;
-    private JTextField ageField;
-    private JTextField microchipField;
-    private JTextField rabiesTagField;
-    private JTextField weightField;
+    private JFormattedTextField dateOfBirthField;
+    private JFormattedTextField microchipField;
+    private JFormattedTextField rabiesTagField;
+    private JFormattedTextField weightField;
     private JButton saveButton;
     private JButton closeButton;
     private ClientController clientController;
@@ -49,10 +50,15 @@ public class PetInfoView extends JPanel implements IClientView {
     private PetAppointmentsTable appointmentsPanel;
     private PetVaccinationsTable vaccinationsPanel;
     private PetInvoiceTable invoicesPanel;
+    private NumberFormat numberFormat;
+    private DateTimeFormatter dateFormat;
 
     public PetInfoView() {
         clientController = ClientController.getInstance();
         clientController.registerView(this);
+        numberFormat = NumberFormat.getNumberInstance();
+        numberFormat.setGroupingUsed(false);
+        dateFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         createUI();
     }
 
@@ -173,23 +179,15 @@ public class PetInfoView extends JPanel implements IClientView {
         JPanel dateOfBirthPanel = new JPanel();
         dateOfBirthPanel.setLayout(new BoxLayout(dateOfBirthPanel, BoxLayout.Y_AXIS));
         JLabel dateOfBirthLabel = new JLabel("Date of Birth:");
-        dateOfBirthField = new JTextField(20);
+        dateOfBirthField = new JFormattedTextField(dateFormat);
         dateOfBirthPanel.add(dateOfBirthLabel);
         dateOfBirthPanel.add(dateOfBirthField);
         contentPanel.add(dateOfBirthPanel);
 
-        JPanel agePanel = new JPanel();
-        agePanel.setLayout(new BoxLayout(agePanel, BoxLayout.Y_AXIS));
-        JLabel ageLabel = new JLabel("Age:");
-        ageField = new JTextField(20);
-        agePanel.add(ageLabel);
-        agePanel.add(ageField);
-        contentPanel.add(agePanel);
-
         JPanel microchipPanel = new JPanel();
         microchipPanel.setLayout(new BoxLayout(microchipPanel, BoxLayout.Y_AXIS));
         JLabel microchipLabel = new JLabel("Microchip:");
-        microchipField = new JTextField(20);
+        microchipField = new JFormattedTextField(numberFormat);
         microchipPanel.add(microchipLabel);
         microchipPanel.add(microchipField);
         contentPanel.add(microchipPanel);
@@ -197,15 +195,15 @@ public class PetInfoView extends JPanel implements IClientView {
         JPanel rabiesTagPanel = new JPanel();
         rabiesTagPanel.setLayout(new BoxLayout(rabiesTagPanel, BoxLayout.Y_AXIS));
         JLabel rabiesTagLabel = new JLabel("Rabies Tag:");
-        rabiesTagField = new JTextField(20);
+        rabiesTagField = new JFormattedTextField(numberFormat);
         rabiesTagPanel.add(rabiesTagLabel);
         rabiesTagPanel.add(rabiesTagField);
         contentPanel.add(rabiesTagPanel);
 
         JPanel weightPanel = new JPanel();
         weightPanel.setLayout(new BoxLayout(weightPanel, BoxLayout.Y_AXIS));
-        JLabel weightLabel = new JLabel("Weight:");
-        weightField = new JTextField(20);
+        JLabel weightLabel = new JLabel("Weight (lbs):");
+        weightField = new JFormattedTextField(numberFormat);
         weightPanel.add(weightLabel);
         weightPanel.add(weightField);
         contentPanel.add(weightPanel);
@@ -239,66 +237,38 @@ public class PetInfoView extends JPanel implements IClientView {
         });
     }
 
-    private void updatePet() {
-        if (pet != null) {
-            try {
-                pet.setBirthdate(parseDate(dateOfBirthField.getText()));
-            } catch (Exception e) {
-                pet.setBirthdate(LocalDateTime.now());
-            }
+    private void updatePet()
+    {
+        String petBirthDate = dateOfBirthField.getText();
+        String name = nameField.getText();
+        String species = speciesField.getText();
+        String breed = breedField.getText();
+        String color = colorField.getText();
+        String sex = sexField.getText();
+        long weight = numberFormat.parse(weightField.getText(), new ParsePosition(0)).longValue();
+        long microchipNumber = numberFormat.parse(microchipField.getText(), new ParsePosition(0)).longValue();
+        long rabiesTag = numberFormat.parse(rabiesTagField.getText(), new ParsePosition(0)).longValue();
 
-            try {
-                pet.setMicrochipNumber(Integer.parseInt(microchipField.getText()));
-            } catch (Exception e) {
-            }
-
-            try {
-                pet.setRabiesTag(Integer.parseInt(rabiesTagField.getText()));
-            } catch (Exception e) {
-            }
-
-            try {
-                pet.setWeight(Integer.parseInt(weightField.getText()));
-            } catch (Exception e) {
-            }
-
-            pet.setName(nameField.getText());
-            pet.setSpecies(speciesField.getText());
-            pet.setBreed(breedField.getText());
-            pet.setColor(colorField.getText());
-            pet.setSex(sexField.getText());
-
-            clientController.updatePet(pet.getPetID(), pet);
-        }
-    }
-
-    private LocalDateTime parseDate(String date) {
-        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-        try {
-            Date dateObj = formatter.parse(date);
-            return dateObj.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDateTime();
-        } catch (ParseException e) {
-        }
-        return null;
+        clientController.updatePet(name, sex, color, species, breed, petBirthDate, weight, microchipNumber, rabiesTag);
     }
 
     public void refresh() {
-        this.pet = clientController.getPet(this.clientController.getCurrentPetID());
+        Pet pet = clientController.getPet(this.clientController.getCurrentPetID());
         if (pet != null) {
             Client client = clientController.getClient(pet.getOwnerID());
             nameField.setText(pet.getName());
-            patientIDField.setText(Integer.toString(pet.getPetID()));
+            patientIDField.setText(Long.toString(pet.getPetID()));
             clientNameField.setText(client.getName());
             sexField.setText(pet.getSex());
             colorField.setText(pet.getColor());
             speciesField.setText(pet.getSpecies());
             breedField.setText(pet.getBreed());
-            ageField.setText(Integer.toString(pet.getAge()));
-            microchipField.setText(Integer.toString(pet.getMicrochipNumber()));
-            rabiesTagField.setText(Integer.toString(pet.getRabiesTag()));
-            weightField.setText(Integer.toString(pet.getWeight()));
+            microchipField.setText(Long.toString(pet.getMicrochipNumber()));
+            rabiesTagField.setText(Long.toString(pet.getRabiesTag()));
+            weightField.setText(Long.toString(pet.getWeight()));
             if (pet.getBirthdate() != null) {
-                dateOfBirthField.setText(pet.getBirthdate().toLocalDate().toString());
+                String dob = pet.getBirthdate().format(dateFormat);
+                dateOfBirthField.setText(dob);
             }
         }
     }

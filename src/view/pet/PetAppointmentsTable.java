@@ -9,12 +9,8 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import java.awt.Color;
 
-import model.Appointment;
-
 import control.IClientView;
 import control.ClientController;
-
-
 
 public class PetAppointmentsTable extends JPanel implements IClientView
 {
@@ -72,12 +68,10 @@ public class PetAppointmentsTable extends JPanel implements IClientView
         // Clear the table
         tableModel.setRowCount(0);
 
-        // Get the pets data from ClientController
-        Appointment[] appointments = clientController.getAppointments(clientController.getCurrentPetID());
+        Object[][] tableData = clientController.getPetAppointmentData();
 
-        // Populate the table with pet data
-        for (Appointment appointment : appointments) {
-            Object[] rowData = {appointment.getAppointmentDate().toString(), appointment.getDescription()};
+        for(Object[] rowData : tableData)
+        {
             tableModel.addRow(rowData);
         }
     }

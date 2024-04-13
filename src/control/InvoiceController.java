@@ -104,16 +104,16 @@ public class InvoiceController
         refreshViews();
     }
 
-    public int[] getExamIDs() {
+    public long[] getExamIDs() {
         Exam[] exams = dataModel.getExams();
-        int[] examIDs = new int[exams.length];
+        long[] examIDs = new long[exams.length];
         for (int i = 0; i < exams.length; i++) {
             examIDs[i] = exams[i].getExamID();
         }
         return examIDs;
     }
 
-    public int getCurrentInvoiceExamID() {
+    public long getCurrentInvoiceExamID() {
         Invoice invoice = dataModel.getInvoice(currentInvoiceID);
         if(invoice == null)
         {
@@ -170,14 +170,14 @@ public class InvoiceController
         return Invoice.getStatusOptions();
     }
 
-    public String getOwnerFromExamID(int examID)
+    public String getOwnerFromExamID(long examID)
     {
         Pet pet = dataModel.getPet(dataModel.getExam(examID).getPetID());
         Client client = dataModel.getClient(pet.getOwnerID());
         return client.getName();
     }
 
-    public String getPetFromExamID(int examID)
+    public String getPetFromExamID(long examID)
     {
         Pet pet = dataModel.getPet(dataModel.getExam(examID).getPetID());
         return pet.getName();
@@ -198,7 +198,7 @@ public class InvoiceController
         Object[][] tableData = new Object[invoices.length][6];
         for (int i = 0; i < invoices.length; i++) {
             Exam exam = dataModel.getExam(invoices[i].getExamID());
-            int invoiceNo = invoices[i].getInvoiceNo();
+            long invoiceNo = invoices[i].getInvoiceNo();
             String clientName = dataModel.getClient(invoices[i].getClientID()).getName();
             String petName = dataModel.getPet(exam.getPetID()).getName();
             String invoiceDate = "";

@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class DataModel
 {
@@ -94,7 +95,7 @@ public class DataModel
      * @param clientID The client ID
      * @param client The client to update
      */
-    public void updateClient(int clientID, Client client)
+    public void updateClient(long clientID, Client client)
     {
         // Update client based on clientID
         for(int i = 0; i < clients.size(); i++)
@@ -111,7 +112,7 @@ public class DataModel
      * Delete a client
      * @param clientID The client ID
      */
-    public void deleteClient(int clientID)
+    public void deleteClient(long clientID)
     {
         // Delete client based on clientID
         for(int i = 0; i < clients.size(); i++)
@@ -129,7 +130,7 @@ public class DataModel
      * @param clientID The client ID
      * @return The client object
      */
-    public Client getClient(int clientID)
+    public Client getClient(long clientID)
     {
         // Get client based on clientID
         for(int i = 0; i < clients.size(); i++)
@@ -150,7 +151,7 @@ public class DataModel
      * @param pet The pet to add
      * @param clientID The client ID
      */
-    public void addPet(Pet pet, int clientID)
+    public void addPet(Pet pet, long clientID)
     {
         // Upate patientID so that it is unique
         if(pets.size() > 0)
@@ -174,7 +175,7 @@ public class DataModel
      * @param clientID The client ID
      * @return An array of pets
      */
-    public Pet[] getPets(int clientID)
+    public Pet[] getPets(long clientID)
     {
         ArrayList<Pet> clientPets = new ArrayList<Pet>();
         for(int i = 0; i < pets.size(); i++)
@@ -192,7 +193,7 @@ public class DataModel
      * @param patientID The patient ID
      * @param pet The new pet object
      */
-    public void updatePet(int patientID, Pet pet)
+    public void updatePet(long patientID, Pet pet)
     {
         // Update pet based on patientID
         for(int i = 0; i < pets.size(); i++)
@@ -209,7 +210,7 @@ public class DataModel
      * Delete a pet
      * @param patientID The patient ID
      */
-    public void deletePet(int patientID)
+    public void deletePet(Long patientID)
     {
         // Delete pet based on patientID
         for(int i = 0; i < pets.size(); i++)
@@ -227,7 +228,7 @@ public class DataModel
      * @param patientID The patient ID
      * @return The pet object
      */
-    public Pet getPet(int patientID)
+    public Pet getPet(long patientID)
     {
         // Get pet based on patientID
         for(int i = 0; i < pets.size(); i++)
@@ -248,7 +249,7 @@ public class DataModel
      * @param patientID The patient ID
      * @return An array of exams
      */
-    public Exam[] getExams(int patientID)
+    public Exam[] getExams(long patientID)
     {
         // Get exams based on patientID
         ArrayList<Exam> patientExams = new ArrayList<Exam>();
@@ -267,7 +268,7 @@ public class DataModel
      * @param exam The exam to add
      * @param patientID The patient ID
      */
-    public void addExam(Exam exam, int patientID)
+    public void addExam(Exam exam, long patientID)
     {
         // Upate examID so that it is unique
         if(exams.size() > 0)
@@ -291,7 +292,7 @@ public class DataModel
      * @param examID The exam ID
      * @param exam The new exam object
      */
-    public void updateExam(int examID, Exam exam)
+    public void updateExam(long examID, Exam exam)
     {
         // Update exam based on examID
         for(int i = 0; i < exams.size(); i++)
@@ -308,7 +309,7 @@ public class DataModel
      * Delete an exam
      * @param examID The exam ID
      */
-    public void deleteExam(int examID)
+    public void deleteExam(long examID)
     {
         // Delete exam based on examID
         for(int i = 0; i < exams.size(); i++)
@@ -326,7 +327,7 @@ public class DataModel
      * @param examID The exam ID
      * @return The exam object
      */
-    public Exam getExam(int examID)
+    public Exam getExam(long examID)
     {
         // Get exam based on examID
         for(int i = 0; i < exams.size(); i++)
@@ -346,7 +347,7 @@ public class DataModel
      * @param vetID The vet ID
      * @return The vet object
      */
-    public Vet getVet(int vetID)
+    public Vet getVet(long vetID)
     {
         // Get vet based on vetID
         for(int i = 0; i < vets.size(); i++)
@@ -364,7 +365,7 @@ public class DataModel
      * @param techID The tech ID
      * @return The tech object
      */
-    public Tech getTech(int techID)
+    public Tech getTech(long techID)
     {
         // Get tech based on techID
         for(int i = 0; i < techs.size(); i++)
@@ -377,7 +378,7 @@ public class DataModel
         return null;
     }
 
-    public Treatment getTreatmentFromExamID(int examID)
+    public Treatment getTreatmentFromExamID(long examID)
     {
         // Get treatment based on examID
         for(int i = 0; i < treatments.size(); i++)
@@ -390,7 +391,7 @@ public class DataModel
         return null;
     }
 
-    public void updateTreatment(int treatmentID, Treatment treatment)
+    public void updateTreatment(long treatmentID, Treatment treatment)
     {
         // Update treatment based on treatmentID
         for(int i = 0; i < treatments.size(); i++)
@@ -418,7 +419,7 @@ public class DataModel
         return techs.toArray(new Tech[techs.size()]);
     }
 
-    public Appointment[] getAppointments(int petID)
+    public Appointment[] getAppointments(long petID)
     {
         ArrayList<Appointment> petAppointments = new ArrayList<Appointment>();
         for(int i = 0; i < appointments.size(); i++)
@@ -431,7 +432,7 @@ public class DataModel
         return petAppointments.toArray(new Appointment[petAppointments.size()]);
     }
 
-    public Invoice[] getInvoices(int petID)
+    public Invoice[] getInvoices(long petID)
     {
         ArrayList<Invoice> petInvoices = new ArrayList<Invoice>();
         for(int i = 0; i < invoices.size(); i++)
@@ -465,7 +466,7 @@ public class DataModel
         invoices.add(invoice);
     }
 
-    public Invoice getInvoice(int invoiceID)
+    public Invoice getInvoice(long invoiceID)
     {
         // Get invoice based on invoiceID
         for(int i = 0; i < invoices.size(); i++)
@@ -478,7 +479,7 @@ public class DataModel
         return null;
     }
 
-    public void updateInvoice(int invoiceID, Invoice invoice)
+    public void updateInvoice(long invoiceID, Invoice invoice)
     {
         // Update invoice based on invoiceID
         for(int i = 0; i < invoices.size(); i++)
@@ -491,7 +492,7 @@ public class DataModel
         }
     }
 
-    public void deleteInvoice(int invoiceID)
+    public void deleteInvoice(long invoiceID)
     {
         // Delete invoice based on invoiceID
         for(int i = 0; i < invoices.size(); i++)
@@ -538,12 +539,16 @@ public class DataModel
         {
             Pet pet = new Pet();
             pet.setPetID(i);
-            pet.setName("Pet" + i);
-            pet.setSpecies("Dog");
-            pet.setBreed("Labrador");
-            pet.setAge(5);
             pet.setOwnerID(i % 5);
-            pet.setBirthdate(LocalDateTime.of(2015, 1, 1, 0, 0));
+            pet.setName("Pet" + i);
+            pet.setSex("M");
+            pet.setColor("Color");
+            pet.setSpecies("Species");
+            pet.setBreed("Breed");
+            pet.setBirthdate(LocalDate.of(2021, 1, 1));
+            pet.setWeight(50);
+            pet.setMicrochipNumber(123456789);
+            pet.setRabiesTag(987654321);
             pets.add(pet);
         }
     }

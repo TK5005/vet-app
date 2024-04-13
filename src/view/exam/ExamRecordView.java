@@ -357,7 +357,7 @@ public class ExamRecordView extends JPanel implements IClientView
         if(exam != null)
         {
             petNameField.setText(clientController.getPet(exam.getPetID()).getName());
-            examIDField.setText(Integer.toString(exam.getExamID()));
+            examIDField.setText(Long.toString(exam.getExamID()));
             examinerBox.setSelectedItem(clientController.getVet(exam.getVetID()));
             techBox.setSelectedItem(clientController.getTech(exam.getTechID()));
             locationField.setText(exam.getLocation());
@@ -366,7 +366,7 @@ public class ExamRecordView extends JPanel implements IClientView
                 dateTimeField.setText(exam.getDateTime().toString());
             }
             catch(Exception e){}
-            weightField.setText(Integer.toString(exam.getWeight()));
+            weightField.setText(Long.toString(exam.getWeight()));
             descriptionField.setText(exam.getDescription());
             vitalsField.setText(exam.getVitals());
         }

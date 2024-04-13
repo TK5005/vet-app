@@ -1,27 +1,26 @@
 package model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class Pet
 {
-    private int petID;
-    private int ownerID;
+    private long petID;
+    private long ownerID;
     private String name;
     private String sex;
     private String color;
     private String species;
     private String breed;
-    private LocalDateTime birthdate;
-    private int age;
-    private int weight;
-    private int microchipNumber;
-    private int rabiesTag;
+    private LocalDate birthdate;
+    private long weight;
+    private long microchipNumber;
+    private long rabiesTag;
     
-    public int getPetID() {
+    public long getPetID() {
         return petID;
     }
 
-    public void setPetID(int petID) {
+    public void setPetID(long petID) {
         this.petID = petID;
     }
 
@@ -65,51 +64,43 @@ public class Pet
         this.breed = breed;
     }
 
-    public LocalDateTime getBirthdate() {
+    public LocalDate getBirthdate() {
         return birthdate;
     }
 
-    public void setBirthdate(LocalDateTime birthdate) {
+    public void setBirthdate(LocalDate birthdate) {
         this.birthdate = birthdate;
     }
 
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public int getWeight() {
+    public long getWeight() {
         return weight;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(long weight) {
         this.weight = weight;
     }
 
-    public int getMicrochipNumber() {
+    public long getMicrochipNumber() {
         return microchipNumber;
     }
 
-    public void setMicrochipNumber(int microchipNumber) {
+    public void setMicrochipNumber(long microchipNumber) {
         this.microchipNumber = microchipNumber;
     }
 
-    public int getRabiesTag() {
+    public long getRabiesTag() {
         return rabiesTag;
     }
 
-    public void setRabiesTag(int rabiesTag) {
+    public void setRabiesTag(long rabiesTag) {
         this.rabiesTag = rabiesTag;
     }
 
-    public int getOwnerID() {
+    public long getOwnerID() {
         return ownerID;
     }
 
-    public void setOwnerID(int ownerID) {
+    public void setOwnerID(long ownerID) {
         this.ownerID = ownerID;
     }
 

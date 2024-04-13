@@ -2,7 +2,7 @@ package model;
 
 public class Client
 {
-    private int clientID;
+    private long clientID;
     private String firstName;
     private String lastName;
     private String email;
@@ -17,12 +17,12 @@ public class Client
         return firstName + " " + lastName;
     }
 
-    public int getClientID()
+    public long getClientID()
     {
         return clientID;
     }
 
-    public void setClientID(int clientID)
+    public void setClientID(long clientID)
     {
         this.clientID = clientID;
     }

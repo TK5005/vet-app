@@ -5,13 +5,13 @@ import java.time.format.DateTimeFormatter;
 
 public class Exam
 {
-    private int examID;
-    private int petID;
+    private long examID;
+    private long petID;
     private LocalDateTime dateTime;
-    private int vetID;
-    private int techID;
+    private long vetID;
+    private long techID;
     private String description;
-    private int weight;
+    private long weight;
     private String location;
     private String vitals;
 
@@ -28,19 +28,19 @@ public class Exam
         this.vitals = vitals;
     }
 
-    public int getExamID() {
+    public long getExamID() {
         return examID;
     }
 
-    public void setExamID(int examID) {
+    public void setExamID(long examID) {
         this.examID = examID;
     }
 
-    public int getPetID() {
+    public long getPetID() {
         return petID;
     }
 
-    public void setPetID(int petID) {
+    public void setPetID(long petID) {
         this.petID = petID;
     }
 
@@ -58,19 +58,19 @@ public class Exam
         return formattedDate;
     }
 
-    public int getVetID() {
+    public long getVetID() {
         return vetID;
     }
 
-    public void setVetID(int vetID) {
+    public void setVetID(long vetID) {
         this.vetID = vetID;
     }
 
-    public int getTechID() {
+    public long getTechID() {
         return techID;
     }
 
-    public void setTechID(int techID) {
+    public void setTechID(long techID) {
         this.techID = techID;
     }
 
@@ -82,7 +82,7 @@ public class Exam
         this.description = description;
     }
 
-    public int getWeight() {
+    public long getWeight() {
         return weight;
     }
 
@@ -100,6 +100,6 @@ public class Exam
 
     @Override
     public String toString() {
-        return Integer.toString(examID);
+        return Long.toString(examID);
     }
 }

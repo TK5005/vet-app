@@ -23,7 +23,7 @@ public class InvoiceDetailView extends JPanel implements IInvoiceView
     private JTextField invoiceDateField;
     private JTextField invoiceAmtField;
     private JComboBox<String> invoiceStatusField;
-    private JComboBox<Integer> examSelection;
+    private JComboBox<Long> examSelection;
     private String[] statusOptions;
 
     private JButton saveButton;
@@ -44,8 +44,8 @@ public class InvoiceDetailView extends JPanel implements IInvoiceView
         examSelection.removeAllItems();
     
         
-        int[] examIDs = controller.getExamIDs();
-        for (int id : examIDs) {
+        long[] examIDs = controller.getExamIDs();
+        for (long id : examIDs) {
             examSelection.addItem(id);
         }
 
@@ -115,7 +115,7 @@ public class InvoiceDetailView extends JPanel implements IInvoiceView
         headerPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
         JLabel examLabel = new JLabel("Exam:");
-        examSelection = new JComboBox<Integer>();
+        examSelection = new JComboBox<Long>();
         saveButton = new JButton("Save");
         closeButton = new JButton("Close");
 
