@@ -3,8 +3,7 @@ package model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class Exam
-{
+public class Exam {
     private int examID;
     private int petID;
     private LocalDate date;
@@ -15,11 +14,6 @@ public class Exam
     private int weight;
     private String location;
     private String vitals;
-
-    public Exam()
-    {
-
-    }
 
     public String getVitals() {
         return vitals;

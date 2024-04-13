@@ -1,15 +1,16 @@
 package view.clientPatient;
-import javax.swing.*;
+
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+
+import javax.swing.JPanel;
 
 import control.ClientController;
 import control.IClientView;
 import view.exam.ExamRecordView;
 import view.pet.PetInfoView;
 
-import java.awt.*;
-
-public class ClientPageView extends JPanel implements IClientView
-{
+public class ClientPageView extends JPanel implements IClientView {
     private CardLayout cardLayout;
     private JPanel cardPanel;
     private ClientController controller;
@@ -18,8 +19,7 @@ public class ClientPageView extends JPanel implements IClientView
     PetInfoView petInfo;
     ExamRecordView examInfo;
 
-    public ClientPageView()
-    {
+    public ClientPageView() {
         controller = ClientController.getInstance();
         controller.setClientPage(this);
         controller.registerView(this);
@@ -46,38 +46,31 @@ public class ClientPageView extends JPanel implements IClientView
         add(cardPanel, BorderLayout.CENTER);
     }
 
-    public void refresh()
-    {
+    public void refresh() {
 
     }
 
-    public void showClientInfo()
-    {
+    public void showClientInfo() {
         cardLayout.show(cardPanel, "clientInfo");
     }
 
-    public void showPetInfo()
-    {
+    public void showPetInfo() {
         cardLayout.show(cardPanel, "petInfo");
     }
 
-    public void closeClientInfoView()
-    {
+    public void closeClientInfoView() {
         cardLayout.show(cardPanel, "clientsView");
     }
 
-    public void closePetInfoView()
-    {
+    public void closePetInfoView() {
         cardLayout.show(cardPanel, "clientInfo");
     }
 
-    public void showExamInfo()
-    {
+    public void showExamInfo() {
         cardLayout.show(cardPanel, "examInfo");
     }
 
-    public void closeExamInfoView()
-    {
+    public void closeExamInfoView() {
         petInfo.refresh();
         cardLayout.show(cardPanel, "petInfo");
     }

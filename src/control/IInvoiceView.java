@@ -1,6 +1,5 @@
 package control;
 
-public interface IInvoiceView
-{
+public interface IInvoiceView {
     void refresh();
 }

@@ -1,42 +1,40 @@
 package view.exam;
-import javax.swing.JPanel;
-import javax.swing.JButton;
-import javax.swing.JTable;
+
 import java.awt.BorderLayout;
-import javax.swing.table.DefaultTableModel;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.FlowLayout;
+
+import javax.swing.DefaultCellEditor;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 import control.ClientController;
 import control.IClientView;
 import model.Exam;
 
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import java.awt.Component;
-import javax.swing.DefaultCellEditor;
-import javax.swing.JTextField;
-import java.awt.FlowLayout;
-import java.awt.Color;
+public class ExamTable extends JPanel implements IClientView {
 
-public class ExamTable extends JPanel implements IClientView
-{
-    
     private JButton newExamButton;
     private JTable examTable;
     private DefaultTableModel tableModel;
 
     private ClientController clientController;
 
-    public ExamTable()
-    {
+    public ExamTable() {
         clientController = ClientController.getInstance();
         clientController.registerView(this);
         createUI();
     }
 
-    private void createUI()
-    {
+    private void createUI() {
         this.setLayout(new BorderLayout());
 
         newExamButton = new JButton("+ New Exam");
@@ -62,7 +60,8 @@ public class ExamTable extends JPanel implements IClientView
         // Custom renderer for the pet column
         examTable.getColumnModel().getColumn(0).setCellRenderer(new TableCellRenderer() {
             @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
                 JLabel label = new JLabel(Exam.class.cast(value).getDescription());
                 label.setHorizontalAlignment(SwingConstants.CENTER);
                 return label;
@@ -82,15 +81,13 @@ public class ExamTable extends JPanel implements IClientView
         addEventListeners();
     }
 
-    private void addEventListeners()
-    {
+    private void addEventListeners() {
         newExamButton.addActionListener(e -> {
             clientController.addExam();
         });
     }
-    
-    public void refresh()
-    {
+
+    public void refresh() {
         // Clear the table
         tableModel.setRowCount(0);
 
@@ -99,7 +96,7 @@ public class ExamTable extends JPanel implements IClientView
 
         // Populate the table with pet data
         for (Exam exam : exams) {
-            Object[] rowData = {exam, exam.getDate(), ""};
+            Object[] rowData = { exam, exam.getDate(), "" };
             tableModel.addRow(rowData);
         }
     }
@@ -107,17 +104,18 @@ public class ExamTable extends JPanel implements IClientView
     // Custom renderer
     class ButtonRenderer extends JPanel implements TableCellRenderer {
         private JButton viewButton;
-    
+
         public ButtonRenderer() {
             setLayout(new FlowLayout(FlowLayout.CENTER));
             viewButton = new JButton("View Exam Record");
             add(viewButton);
         }
-    
+
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
-                                                       boolean isSelected, boolean hasFocus, int row, int column) {
-            // You can customize the buttons further here, such as setting a different text based on the cell value
+                boolean isSelected, boolean hasFocus, int row, int column) {
+            // You can customize the buttons further here, such as setting a different text
+            // based on the cell value
             return this;
         }
     }
@@ -128,14 +126,14 @@ public class ExamTable extends JPanel implements IClientView
         protected JButton viewButton;
         private JTable table;
         private int currentRow;
-    
+
         public ButtonEditor() {
             super(new JTextField());
-    
+
             panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-    
+
             viewButton = new JButton("View Exam Record");
-    
+
             panel.add(viewButton);
 
             // Add action listener for the View button
@@ -144,15 +142,15 @@ public class ExamTable extends JPanel implements IClientView
                 clientController.showExamInfo(exam.getExamID());
             });
         }
-    
+
         @Override
         public Component getTableCellEditorComponent(JTable table, Object value,
-                                                     boolean isSelected, int row, int column) {
+                boolean isSelected, int row, int column) {
             this.table = table; // Capture the table
             this.currentRow = row; // Capture the current row
             return panel;
         }
-    
+
         @Override
         public Object getCellEditorValue() {
             return "";

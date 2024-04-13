@@ -1,62 +1,53 @@
 package view.invoice;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.FlowLayout;
 
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-
-import control.InvoiceController;
-import control.IInvoiceView;
-
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
-import java.awt.Component;
-import javax.swing.DefaultCellEditor;
-import javax.swing.JTextField;
-import java.awt.FlowLayout;
+import control.IInvoiceView;
+import control.InvoiceController;
 
-import java.awt.Color;
-
-public class InvoiceListView extends JPanel implements IInvoiceView
-{
+public class InvoiceListView extends JPanel implements IInvoiceView {
     private InvoiceController controller;
     private JButton addInvoiceButton;
     private JTable invoiceTable;
     private DefaultTableModel tableModel;
     private int actionColumnIndex = 6;
 
-    public InvoiceListView()
-    {
+    public InvoiceListView() {
         this.controller = InvoiceController.getInstance();
         controller.registerView(this);
         createUI();
     }
 
-    public void refresh()
-    {
+    public void refresh() {
         // Clear the table
         tableModel.setRowCount(0);
 
         Object[][] tableData = controller.getInvoiceTableData();
 
-        for(Object[] rowData : tableData)
-        {
+        for (Object[] rowData : tableData) {
             tableModel.addRow(rowData);
         }
     }
 
-    private void createEventListeners()
-    {
+    private void createEventListeners() {
         addInvoiceButton.addActionListener(e -> {
             controller.addInvoice();
         });
     }
 
-    private void createUI()
-    {
+    private void createUI() {
         this.setLayout(new BorderLayout());
         JPanel header = createHeader();
         add(header, BorderLayout.NORTH);
@@ -68,16 +59,14 @@ public class InvoiceListView extends JPanel implements IInvoiceView
         refresh();
     }
 
-    private JPanel createHeader()
-    {
+    private JPanel createHeader() {
         JPanel header = new JPanel();
         addInvoiceButton = new JButton("New Invoice");
         header.add(addInvoiceButton);
         return header;
     }
 
-    private JScrollPane createInvoiceTable()
-    {
+    private JScrollPane createInvoiceTable() {
         // Create the table with two columns
         tableModel = new DefaultTableModel() {
             @Override
@@ -114,7 +103,7 @@ public class InvoiceListView extends JPanel implements IInvoiceView
     class ButtonRenderer extends JPanel implements TableCellRenderer {
         private JButton viewButton;
         private JButton removeButton;
-    
+
         public ButtonRenderer() {
             setLayout(new FlowLayout(FlowLayout.CENTER));
             viewButton = new JButton("View");
@@ -122,11 +111,12 @@ public class InvoiceListView extends JPanel implements IInvoiceView
             add(viewButton);
             add(removeButton);
         }
-    
+
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
-                                                       boolean isSelected, boolean hasFocus, int row, int column) {
-            // You can customize the buttons further here, such as setting a different text based on the cell value
+                boolean isSelected, boolean hasFocus, int row, int column) {
+            // You can customize the buttons further here, such as setting a different text
+            // based on the cell value
             return this;
         }
     }
@@ -137,39 +127,39 @@ public class InvoiceListView extends JPanel implements IInvoiceView
         protected JButton viewButton;
         private JTable table;
         private int currentRow;
-    
+
         public ButtonEditor() {
             super(new JTextField());
-    
+
             panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-    
+
             viewButton = new JButton("View");
             JButton removeButton = new JButton("Remove");
-    
+
             panel.add(viewButton);
             panel.add(removeButton);
 
             // Add action listener for the View button
             viewButton.addActionListener(e -> {
-                int invoiceID = (int)tableModel.getValueAt(currentRow, 0);
+                int invoiceID = (int) tableModel.getValueAt(currentRow, 0);
                 controller.showInvoiceDetail(invoiceID);
             });
 
             // Add action listener for the Remove button
             removeButton.addActionListener(e -> {
-                int invoiceID = (int)tableModel.getValueAt(currentRow, 0);
+                int invoiceID = (int) tableModel.getValueAt(currentRow, 0);
                 controller.removeInvoice(invoiceID);
             });
         }
-    
+
         @Override
         public Component getTableCellEditorComponent(JTable table, Object value,
-                                                     boolean isSelected, int row, int column) {
+                boolean isSelected, int row, int column) {
             this.table = table; // Capture the table
             this.currentRow = row; // Capture the current row
             return panel;
         }
-    
+
         @Override
         public Object getCellEditorValue() {
             return "";

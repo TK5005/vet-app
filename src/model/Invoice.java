@@ -2,10 +2,8 @@ package model;
 
 import java.time.LocalDate;
 
-public class Invoice
-{
-    public static enum Status
-    {
+public class Invoice {
+    public static enum Status {
         PAID,
         UNPAID,
         OVERDUE
@@ -55,8 +53,7 @@ public class Invoice
     }
 
     public String getStatusString() {
-        if(this.status != null)
-        {
+        if (this.status != null) {
             switch (this.status) {
                 case PAID:
                     return "PAID";
@@ -80,12 +77,10 @@ public class Invoice
         this.status = status;
     }
 
-    public static String[] getStatusOptions()
-    {
+    public static String[] getStatusOptions() {
         String[] options = new String[Status.values().length];
         int i = 0;
-        for(Status status : Status.values())
-        {
+        for (Status status : Status.values()) {
             options[i] = status.toString();
             i++;
         }

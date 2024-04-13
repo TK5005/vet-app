@@ -1,35 +1,33 @@
 package view.pet;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import control.IClientView;
-import control.ClientController;
-import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import java.awt.Color;
 
-public class PetVaccinationsTable extends JPanel implements IClientView
-{
+import control.ClientController;
+import control.IClientView;
+
+public class PetVaccinationsTable extends JPanel implements IClientView {
     private ClientController clientController;
     private DefaultTableModel tableModel;
 
-    public PetVaccinationsTable()
-    {
+    public PetVaccinationsTable() {
         clientController = ClientController.getInstance();
         clientController.registerView(this);
         createUI();
     }
 
-    public void createUI()
-    {
+    public void createUI() {
         JPanel vaccinationTable = createVaccinationTable();
         this.add(vaccinationTable, BorderLayout.CENTER);
     }
 
-    private JPanel createVaccinationTable()
-    {
+    private JPanel createVaccinationTable() {
         JPanel vaccinationPanel = new JPanel();
         vaccinationPanel.setLayout(new BorderLayout());
 
@@ -61,20 +59,19 @@ public class PetVaccinationsTable extends JPanel implements IClientView
         return vaccinationPanel;
     }
 
-    public void refresh()
-    {
+    public void refresh() {
         // Clear the table
         tableModel.setRowCount(0);
 
         /*
-        // Get the pets data from ClientController
-        Vaccination[] vaccinations = clientController.getVaccinations();
-
-        // Populate the table with pet data
-        for (Vaccination vaccination : vaccinations) {
-            Object[] rowData = {"",""};
-            tableModel.addRow(rowData);
-        }
-        */
+         * // Get the pets data from ClientController
+         * Vaccination[] vaccinations = clientController.getVaccinations();
+         * 
+         * // Populate the table with pet data
+         * for (Vaccination vaccination : vaccinations) {
+         * Object[] rowData = {"",""};
+         * tableModel.addRow(rowData);
+         * }
+         */
     }
 }

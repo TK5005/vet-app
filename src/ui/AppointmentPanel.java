@@ -9,18 +9,15 @@ import javax.swing.JLabel;
 /**
  * AppointmentPanel
  */
-public class AppointmentPanel extends JPanel
-{
+public class AppointmentPanel extends JPanel {
     private AppController controller;
 
-    public AppointmentPanel(AppController controller)
-    {
+    public AppointmentPanel(AppController controller) {
         this.controller = controller;
         createUI();
     }
 
-    private void createUI()
-    {
+    private void createUI() {
         add(new JLabel("Content for Appointment Panel"));
     }
 }

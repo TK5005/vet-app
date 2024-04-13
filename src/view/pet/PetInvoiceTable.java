@@ -1,37 +1,34 @@
 package view.pet;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import control.IClientView;
-import control.ClientController;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import model.Invoice;
-import java.awt.Color;
 
-public class PetInvoiceTable extends JPanel implements IClientView
-{
+import control.ClientController;
+import control.IClientView;
+import model.Invoice;
+
+public class PetInvoiceTable extends JPanel implements IClientView {
     private ClientController clientController;
     private DefaultTableModel tableModel;
 
-    public PetInvoiceTable()
-    {
+    public PetInvoiceTable() {
         clientController = ClientController.getInstance();
         clientController.registerView(this);
         createUI();
     }
 
-    public void createUI()
-    {
+    public void createUI() {
         JPanel invoiceTable = createInvoiceTable();
         this.add(invoiceTable, BorderLayout.CENTER);
     }
 
-    private JPanel createInvoiceTable()
-    {
+    private JPanel createInvoiceTable() {
         JPanel invoicePanel = new JPanel();
         invoicePanel.setLayout(new BorderLayout());
 
@@ -63,8 +60,7 @@ public class PetInvoiceTable extends JPanel implements IClientView
         return invoicePanel;
     }
 
-    public void refresh()
-    {
+    public void refresh() {
         // Clear the table
         tableModel.setRowCount(0);
 
@@ -73,7 +69,7 @@ public class PetInvoiceTable extends JPanel implements IClientView
 
         // Populate the table with pet data
         for (Invoice invoice : invoices) {
-            Object[] rowData = {invoice.getExamID(), invoice.getAmtDue()};
+            Object[] rowData = { invoice.getExamID(), invoice.getAmtDue() };
             tableModel.addRow(rowData);
         }
     }

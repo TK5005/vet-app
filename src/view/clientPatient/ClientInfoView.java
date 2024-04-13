@@ -1,12 +1,24 @@
 package view.clientPatient;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.NumberFormat;
+
 import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
@@ -15,20 +27,7 @@ import control.IClientView;
 import model.Client;
 import model.Pet;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.text.NumberFormat;
-
-import javax.swing.SwingConstants;
-import javax.swing.JScrollPane;
-import java.awt.Color;
-
-public class ClientInfoView extends JPanel implements IClientView
-{
+public class ClientInfoView extends JPanel implements IClientView {
     private ClientController clientController;
 
     private JButton saveButton;
@@ -47,23 +46,20 @@ public class ClientInfoView extends JPanel implements IClientView
     private JTable petTable;
     private NumberFormat zipFormat;
 
-    public ClientInfoView()
-    {
+    public ClientInfoView() {
         clientController = ClientController.getInstance();
         clientController.registerView(this);
         configureFormatters();
         createUI();
     }
 
-    private void configureFormatters()
-    {
+    private void configureFormatters() {
         zipFormat = NumberFormat.getIntegerInstance();
         zipFormat.setGroupingUsed(false);
         zipFormat.setMaximumIntegerDigits(5);
     }
 
-    private void createUI()
-    {
+    private void createUI() {
         // Set the layout of the panel
         setLayout(new BorderLayout());
 
@@ -94,12 +90,11 @@ public class ClientInfoView extends JPanel implements IClientView
         createEventListeners();
     }
 
-    private JPanel createClientPanel()
-    {
+    private JPanel createClientPanel() {
         JPanel clientPanel = new JPanel();
         FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
         clientPanel.setLayout(layout);
-        
+
         JPanel clientIDPanel = new JPanel();
         clientIDPanel.setLayout(new BoxLayout(clientIDPanel, BoxLayout.Y_AXIS));
         clientIDPanel.add(new JLabel("Client ID"));
@@ -168,8 +163,7 @@ public class ClientInfoView extends JPanel implements IClientView
         return clientPanel;
     }
 
-    private JPanel createPetPanel()
-    {
+    private JPanel createPetPanel() {
         JPanel petPanel = new JPanel();
         petPanel.setLayout(new BorderLayout());
 
@@ -195,7 +189,8 @@ public class ClientInfoView extends JPanel implements IClientView
         // Custom renderer for the pet column
         petTable.getColumnModel().getColumn(0).setCellRenderer(new TableCellRenderer() {
             @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
                 JLabel label = new JLabel(Pet.class.cast(value).getName());
                 label.setHorizontalAlignment(SwingConstants.CENTER);
                 return label;
@@ -215,8 +210,7 @@ public class ClientInfoView extends JPanel implements IClientView
         return petPanel;
     }
 
-    private void createEventListeners()
-    {
+    private void createEventListeners() {
         saveButton.addActionListener(e -> {
             updateClient();
         });
@@ -233,12 +227,10 @@ public class ClientInfoView extends JPanel implements IClientView
         });
     }
 
-    public void refresh()
-    {
+    public void refresh() {
         Client client = clientController.getClient(clientController.getCurrentClientID());
-        
-        if(client != null)
-        {
+
+        if (client != null) {
             clientIDField.setText(Integer.toString(client.getClientID()));
             firstNameField.setText(client.getFirstName());
             lastNameField.setText(client.getLastName());
@@ -253,8 +245,7 @@ public class ClientInfoView extends JPanel implements IClientView
         refreshPetTable();
     }
 
-    private void updateClient()
-    {
+    private void updateClient() {
         String fName = firstNameField.getText();
         String lName = lastNameField.getText();
         String email = emailField.getText();
@@ -264,11 +255,11 @@ public class ClientInfoView extends JPanel implements IClientView
         int zip = Integer.parseInt(zipField.getText());
         String phone = phoneField.getText();
 
-        clientController.updateClient(clientController.getCurrentClientID(), fName, lName, phone, email, street, city, state, zip);
+        clientController.updateClient(clientController.getCurrentClientID(), fName, lName, phone, email, street, city,
+                state, zip);
     }
 
-    private void refreshPetTable()
-    {
+    private void refreshPetTable() {
         // Clear the table
         tableModel.setRowCount(0);
 
@@ -277,7 +268,7 @@ public class ClientInfoView extends JPanel implements IClientView
 
         // Populate the table with pet data
         for (Pet pet : pets) {
-            Object[] rowData = {pet, ""};
+            Object[] rowData = { pet, "" };
             tableModel.addRow(rowData);
         }
     }
@@ -286,7 +277,7 @@ public class ClientInfoView extends JPanel implements IClientView
     class ButtonRenderer extends JPanel implements TableCellRenderer {
         private JButton viewButton;
         private JButton removeButton;
-    
+
         public ButtonRenderer() {
             setLayout(new FlowLayout(FlowLayout.CENTER));
             viewButton = new JButton("View");
@@ -294,11 +285,12 @@ public class ClientInfoView extends JPanel implements IClientView
             add(viewButton);
             add(removeButton);
         }
-    
+
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
-                                                       boolean isSelected, boolean hasFocus, int row, int column) {
-            // You can customize the buttons further here, such as setting a different text based on the cell value
+                boolean isSelected, boolean hasFocus, int row, int column) {
+            // You can customize the buttons further here, such as setting a different text
+            // based on the cell value
             return this;
         }
     }
@@ -310,39 +302,39 @@ public class ClientInfoView extends JPanel implements IClientView
         protected JButton removeButton;
         private JTable table;
         private int currentRow;
-    
+
         public ButtonEditor() {
             super(new JTextField());
-    
+
             panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-    
+
             viewButton = new JButton("View");
             removeButton = new JButton("Remove");
-    
+
             panel.add(viewButton);
             panel.add(removeButton);
-    
+
             // Add action listener for the Remove button
             removeButton.addActionListener(e -> {
-                Pet pet = (Pet)table.getModel().getValueAt(currentRow, 0);
+                Pet pet = (Pet) table.getModel().getValueAt(currentRow, 0);
                 clientController.deletePet(pet.getPetID());
             });
 
             // Add action listener for the View button
             viewButton.addActionListener(e -> {
-                Pet pet = (Pet)table.getModel().getValueAt(currentRow, 0);
+                Pet pet = (Pet) table.getModel().getValueAt(currentRow, 0);
                 clientController.showPetInfo(pet.getPetID());
             });
         }
-    
+
         @Override
         public Component getTableCellEditorComponent(JTable table, Object value,
-                                                     boolean isSelected, int row, int column) {
+                boolean isSelected, int row, int column) {
             this.table = table; // Capture the table
             this.currentRow = row; // Capture the current row
             return panel;
         }
-    
+
         @Override
         public Object getCellEditorValue() {
             return "";

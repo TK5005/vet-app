@@ -4,24 +4,21 @@ import java.awt.CardLayout;
 
 import javax.swing.JPanel;
 
-import control.InvoiceController;
 import control.IInvoiceView;
+import control.InvoiceController;
 
-public class InvoiceView extends JPanel implements IInvoiceView
-{
+public class InvoiceView extends JPanel implements IInvoiceView {
     private InvoiceController controller;
     private CardLayout layout;
 
-    public InvoiceView()
-    {
+    public InvoiceView() {
         this.controller = InvoiceController.getInstance();
         controller.registerView(this);
         controller.setInvoicePanel(this);
         createUI();
     }
 
-    private void createUI()
-    {
+    private void createUI() {
         layout = new CardLayout();
         setLayout(layout);
 
@@ -32,18 +29,15 @@ public class InvoiceView extends JPanel implements IInvoiceView
         layout.show(this, "list");
     }
 
-    public void refresh()
-    {
+    public void refresh() {
         // Refresh the view
     }
 
-    public void showListView()
-    {
+    public void showListView() {
         layout.show(this, "list");
     }
 
-    public void showDetailView()
-    {
+    public void showDetailView() {
         layout.show(this, "detail");
     }
 }

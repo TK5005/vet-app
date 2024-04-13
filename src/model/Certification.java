@@ -1,12 +1,10 @@
 package model;
 
-public class Certification
-{
+public class Certification {
     private int empID;
     private String certification;
 
-    public Certification()
-    {
+    public Certification() {
 
     }
 

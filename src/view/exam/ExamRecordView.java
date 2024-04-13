@@ -1,12 +1,26 @@
 package view.exam;
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.FlowLayout;
+import java.text.NumberFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
+
+import com.github.lgooddatepicker.components.DatePicker;
+import com.github.lgooddatepicker.components.TimePicker;
 
 import control.ClientController;
 import control.IClientView;
@@ -15,30 +29,30 @@ import model.Tech;
 import model.Treatment;
 import model.Vet;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
+public class ExamRecordView extends JPanel implements IClientView {
+    private class VetComboBoxRenderer extends JLabel implements ListCellRenderer<Vet> {
+        @Override
+        public Component getListCellRendererComponent(JList<? extends Vet> list, Vet value, int index,
+                boolean isSelected, boolean cellHasFocus) {
+            if (value != null) {
+                setText(value.getName());
+            }
+            return this;
+        }
+    }
 
-import java.util.Date;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.text.DateFormat;
-import java.text.NumberFormat;
-import java.time.ZoneId;
-import java.time.LocalTime;
+    private class TechComboBoxRenderer extends JLabel implements ListCellRenderer<Tech> {
+        @Override
+        public Component getListCellRendererComponent(JList<? extends Tech> list, Tech value, int index,
+                boolean isSelected, boolean cellHasFocus) {
+            if (value != null) {
+                setText(value.getName());
+            }
+            return this;
+        }
+    }
 
-import javax.swing.JList;
-import javax.swing.ListCellRenderer;
-import java.awt.Component;
-
-import com.github.lgooddatepicker.components.DatePicker;
-import com.github.lgooddatepicker.components.TimePicker;
-
-public class ExamRecordView extends JPanel implements IClientView
-{
     ClientController clientController;
-
     JTextField petNameField;
     JTextField examIDField;
     JComboBox<Vet> examinerBox;
@@ -51,37 +65,40 @@ public class ExamRecordView extends JPanel implements IClientView
     JTextArea vitalsField;
     JButton detailsButton;
     JButton treatmentButton;
+
     JPanel examCardPanel;
     CardLayout cardLayout;
-
     JTextField treatmentIDField;
     JTextField medicationField;
     DatePicker treatmentStartDateField;
+
     DatePicker treatmentEndDateField;
     JTextArea treatmentDirectionsField;
 
     JButton saveButton;
+
     JButton closeButton;
 
     NumberFormat numberFormat;
 
-
-    public ExamRecordView()
-    {
+    public ExamRecordView() {
         clientController = ClientController.getInstance();
         clientController.registerView(this);
         configureFormatters();
         createUI();
     }
 
-    private void configureFormatters()
-    {
+    public void refresh() {
+        refreshExam();
+        refreshTreatment();
+    }
+
+    private void configureFormatters() {
         numberFormat = NumberFormat.getNumberInstance();
         numberFormat.setMaximumFractionDigits(3);
     }
 
-    private void createUI()
-    {
+    private void createUI() {
         setLayout(new BorderLayout());
         JPanel header = createExamInfoSection();
         JPanel examInfoPanel = new JPanel();
@@ -91,8 +108,7 @@ public class ExamRecordView extends JPanel implements IClientView
         refresh();
     }
 
-    private JPanel createExamInfoSection()
-    {
+    private JPanel createExamInfoSection() {
         JPanel examInfo = new JPanel();
         examInfo.setLayout(new BorderLayout());
 
@@ -143,8 +159,7 @@ public class ExamRecordView extends JPanel implements IClientView
         return examInfo;
     }
 
-    private JPanel createExamDetails()
-    {
+    private JPanel createExamDetails() {
         JPanel examDetails = new JPanel();
         examDetails.setLayout(new BoxLayout(examDetails, BoxLayout.Y_AXIS));
 
@@ -168,8 +183,7 @@ public class ExamRecordView extends JPanel implements IClientView
         return examDetails;
     }
 
-    private JPanel createTreatmentDetails()
-    {
+    private JPanel createTreatmentDetails() {
         JPanel treatmentDetails = new JPanel();
         treatmentDetails.setLayout(new BorderLayout());
 
@@ -223,8 +237,7 @@ public class ExamRecordView extends JPanel implements IClientView
         return treatmentDetails;
     }
 
-    private JPanel createExamDataFields()
-    {
+    private JPanel createExamDataFields() {
         JPanel examDataFields = new JPanel();
         examDataFields.setLayout(new FlowLayout(FlowLayout.LEFT));
 
@@ -294,8 +307,7 @@ public class ExamRecordView extends JPanel implements IClientView
         return examDataFields;
     }
 
-    private void addActionListeners()
-    {
+    private void addActionListeners() {
         saveButton.addActionListener(e -> {
             updateExam();
             updateTreatment();
@@ -315,21 +327,20 @@ public class ExamRecordView extends JPanel implements IClientView
         });
     }
 
-    private void updateExam()
-    {
+    private void updateExam() {
         LocalDate date = dateField.getDate();
-        int vetID = ((Vet)examinerBox.getSelectedItem()).getEmpID();
-        int techID = ((Tech)techBox.getSelectedItem()).getEmpID();
+        int vetID = ((Vet) examinerBox.getSelectedItem()).getEmpID();
+        int techID = ((Tech) techBox.getSelectedItem()).getEmpID();
         String description = descriptionField.getText();
         String vitals = vitalsField.getText();
         int weight = Integer.parseInt(weightField.getText());
         String location = locationField.getText();
         LocalTime time = timeField.getTime();
-        clientController.updateExam(clientController.getCurrentExamID(), date, time, vetID, techID, description, vitals, weight, location);
+        clientController.updateExam(clientController.getCurrentExamID(), date, time, vetID, techID, description, vitals,
+                weight, location);
     }
 
-    private void updateTreatment()
-    {
+    private void updateTreatment() {
         Treatment treatment = clientController.getTreatmentFromExamID(clientController.getCurrentExamID());
         LocalDate startDate = treatmentStartDateField.getDate();
         LocalDate endDate = treatmentEndDateField.getDate();
@@ -340,17 +351,9 @@ public class ExamRecordView extends JPanel implements IClientView
         clientController.updateTreatment(treatment.getTreatmentID(), treatment);
     }
 
-    public void refresh()
-    {
-        refreshExam();
-        refreshTreatment();
-    }
-
-    private void refreshExam()
-    {
+    private void refreshExam() {
         Exam exam = clientController.getExam(clientController.getCurrentExamID());
-        if(exam != null)
-        {
+        if (exam != null) {
             petNameField.setText(clientController.getPet(exam.getPetID()).getName());
             examIDField.setText(Long.toString(exam.getExamID()));
             examinerBox.setSelectedItem(clientController.getVet(exam.getVetID()));
@@ -364,42 +367,14 @@ public class ExamRecordView extends JPanel implements IClientView
         }
     }
 
-    private void refreshTreatment()
-    {
+    private void refreshTreatment() {
         Treatment treatment = clientController.getTreatmentFromExamID(clientController.getCurrentExamID());
-        if(treatment != null)
-        {
+        if (treatment != null) {
             treatmentIDField.setText(Integer.toString(treatment.getTreatmentID()));
             medicationField.setText(treatment.getMedication());
             treatmentStartDateField.setDate(treatment.getStartDate());
             treatmentEndDateField.setDate(treatment.getEndDate());
             treatmentDirectionsField.setText(treatment.getDirections());
-        }
-    }
-
-    private class VetComboBoxRenderer extends JLabel implements ListCellRenderer<Vet>
-    {
-        @Override
-        public Component getListCellRendererComponent(JList<? extends Vet> list, Vet value, int index, boolean isSelected, boolean cellHasFocus)
-        {
-            if(value != null)
-            {
-                setText(value.getName());
-            }
-            return this;
-        }
-    }
-
-    private class TechComboBoxRenderer extends JLabel implements ListCellRenderer<Tech>
-    {
-        @Override
-        public Component getListCellRendererComponent(JList<? extends Tech> list, Tech value, int index, boolean isSelected, boolean cellHasFocus)
-        {
-            if(value != null)
-            {
-                setText(value.getName());
-            }
-            return this;
         }
     }
 }

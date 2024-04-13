@@ -2,8 +2,7 @@ package model;
 
 import java.time.LocalDateTime;
 
-public class Appointment
-{
+public class Appointment {
     private int appointmentID;
     private int clientID;
     private int petID;

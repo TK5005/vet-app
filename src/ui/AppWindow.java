@@ -1,30 +1,28 @@
 package ui;
-import javax.swing.JFrame;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import control.AppController;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-
 /**
  * The AppWindow class represents the main window of the application.
  */
-public class AppWindow extends JFrame
-{
+public class AppWindow extends JFrame {
     AppController controller;
 
-    public AppWindow()
-    {
+    public AppWindow() {
         super("Warm & Fuzzy Veterinary Center Enterprise Management System");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    public void start(AppController controller)
-    {
+    public void start(AppController controller) {
         this.controller = controller;
 
         // Add content to the window

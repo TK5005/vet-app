@@ -2,7 +2,12 @@ package view.pet;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.text.NumberFormat;
+import java.text.ParsePosition;
+import java.time.LocalDate;
+
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
@@ -10,21 +15,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.github.lgooddatepicker.components.DatePicker;
+
 import control.ClientController;
 import control.IClientView;
 import model.Client;
 import model.Pet;
 import view.exam.ExamTable;
-
-import java.text.NumberFormat;
-import java.time.LocalDate;
-
-import java.time.format.DateTimeFormatter;
-
-import java.awt.Dimension;
-import com.github.lgooddatepicker.components.DatePicker;
-
-import java.text.ParsePosition;
 
 public class PetInfoView extends JPanel implements IClientView {
     private JTextField nameField;
@@ -57,7 +54,7 @@ public class PetInfoView extends JPanel implements IClientView {
     public PetInfoView() {
         clientController = ClientController.getInstance();
         clientController.registerView(this);
-        
+
         configureFormatters();
         createUI();
     }
@@ -242,8 +239,7 @@ public class PetInfoView extends JPanel implements IClientView {
         });
     }
 
-    private void updatePet()
-    {
+    private void updatePet() {
         LocalDate dateOfBirth = dateOfBirthPicker.getDate();
         String name = nameField.getText();
         String species = speciesField.getText();
@@ -255,7 +251,7 @@ public class PetInfoView extends JPanel implements IClientView {
         long rabiesTag = numberFormat.parse(rabiesTagField.getText(), new ParsePosition(0)).longValue();
 
         clientController.updatePet(clientController.getCurrentPetID(), name, sex, color, species, breed,
-        dateOfBirth, weight, microchipNumber, rabiesTag);
+                dateOfBirth, weight, microchipNumber, rabiesTag);
     }
 
     public void refresh() {

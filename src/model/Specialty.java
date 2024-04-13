@@ -1,12 +1,10 @@
 package model;
 
-public class Specialty
-{
+public class Specialty {
     private int empID;
     private String specialty;
 
-    public Specialty()
-    {
+    public Specialty() {
 
     }
 
