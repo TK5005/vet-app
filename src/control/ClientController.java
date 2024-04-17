@@ -3,7 +3,9 @@ package control;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.List;
 
+import Repository.ClientRepository;
 import model.Appointment;
 import model.Client;
 import model.DataModel;
@@ -35,6 +37,7 @@ public class ClientController {
     }
 
     private DataModel dataModel;
+    private ClientRepository clientRepository;
     private ArrayList<IClientView> views;
     private ClientPageView clientPage;
     private int currentPetID = -1;
@@ -47,6 +50,7 @@ public class ClientController {
      */
     private ClientController() {
         dataModel = DataModel.getInstance();
+        clientRepository = new ClientRepository();
         views = new ArrayList<>();
     }
 
@@ -84,7 +88,8 @@ public class ClientController {
      * @return An array of clients
      */
     public Client[] getClients() {
-        return dataModel.getClients();
+        return clientRepository.Get();
+        //return dataModel.getClients();
     }
 
     // Client methods

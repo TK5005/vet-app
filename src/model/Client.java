@@ -11,6 +11,20 @@ public class Client {
     private String state;
     private int zip;
 
+    public Client(int clientID, String firstName, String lastName, String email, String phone, String street,
+                  String city, String state, int zip){
+        this.clientID = clientID;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phone = phone;
+        this.street = street;
+        this.city = city;
+        this.state = state;
+        this.zip = zip;
+    }
+    public Client(){}
+
     public String getName() {
         return firstName + " " + lastName;
     }
