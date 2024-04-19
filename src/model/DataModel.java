@@ -471,6 +471,26 @@ public class DataModel {
         return inventory.toArray(new Inventory[inventory.size()]);
     }
 
+    public Inventory getInventoryItem(int itemID) {
+        // Get item based on itemID
+        for (int i = 0; i < inventory.size(); i++) {
+            if (inventory.get(i).getItemID() == itemID) {
+                return inventory.get(i);
+            }
+        }
+        return null;
+    }
+
+    public void updateInventoryItem(int itemID, Inventory item) {
+        // Update item based on itemID
+        for (int i = 0; i < inventory.size(); i++) {
+            if (inventory.get(i).getItemID() == itemID) {
+                inventory.set(i, item);
+                break;
+            }
+        }
+    }
+
     // Temp Data methods
 
     /**

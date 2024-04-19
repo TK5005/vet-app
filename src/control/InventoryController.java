@@ -4,11 +4,14 @@ import java.util.ArrayList;
 
 import model.DataModel;
 import model.Inventory;
+import view.inventory.InventoryView;
 
 public class InventoryController {
     private static InventoryController instance;
     private DataModel dataModel;
     private ArrayList<IInventoryView> views;
+    private InventoryView inventoryView;
+    private int currentInventoryID = -1;
 
     private InventoryController() {
         dataModel = DataModel.getInstance();
@@ -24,6 +27,10 @@ public class InventoryController {
             }
         }
         return instance;
+    }
+
+    public void setInventoryView(InventoryView inventoryView) {
+        this.inventoryView = inventoryView;
     }
 
     public void registerView(IInventoryView view) {
@@ -53,5 +60,35 @@ public class InventoryController {
 
     public Inventory[] getInventory() {
         return dataModel.getInventory();
+    }
+
+    public void showInventoryDetails(int itemID) {
+        this.setCurrentInventoryID(itemID);
+        this.refreshViews();
+        inventoryView.showDetailView();
+    }
+
+    public void showInventoryList() {
+        this.setCurrentInventoryID(-1);
+        this.refreshViews();
+        inventoryView.showListView();
+    }
+
+    public void setCurrentInventoryID(int itemID) {
+        this.currentInventoryID = itemID;
+    }
+
+    public int getCurrentInventoryID() {
+        return this.currentInventoryID;
+    }
+
+    public Inventory getCurrentInventoryItem() {
+        return dataModel.getInventoryItem(currentInventoryID);
+    }
+
+    public void updateInventoryItem(Inventory item) {
+        dataModel.updateInventoryItem(currentInventoryID, item);
+        refreshViews();
+        showInventoryList();
     }
 }

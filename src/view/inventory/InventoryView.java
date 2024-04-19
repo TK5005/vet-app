@@ -14,6 +14,7 @@ public class InventoryView extends JPanel implements IInventoryView{
     public InventoryView() {
         controller = InventoryController.getInstance();
         controller.registerView(this);
+        controller.setInventoryView(this);
         createUI();
     }
 
@@ -30,5 +31,13 @@ public class InventoryView extends JPanel implements IInventoryView{
         add(listView, "list");
         add(detailView, "detail");
         layout.show(this, "list");
+    }
+
+    public void showListView() {
+        layout.show(this, "list");
+    }
+
+    public void showDetailView() {
+        layout.show(this, "detail");
     }
 }

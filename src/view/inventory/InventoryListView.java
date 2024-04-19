@@ -7,7 +7,6 @@ import java.awt.FlowLayout;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -141,10 +140,8 @@ public class InventoryListView extends JPanel implements IInventoryView{
 
             // Add action listener for the View button
             viewButton.addActionListener(e -> {
-                // TODO: Open Inventory item details view
-                System.out.println("View button clicked");
-                //Client client = (Client) table.getModel().getValueAt(currentRow, 0);
-                //clientController.showClientInfo(client.getClientID());
+                int inventoryID = (int) table.getModel().getValueAt(currentRow, 0);
+                controller.showInventoryDetails(inventoryID);
             });
         }
 
