@@ -2,12 +2,14 @@ package view.inventory;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.text.NumberFormatter;
 import javax.swing.JLabel;
 
 import javax.swing.BoxLayout;
@@ -15,6 +17,10 @@ import javax.swing.BoxLayout;
 import control.IInventoryView;
 import control.InventoryController;
 import model.Inventory;
+
+import java.text.ParseException;
+
+
 
 public class InventoryDetailView extends JPanel implements IInventoryView{
     public InventoryController controller;
@@ -30,8 +36,14 @@ public class InventoryDetailView extends JPanel implements IInventoryView{
     private JTextField typeField;
     private JTextField manufacturerField;
 
-    private NumberFormat floatFormat;
-    private NumberFormat integerFormat;
+    NumberFormat integerFormat = NumberFormat.getIntegerInstance();
+    NumberFormatter numberFormatter = new NumberFormatter(integerFormat) {
+        @Override
+        public Object stringToValue(String string) throws ParseException {
+            Number number = (Number) super.stringToValue(string);
+            return number.intValue(); // Always return an Integer
+        }
+    };
 
     public InventoryDetailView() {
         controller = InventoryController.getInstance();
@@ -43,15 +55,21 @@ public class InventoryDetailView extends JPanel implements IInventoryView{
     private void createEventListeners() {
         saveButton.addActionListener(e -> {
             Inventory item = controller.getCurrentInventoryItem();
-            item.setName(nameField.getText());
-            item.setReorderLevel((int) reoderLevelField.getValue());
-            item.setQuantity((int) quantityField.getValue());
-            item.setReorderQuantity((int) reorderQuantityField.getValue());
-            item.setRetailCost((float) retailCostField.getValue());
-            item.setWholesaleCost((float) wholesaleCostField.getValue());
-            item.setType(typeField.getText());
-            item.setManufacturer(manufacturerField.getText());
-            controller.updateInventoryItem(item);
+            if(item != null)
+            {
+                item.setName(nameField.getText());
+                item.setType(typeField.getText());
+                item.setManufacturer(manufacturerField.getText());
+
+                //  Update item numbers
+                item.setReorderLevel((Integer)reoderLevelField.getValue());
+                item.setQuantity((Integer)quantityField.getValue());
+                item.setReorderQuantity((Integer)reorderQuantityField.getValue());
+                item.setRetailCost((Double)retailCostField.getValue());
+                item.setWholesaleCost((Double)wholesaleCostField.getValue());
+
+                controller.updateInventoryItem(item);
+            }
         });
         closeButton.addActionListener(e -> {
             controller.showInventoryList();
@@ -60,15 +78,18 @@ public class InventoryDetailView extends JPanel implements IInventoryView{
 
     public void refresh() {
         Inventory item = controller.getCurrentInventoryItem();
-        idField.setValue(item.getItemID());
-        nameField.setText(item.getName());
-        reoderLevelField.setValue(item.getReorderLevel());
-        quantityField.setValue(item.getQuantity());
-        reorderQuantityField.setValue(item.getReorderQuantity());
-        retailCostField.setValue(item.getRetailCost());
-        wholesaleCostField.setValue(item.getWholesaleCost());
-        typeField.setText(item.getType());
-        manufacturerField.setText(item.getManufacturer());
+        if(item != null)
+        {
+            idField.setValue(item.getItemID());
+            nameField.setText(item.getName());
+            reoderLevelField.setValue(item.getReorderLevel());
+            quantityField.setValue(item.getQuantity());
+            reorderQuantityField.setValue(item.getReorderQuantity());
+            retailCostField.setValue(item.getRetailCost());
+            wholesaleCostField.setValue(item.getWholesaleCost());
+            typeField.setText(item.getType());
+            manufacturerField.setText(item.getManufacturer());
+        }
     }
 
     private void createUI() {
@@ -94,8 +115,6 @@ public class InventoryDetailView extends JPanel implements IInventoryView{
     }
 
     private JPanel createDetailPanel() {
-        floatFormat = NumberFormat.getNumberInstance();
-        integerFormat = NumberFormat.getIntegerInstance();
 
         JPanel detailPanel = new JPanel();
         detailPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -103,7 +122,7 @@ public class InventoryDetailView extends JPanel implements IInventoryView{
         JPanel idPanel = new JPanel();
         idPanel.setLayout(new BoxLayout(idPanel, BoxLayout.Y_AXIS));
         JLabel idLabel = new JLabel("Item ID");
-        idField = new JFormattedTextField(integerFormat);
+        idField = new JFormattedTextField(numberFormatter);
         idField.setEditable(false);
         idPanel.add(idLabel);
         idPanel.add(idField);
@@ -111,35 +130,35 @@ public class InventoryDetailView extends JPanel implements IInventoryView{
         JPanel reorderLevelPanel = new JPanel();
         reorderLevelPanel.setLayout(new BoxLayout(reorderLevelPanel, BoxLayout.Y_AXIS));
         JLabel reorderLevelLabel = new JLabel("Reorder Level");
-        reoderLevelField = new JFormattedTextField(integerFormat);
+        reoderLevelField = new JFormattedTextField(numberFormatter);
         reorderLevelPanel.add(reorderLevelLabel);
         reorderLevelPanel.add(reoderLevelField);
 
         JPanel quantityPanel = new JPanel();
         quantityPanel.setLayout(new BoxLayout(quantityPanel, BoxLayout.Y_AXIS));
         JLabel quantityLabel = new JLabel("Quantity");
-        quantityField = new JFormattedTextField(integerFormat);
+        quantityField = new JFormattedTextField(numberFormatter);
         quantityPanel.add(quantityLabel);
         quantityPanel.add(quantityField);
 
         JPanel reorderQuantityPanel = new JPanel();
         reorderQuantityPanel.setLayout(new BoxLayout(reorderQuantityPanel, BoxLayout.Y_AXIS));
         JLabel reorderQuantityLabel = new JLabel("Reorder Quantity");
-        reorderQuantityField = new JFormattedTextField(integerFormat);
+        reorderQuantityField = new JFormattedTextField(numberFormatter);
         reorderQuantityPanel.add(reorderQuantityLabel);
         reorderQuantityPanel.add(reorderQuantityField);
 
         JPanel retailCostPanel = new JPanel();
         retailCostPanel.setLayout(new BoxLayout(retailCostPanel, BoxLayout.Y_AXIS));
         JLabel retailCostLabel = new JLabel("Retail Cost");
-        retailCostField = new JFormattedTextField(floatFormat);
+        retailCostField = new JFormattedTextField(new DecimalFormat("#0.00"));
         retailCostPanel.add(retailCostLabel);
         retailCostPanel.add(retailCostField);
 
         JPanel wholesaleCostPanel = new JPanel();
         wholesaleCostPanel.setLayout(new BoxLayout(wholesaleCostPanel, BoxLayout.Y_AXIS));
         JLabel wholesaleCostLabel = new JLabel("Wholesale Cost");
-        wholesaleCostField = new JFormattedTextField(floatFormat);
+        wholesaleCostField = new JFormattedTextField(new DecimalFormat("#0.00"));
         wholesaleCostPanel.add(wholesaleCostLabel);
         wholesaleCostPanel.add(wholesaleCostField);
 

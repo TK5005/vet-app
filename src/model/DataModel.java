@@ -655,8 +655,8 @@ public class DataModel {
             item.setReorderLevel(10);
             item.setQuantity(100);
             item.setReorderQuantity(50);
-            item.setRetailCost(10.00f);
-            item.setWholesaleCost(5.00f);
+            item.setRetailCost(10.00);
+            item.setWholesaleCost(5.00);
             item.setType("Item Type");
             item.setManufacturer("Manufacturer");
             inventory.add(item);
