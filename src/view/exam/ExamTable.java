@@ -37,7 +37,10 @@ public class ExamTable extends JPanel implements IClientView {
     private void createUI() {
         this.setLayout(new BorderLayout());
 
-        newExamButton = new JButton("+ New Exam");
+        newExamButton = new JButton("Add New Exam");
+        JPanel examTableHeader = new JPanel();
+        examTableHeader.setLayout(new FlowLayout(FlowLayout.LEFT));
+        examTableHeader.add(newExamButton);
 
         // Create the table with two columns
         tableModel = new DefaultTableModel() {
@@ -75,7 +78,7 @@ public class ExamTable extends JPanel implements IClientView {
         // Add the table to a scroll pane
         JScrollPane scrollPane = new JScrollPane(examTable);
 
-        this.add(newExamButton, BorderLayout.NORTH);
+        this.add(examTableHeader, BorderLayout.NORTH);
         this.add(scrollPane, BorderLayout.CENTER);
 
         addEventListeners();

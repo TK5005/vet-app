@@ -61,6 +61,7 @@ public class InvoiceListView extends JPanel implements IInvoiceView {
 
     private JPanel createHeader() {
         JPanel header = new JPanel();
+        header.setLayout(new FlowLayout(FlowLayout.LEFT));
         addInvoiceButton = new JButton("New Invoice");
         header.add(addInvoiceButton);
         return header;

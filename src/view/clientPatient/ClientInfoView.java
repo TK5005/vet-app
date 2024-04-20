@@ -65,7 +65,7 @@ public class ClientInfoView extends JPanel implements IClientView {
 
         // Create the header of the panel
         JPanel panelHeader = new JPanel();
-        panelHeader.setLayout(new FlowLayout());
+        panelHeader.setLayout(new FlowLayout(FlowLayout.LEFT));
         saveButton = new JButton("Save");
         closeButton = new JButton("Close");
         panelHeader.add(saveButton);
@@ -167,8 +167,11 @@ public class ClientInfoView extends JPanel implements IClientView {
         JPanel petPanel = new JPanel();
         petPanel.setLayout(new BorderLayout());
 
+        JPanel petPanelHeader = new JPanel();
+        petPanelHeader.setLayout(new FlowLayout(FlowLayout.LEFT));
         addPetButton = new JButton("Add Pet");
-
+        petPanelHeader.add(addPetButton);
+        
         // Create the table with two columns
         tableModel = new DefaultTableModel() {
             @Override
@@ -204,7 +207,7 @@ public class ClientInfoView extends JPanel implements IClientView {
         // Add the table to a scroll pane
         JScrollPane scrollPane = new JScrollPane(petTable);
 
-        petPanel.add(addPetButton, BorderLayout.NORTH);
+        petPanel.add(petPanelHeader, BorderLayout.NORTH);
         petPanel.add(scrollPane, BorderLayout.CENTER);
 
         return petPanel;

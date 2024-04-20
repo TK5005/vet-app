@@ -126,6 +126,7 @@ public class DashboardPanel extends JPanel {
         Dimension d = table.getPreferredSize();
         table.setPreferredScrollableViewportSize(d);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        table.setRowHeight(50);
         table.getTableHeader().setOpaque(false);
         table.getTableHeader().setBackground(new Color(173, 216, 230));
         table.setVisible(true);
