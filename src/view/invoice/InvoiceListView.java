@@ -49,6 +49,7 @@ public class InvoiceListView extends JPanel implements IInvoiceView {
 
     private void createUI() {
         this.setLayout(new BorderLayout());
+        setBackground(Color.WHITE);
         JPanel header = createHeader();
         add(header, BorderLayout.NORTH);
 
@@ -61,6 +62,7 @@ public class InvoiceListView extends JPanel implements IInvoiceView {
 
     private JPanel createHeader() {
         JPanel header = new JPanel();
+        header.setBackground(Color.WHITE);
         header.setLayout(new FlowLayout(FlowLayout.LEFT));
         addInvoiceButton = new JButton("New Invoice");
         header.add(addInvoiceButton);
@@ -87,6 +89,7 @@ public class InvoiceListView extends JPanel implements IInvoiceView {
 
         invoiceTable = new JTable(tableModel);
         invoiceTable.setRowHeight(50);
+        invoiceTable.setBackground(Color.WHITE);
         invoiceTable.getTableHeader().setOpaque(false);
         invoiceTable.getTableHeader().setBackground(new Color(173, 216, 230));
 
@@ -96,7 +99,7 @@ public class InvoiceListView extends JPanel implements IInvoiceView {
 
         // Add the table to a scroll pane
         JScrollPane scrollPane = new JScrollPane(invoiceTable);
-
+        scrollPane.setBackground(Color.WHITE);
         return scrollPane;
     }
 
@@ -107,6 +110,7 @@ public class InvoiceListView extends JPanel implements IInvoiceView {
 
         public ButtonRenderer() {
             setLayout(new FlowLayout(FlowLayout.CENTER));
+            setBackground(Color.WHITE);
             viewButton = new JButton("View");
             removeButton = new JButton("Remove");
             add(viewButton);
@@ -133,7 +137,7 @@ public class InvoiceListView extends JPanel implements IInvoiceView {
             super(new JTextField());
 
             panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-
+            panel.setBackground(Color.WHITE);
             viewButton = new JButton("View");
             JButton removeButton = new JButton("Remove");
 

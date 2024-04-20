@@ -2,6 +2,7 @@ package view.pet;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.text.NumberFormat;
@@ -66,10 +67,10 @@ public class PetInfoView extends JPanel implements IClientView {
 
     private void createUI() {
         setLayout(new BorderLayout());
-
+        setBackground(Color.WHITE);
         JPanel headerPanel = new JPanel();
         headerPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-
+        headerPanel.setBackground(Color.WHITE);
         nameField = new JTextField(20);
         saveButton = new JButton("Save");
         closeButton = new JButton("Close");
@@ -81,6 +82,7 @@ public class PetInfoView extends JPanel implements IClientView {
         JPanel petInfoPanel = createPetInfoSection();
 
         JPanel contentPanel = new JPanel();
+        contentPanel.setBackground(Color.WHITE);
         BoxLayout layout = new BoxLayout(contentPanel, BoxLayout.PAGE_AXIS);
         petInfoPanel.setPreferredSize(new Dimension(contentPanel.getWidth(), 100));
         contentPanel.setLayout(layout);
@@ -90,6 +92,7 @@ public class PetInfoView extends JPanel implements IClientView {
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        buttonPanel.setBackground(Color.WHITE);
 
         examButton = new JButton("Exams");
         buttonPanel.add(examButton);
@@ -103,6 +106,7 @@ public class PetInfoView extends JPanel implements IClientView {
         cardPanel = new JPanel();
         cardLayout = new CardLayout();
         cardPanel.setLayout(cardLayout);
+        cardPanel.setBackground(Color.WHITE);
         examPanel = new ExamTable();
         appointmentsPanel = new PetAppointmentsTable();
         vaccinationsPanel = new PetVaccinationsTable();
@@ -114,6 +118,7 @@ public class PetInfoView extends JPanel implements IClientView {
         cardLayout.show(cardPanel, "examPanel");
 
         JPanel bottomPanel = new JPanel();
+        bottomPanel.setBackground(Color.WHITE);
         bottomPanel.setLayout(new BorderLayout());
         bottomPanel.add(buttonPanel, BorderLayout.NORTH);
         bottomPanel.add(cardPanel, BorderLayout.CENTER);
@@ -126,10 +131,12 @@ public class PetInfoView extends JPanel implements IClientView {
 
     private JPanel createPetInfoSection() {
         JPanel contentPanel = new JPanel();
+        contentPanel.setBackground(Color.WHITE);
         contentPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
         JPanel patientIDPanel = new JPanel();
         patientIDPanel.setLayout(new BoxLayout(patientIDPanel, BoxLayout.Y_AXIS));
+        patientIDPanel.setBackground(Color.WHITE);
         JLabel patientIDLabel = new JLabel("Patient ID:");
         patientIDField = new JTextField(20);
         patientIDField.setEditable(false);
@@ -139,6 +146,7 @@ public class PetInfoView extends JPanel implements IClientView {
 
         JPanel clientNamePanel = new JPanel();
         clientNamePanel.setLayout(new BoxLayout(clientNamePanel, BoxLayout.Y_AXIS));
+        clientNamePanel.setBackground(Color.WHITE);
         JLabel clientNameLabel = new JLabel("Client Name:");
         clientNameField = new JTextField(20);
         clientNameField.setEditable(false);
@@ -148,6 +156,7 @@ public class PetInfoView extends JPanel implements IClientView {
 
         JPanel sexPanel = new JPanel();
         sexPanel.setLayout(new BoxLayout(sexPanel, BoxLayout.Y_AXIS));
+        sexPanel.setBackground(Color.WHITE);
         JLabel sexLabel = new JLabel("Sex:");
         sexField = new JTextField(20);
         sexPanel.add(sexLabel);
@@ -156,6 +165,7 @@ public class PetInfoView extends JPanel implements IClientView {
 
         JPanel colorPanel = new JPanel();
         colorPanel.setLayout(new BoxLayout(colorPanel, BoxLayout.Y_AXIS));
+        colorPanel.setBackground(Color.WHITE);
         JLabel colorLabel = new JLabel("Color:");
         colorField = new JTextField(20);
         colorPanel.add(colorLabel);
@@ -164,6 +174,7 @@ public class PetInfoView extends JPanel implements IClientView {
 
         JPanel speciesPanel = new JPanel();
         speciesPanel.setLayout(new BoxLayout(speciesPanel, BoxLayout.Y_AXIS));
+        speciesPanel.setBackground(Color.WHITE);
         JLabel speciesLabel = new JLabel("Species:");
         speciesField = new JTextField(20);
         speciesPanel.add(speciesLabel);
@@ -172,6 +183,7 @@ public class PetInfoView extends JPanel implements IClientView {
 
         JPanel breedPanel = new JPanel();
         breedPanel.setLayout(new BoxLayout(breedPanel, BoxLayout.Y_AXIS));
+        breedPanel.setBackground(Color.WHITE);
         JLabel breedLabel = new JLabel("Breed:");
         breedField = new JTextField(20);
         breedPanel.add(breedLabel);
@@ -180,6 +192,7 @@ public class PetInfoView extends JPanel implements IClientView {
 
         JPanel dateOfBirthPanel = new JPanel();
         dateOfBirthPanel.setLayout(new BoxLayout(dateOfBirthPanel, BoxLayout.Y_AXIS));
+        dateOfBirthPanel.setBackground(Color.WHITE);
         JLabel dateOfBirthLabel = new JLabel("Date of Birth:");
         dateOfBirthPicker = new DatePicker();
         dateOfBirthPanel.add(dateOfBirthLabel);
@@ -188,6 +201,7 @@ public class PetInfoView extends JPanel implements IClientView {
 
         JPanel microchipPanel = new JPanel();
         microchipPanel.setLayout(new BoxLayout(microchipPanel, BoxLayout.Y_AXIS));
+        microchipPanel.setBackground(Color.WHITE);
         JLabel microchipLabel = new JLabel("Microchip:");
         microchipField = new JFormattedTextField(numberFormat);
         microchipPanel.add(microchipLabel);
@@ -196,6 +210,7 @@ public class PetInfoView extends JPanel implements IClientView {
 
         JPanel rabiesTagPanel = new JPanel();
         rabiesTagPanel.setLayout(new BoxLayout(rabiesTagPanel, BoxLayout.Y_AXIS));
+        rabiesTagPanel.setBackground(Color.WHITE);
         JLabel rabiesTagLabel = new JLabel("Rabies Tag:");
         rabiesTagField = new JFormattedTextField(numberFormat);
         rabiesTagPanel.add(rabiesTagLabel);
@@ -204,6 +219,7 @@ public class PetInfoView extends JPanel implements IClientView {
 
         JPanel weightPanel = new JPanel();
         weightPanel.setLayout(new BoxLayout(weightPanel, BoxLayout.Y_AXIS));
+        weightPanel.setBackground(Color.WHITE);
         JLabel weightLabel = new JLabel("Weight (lbs):");
         weightField = new JFormattedTextField(numberFormat);
         weightPanel.add(weightLabel);

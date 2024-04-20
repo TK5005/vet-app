@@ -2,6 +2,7 @@ package view.pet;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -23,15 +24,10 @@ public class PetAppointmentsTable extends JPanel implements IClientView {
     }
 
     public void createUI() {
-        JPanel appointmentTable = createAppointmentTable();
-        this.add(appointmentTable, BorderLayout.CENTER);
-    }
-
-    private JPanel createAppointmentTable() {
-        JPanel appointmentPanel = new JPanel();
-        appointmentPanel.setLayout(new BorderLayout());
-
-        JLabel appointmentLabel = new JLabel("Appointments");
+        setBackground(Color.WHITE);
+        this.setLayout(new BorderLayout());
+        
+        JPanel appointmentHeader = createAppointmentHeader();
 
         // Create the table with two columns
         tableModel = new DefaultTableModel() {
@@ -46,17 +42,29 @@ public class PetAppointmentsTable extends JPanel implements IClientView {
         tableModel.addColumn("Description");
 
         JTable appointmentTable = new JTable(tableModel);
+        appointmentTable.setBackground(Color.WHITE);
         appointmentTable.setRowHeight(50);
         appointmentTable.getTableHeader().setOpaque(false);
         appointmentTable.getTableHeader().setBackground(new Color(173, 216, 230));
 
         // Add the table to a scroll pane
         JScrollPane scrollPane = new JScrollPane(appointmentTable);
+        scrollPane.setBackground(Color.WHITE);
 
-        appointmentPanel.add(appointmentLabel, BorderLayout.NORTH);
-        appointmentPanel.add(scrollPane, BorderLayout.CENTER);
+        this.add(appointmentHeader, BorderLayout.NORTH);
+        this.add(scrollPane, BorderLayout.CENTER);
+    }
 
-        return appointmentPanel;
+    private JPanel createAppointmentHeader()
+    {
+        JPanel appointmentHeader = new JPanel();
+        JLabel appointmentLabel = new JLabel("Appointments");
+        
+        appointmentHeader.setLayout(new FlowLayout(FlowLayout.LEFT));
+        appointmentHeader.setBackground(Color.WHITE);
+        appointmentHeader.add(appointmentLabel);
+
+        return appointmentHeader;
     }
 
     public void refresh() {

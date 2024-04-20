@@ -36,6 +36,7 @@ public class DashboardPanel extends JPanel {
 
     private void createUI() {
         setLayout(new BorderLayout());
+        topPanel.setBackground(Color.WHITE);
         String[] navButtons = { "Active Patients", "In Review", "Medication Order", "Today's Appointment" };
         for (String name : navButtons) {
             if (name == "Active Patients") {

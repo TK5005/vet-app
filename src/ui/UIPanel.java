@@ -41,7 +41,7 @@ public class UIPanel extends JPanel {
 
     private void createUI() {
         setLayout(new BorderLayout());
-
+        setBackground(Color.WHITE);
         // Navigation panel
         JPanel navigationPanel = new JPanel();
         navigationPanel.setLayout(new BoxLayout(navigationPanel, BoxLayout.Y_AXIS));

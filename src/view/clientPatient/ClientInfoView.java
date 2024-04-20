@@ -62,10 +62,12 @@ public class ClientInfoView extends JPanel implements IClientView {
     private void createUI() {
         // Set the layout of the panel
         setLayout(new BorderLayout());
+        setBackground(Color.WHITE);
 
         // Create the header of the panel
         JPanel panelHeader = new JPanel();
         panelHeader.setLayout(new FlowLayout(FlowLayout.LEFT));
+        panelHeader.setBackground(Color.WHITE);
         saveButton = new JButton("Save");
         closeButton = new JButton("Close");
         panelHeader.add(saveButton);
@@ -75,6 +77,7 @@ public class ClientInfoView extends JPanel implements IClientView {
         add(panelHeader, BorderLayout.NORTH);
 
         JPanel clientInfoPanel = new JPanel();
+        clientInfoPanel.setBackground(Color.WHITE);
         BoxLayout layout = new BoxLayout(clientInfoPanel, BoxLayout.Y_AXIS);
         clientInfoPanel.setLayout(layout);
 
@@ -83,6 +86,7 @@ public class ClientInfoView extends JPanel implements IClientView {
         clientInfoPanel.add(clientPanel);
 
         JPanel petPanel = createPetPanel();
+        petPanel.setBackground(Color.WHITE);
         clientInfoPanel.add(petPanel);
 
         add(clientInfoPanel, BorderLayout.CENTER);
@@ -92,11 +96,14 @@ public class ClientInfoView extends JPanel implements IClientView {
 
     private JPanel createClientPanel() {
         JPanel clientPanel = new JPanel();
+        
         FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
         clientPanel.setLayout(layout);
+        clientPanel.setBackground(Color.WHITE);
 
         JPanel clientIDPanel = new JPanel();
         clientIDPanel.setLayout(new BoxLayout(clientIDPanel, BoxLayout.Y_AXIS));
+        clientIDPanel.setBackground(Color.WHITE);
         clientIDPanel.add(new JLabel("Client ID"));
         clientIDField = new JTextField(10);
         clientIDField.setEditable(false);
@@ -104,48 +111,56 @@ public class ClientInfoView extends JPanel implements IClientView {
 
         JPanel firstNamePanel = new JPanel();
         firstNamePanel.setLayout(new BoxLayout(firstNamePanel, BoxLayout.Y_AXIS));
+        firstNamePanel.setBackground(Color.WHITE);
         firstNamePanel.add(new JLabel("First Name"));
         firstNameField = new JTextField(10);
         firstNamePanel.add(firstNameField);
 
         JPanel lastNamePanel = new JPanel();
         lastNamePanel.setLayout(new BoxLayout(lastNamePanel, BoxLayout.Y_AXIS));
+        lastNamePanel.setBackground(Color.WHITE);
         lastNamePanel.add(new JLabel("Last Name"));
         lastNameField = new JTextField(10);
         lastNamePanel.add(lastNameField);
 
         JPanel emailPanel = new JPanel();
         emailPanel.setLayout(new BoxLayout(emailPanel, BoxLayout.Y_AXIS));
+        emailPanel.setBackground(Color.WHITE);
         emailPanel.add(new JLabel("Email"));
         emailField = new JTextField(10);
         emailPanel.add(emailField);
 
         JPanel streetPanel = new JPanel();
         streetPanel.setLayout(new BoxLayout(streetPanel, BoxLayout.Y_AXIS));
+        streetPanel.setBackground(Color.WHITE);
         streetPanel.add(new JLabel("Street"));
         streetField = new JTextField(10);
         streetPanel.add(streetField);
 
         JPanel cityPanel = new JPanel();
         cityPanel.setLayout(new BoxLayout(cityPanel, BoxLayout.Y_AXIS));
+        cityPanel.setBackground(Color.WHITE);
         cityPanel.add(new JLabel("City"));
         cityField = new JTextField(10);
         cityPanel.add(cityField);
 
         JPanel statePanel = new JPanel();
         statePanel.setLayout(new BoxLayout(statePanel, BoxLayout.Y_AXIS));
+        statePanel.setBackground(Color.WHITE);
         statePanel.add(new JLabel("State"));
         stateField = new JTextField(10);
         statePanel.add(stateField);
 
         JPanel zipPanel = new JPanel();
         zipPanel.setLayout(new BoxLayout(zipPanel, BoxLayout.Y_AXIS));
+        zipPanel.setBackground(Color.WHITE);
         zipPanel.add(new JLabel("Zip"));
         zipField = new JFormattedTextField(zipFormat);
         zipPanel.add(zipField);
 
         JPanel phonePanel = new JPanel();
         phonePanel.setLayout(new BoxLayout(phonePanel, BoxLayout.Y_AXIS));
+        phonePanel.setBackground(Color.WHITE);
         phonePanel.add(new JLabel("Phone"));
         phoneField = new JTextField(10);
         phonePanel.add(phoneField);
@@ -166,9 +181,11 @@ public class ClientInfoView extends JPanel implements IClientView {
     private JPanel createPetPanel() {
         JPanel petPanel = new JPanel();
         petPanel.setLayout(new BorderLayout());
+        petPanel.setBackground(Color.WHITE);
 
         JPanel petPanelHeader = new JPanel();
         petPanelHeader.setLayout(new FlowLayout(FlowLayout.LEFT));
+        petPanelHeader.setBackground(Color.WHITE);
         addPetButton = new JButton("Add Pet");
         petPanelHeader.add(addPetButton);
         
@@ -185,6 +202,7 @@ public class ClientInfoView extends JPanel implements IClientView {
         tableModel.addColumn("Actions");
 
         petTable = new JTable(tableModel);
+        petTable.setBackground(Color.WHITE);
         petTable.setRowHeight(50);
         petTable.getTableHeader().setOpaque(false);
         petTable.getTableHeader().setBackground(new Color(173, 216, 230));
@@ -206,6 +224,7 @@ public class ClientInfoView extends JPanel implements IClientView {
 
         // Add the table to a scroll pane
         JScrollPane scrollPane = new JScrollPane(petTable);
+        scrollPane.setBackground(Color.WHITE);
 
         petPanel.add(petPanelHeader, BorderLayout.NORTH);
         petPanel.add(scrollPane, BorderLayout.CENTER);
@@ -283,6 +302,7 @@ public class ClientInfoView extends JPanel implements IClientView {
 
         public ButtonRenderer() {
             setLayout(new FlowLayout(FlowLayout.CENTER));
+            setBackground(Color.WHITE);
             viewButton = new JButton("View");
             removeButton = new JButton("Remove");
             add(viewButton);
@@ -310,7 +330,7 @@ public class ClientInfoView extends JPanel implements IClientView {
             super(new JTextField());
 
             panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-
+            panel.setBackground(Color.WHITE);
             viewButton = new JButton("View");
             removeButton = new JButton("Remove");
 

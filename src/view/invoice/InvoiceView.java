@@ -1,6 +1,7 @@
 package view.invoice;
 
 import java.awt.CardLayout;
+import java.awt.Color;
 
 import javax.swing.JPanel;
 
@@ -21,7 +22,7 @@ public class InvoiceView extends JPanel implements IInvoiceView {
     private void createUI() {
         layout = new CardLayout();
         setLayout(layout);
-
+        setBackground(Color.WHITE);
         InvoiceListView listView = new InvoiceListView();
         InvoiceDetailView detailView = new InvoiceDetailView();
         add(listView, "list");

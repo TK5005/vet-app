@@ -1,6 +1,7 @@
 package view.invoice;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.time.LocalDate;
 
@@ -113,17 +114,19 @@ public class InvoiceDetailView extends JPanel implements IInvoiceView {
 
     private void createUI() {
         setLayout(new BorderLayout());
-
+        setBackground(Color.WHITE);
         JPanel headerPanel = createHeaderPanel();
         add(headerPanel, BorderLayout.NORTH);
 
         JPanel invoiceFieldPanel = createInvoiceFieldPanel();
+        invoiceFieldPanel.setBackground(Color.WHITE);
         add(invoiceFieldPanel, BorderLayout.CENTER);
     }
 
     private JPanel createHeaderPanel() {
         JPanel headerPanel = new JPanel();
         headerPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        headerPanel.setBackground(Color.WHITE);
 
         JLabel examLabel = new JLabel("Exam:");
         examSelection = new JComboBox<Integer>();
@@ -141,9 +144,11 @@ public class InvoiceDetailView extends JPanel implements IInvoiceView {
     private JPanel createInvoiceFieldPanel() {
         JPanel invoiceDataFields = new JPanel();
         invoiceDataFields.setLayout(new FlowLayout(FlowLayout.LEFT));
+        invoiceDataFields.setBackground(Color.WHITE);
 
         JPanel invoiceIDPanel = new JPanel();
         invoiceIDPanel.setLayout(new BoxLayout(invoiceIDPanel, BoxLayout.Y_AXIS));
+        invoiceIDPanel.setBackground(Color.WHITE);
         JLabel invoiceIDLabel = new JLabel("Invoice #");
         invoiceIDField = new JTextField(10);
         invoiceIDField.setEditable(false);
@@ -152,6 +157,7 @@ public class InvoiceDetailView extends JPanel implements IInvoiceView {
 
         JPanel ownerNamePanel = new JPanel();
         ownerNamePanel.setLayout(new BoxLayout(ownerNamePanel, BoxLayout.Y_AXIS));
+        ownerNamePanel.setBackground(Color.WHITE);
         JLabel ownerNameLabel = new JLabel("Owner Name");
         ownerNameField = new JTextField(10);
         ownerNameField.setEditable(false);
@@ -160,6 +166,7 @@ public class InvoiceDetailView extends JPanel implements IInvoiceView {
 
         JPanel petNamePanel = new JPanel();
         petNamePanel.setLayout(new BoxLayout(petNamePanel, BoxLayout.Y_AXIS));
+        petNamePanel.setBackground(Color.WHITE);
         JLabel petNameLabel = new JLabel("Pet Name");
         petNameField = new JTextField(10);
         petNameField.setEditable(false);
@@ -168,6 +175,7 @@ public class InvoiceDetailView extends JPanel implements IInvoiceView {
 
         JPanel invoiceDatePanel = new JPanel();
         invoiceDatePanel.setLayout(new BoxLayout(invoiceDatePanel, BoxLayout.Y_AXIS));
+        invoiceDatePanel.setBackground(Color.WHITE);
         JLabel invoiceDateLabel = new JLabel("Invoice Date");
         invoiceDateField = new DatePicker();
         invoiceDatePanel.add(invoiceDateLabel);
@@ -175,6 +183,7 @@ public class InvoiceDetailView extends JPanel implements IInvoiceView {
 
         JPanel invoiceAmtPanel = new JPanel();
         invoiceAmtPanel.setLayout(new BoxLayout(invoiceAmtPanel, BoxLayout.Y_AXIS));
+        invoiceAmtPanel.setBackground(Color.WHITE);
         JLabel invoiceAmtLabel = new JLabel("Amount Due");
         invoiceAmtField = new JTextField(10);
         invoiceAmtField.setEditable(true);
@@ -183,6 +192,7 @@ public class InvoiceDetailView extends JPanel implements IInvoiceView {
 
         JPanel invoiceStatusPanel = new JPanel();
         invoiceStatusPanel.setLayout(new BoxLayout(invoiceStatusPanel, BoxLayout.Y_AXIS));
+        invoiceStatusPanel.setBackground(Color.WHITE);
 
         JLabel invoiceStatusLabel = new JLabel("Status");
         invoiceStatusField = new JComboBox<String>();
