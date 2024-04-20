@@ -36,6 +36,7 @@ public class DashboardPanel extends JPanel {
 
     private void createUI() {
         setLayout(new BorderLayout());
+        topPanel.setBackground(Color.WHITE);
         String[] navButtons = { "Active Patients", "In Review", "Medication Order", "Today's Appointment" };
         for (String name : navButtons) {
             if (name == "Active Patients") {
@@ -67,6 +68,8 @@ public class DashboardPanel extends JPanel {
             }
         });
         topPanel.add(loadDataButton);
+        setTable(returnedData, columns, name);
+        cardLayout.show(bottomJPanel, "Active Patients");
     }
 
     private void loadAppointments(String name) {
@@ -124,6 +127,7 @@ public class DashboardPanel extends JPanel {
         Dimension d = table.getPreferredSize();
         table.setPreferredScrollableViewportSize(d);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        table.setRowHeight(50);
         table.getTableHeader().setOpaque(false);
         table.getTableHeader().setBackground(new Color(173, 216, 230));
         table.setVisible(true);

@@ -36,8 +36,12 @@ public class ExamTable extends JPanel implements IClientView {
 
     private void createUI() {
         this.setLayout(new BorderLayout());
-
-        newExamButton = new JButton("+ New Exam");
+        setBackground(Color.WHITE);
+        newExamButton = new JButton("Add New Exam");
+        JPanel examTableHeader = new JPanel();
+        examTableHeader.setLayout(new FlowLayout(FlowLayout.LEFT));
+        examTableHeader.setBackground(Color.WHITE);
+        examTableHeader.add(newExamButton);
 
         // Create the table with two columns
         tableModel = new DefaultTableModel() {
@@ -54,6 +58,7 @@ public class ExamTable extends JPanel implements IClientView {
 
         examTable = new JTable(tableModel);
         examTable.setRowHeight(50);
+        examTable.setBackground(Color.WHITE);
         examTable.getTableHeader().setOpaque(false);
         examTable.getTableHeader().setBackground(new Color(173, 216, 230));
 
@@ -75,7 +80,7 @@ public class ExamTable extends JPanel implements IClientView {
         // Add the table to a scroll pane
         JScrollPane scrollPane = new JScrollPane(examTable);
 
-        this.add(newExamButton, BorderLayout.NORTH);
+        this.add(examTableHeader, BorderLayout.NORTH);
         this.add(scrollPane, BorderLayout.CENTER);
 
         addEventListeners();
@@ -107,6 +112,7 @@ public class ExamTable extends JPanel implements IClientView {
 
         public ButtonRenderer() {
             setLayout(new FlowLayout(FlowLayout.CENTER));
+            setBackground(Color.WHITE);
             viewButton = new JButton("View Exam Record");
             add(viewButton);
         }
@@ -131,7 +137,7 @@ public class ExamTable extends JPanel implements IClientView {
             super(new JTextField());
 
             panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-
+            panel.setBackground(Color.WHITE);
             viewButton = new JButton("View Exam Record");
 
             panel.add(viewButton);

@@ -24,12 +24,15 @@ public class PetInvoiceTable extends JPanel implements IClientView {
     }
 
     public void createUI() {
+        setBackground(Color.WHITE);
+        this.setLayout(new BorderLayout());
         JPanel invoiceTable = createInvoiceTable();
         this.add(invoiceTable, BorderLayout.CENTER);
     }
 
     private JPanel createInvoiceTable() {
         JPanel invoicePanel = new JPanel();
+        invoicePanel.setBackground(Color.WHITE);
         invoicePanel.setLayout(new BorderLayout());
 
         JLabel invoiceLabel = new JLabel("Invoices");
@@ -47,13 +50,14 @@ public class PetInvoiceTable extends JPanel implements IClientView {
         tableModel.addColumn("Amount Due");
 
         JTable invoiceTable = new JTable(tableModel);
+        invoiceTable.setBackground(Color.WHITE);
         invoiceTable.setRowHeight(50);
         invoiceTable.getTableHeader().setOpaque(false);
         invoiceTable.getTableHeader().setBackground(new Color(173, 216, 230));
 
         // Add the table to a scroll pane
         JScrollPane scrollPane = new JScrollPane(invoiceTable);
-
+        scrollPane.setBackground(Color.WHITE);
         invoicePanel.add(invoiceLabel, BorderLayout.NORTH);
         invoicePanel.add(scrollPane, BorderLayout.CENTER);
 

@@ -1,6 +1,7 @@
 package view.inventory;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -94,10 +95,10 @@ public class InventoryDetailView extends JPanel implements IInventoryView{
 
     private void createUI() {
         this.setLayout(new BorderLayout());
-
+        setBackground(Color.WHITE);
         JPanel header = createHeaderPanel();
         this.add(header, BorderLayout.NORTH);
-
+        header.setBackground(Color.WHITE);
         JPanel detailPanel = createDetailPanel();
         this.add(detailPanel, BorderLayout.CENTER);
     }
@@ -105,6 +106,7 @@ public class InventoryDetailView extends JPanel implements IInventoryView{
     private JPanel createHeaderPanel() {
         JPanel header = new JPanel();
         header.setLayout(new FlowLayout(FlowLayout.LEFT));
+        header.setBackground(Color.WHITE);
         nameField = new JTextField(10);
         saveButton = new JButton("Save");
         closeButton = new JButton("Close");
@@ -118,9 +120,10 @@ public class InventoryDetailView extends JPanel implements IInventoryView{
 
         JPanel detailPanel = new JPanel();
         detailPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-
+        detailPanel.setBackground(Color.WHITE);
         JPanel idPanel = new JPanel();
         idPanel.setLayout(new BoxLayout(idPanel, BoxLayout.Y_AXIS));
+        idPanel.setBackground(Color.WHITE);
         JLabel idLabel = new JLabel("Item ID");
         idField = new JFormattedTextField(numberFormatter);
         idField.setEditable(false);
@@ -129,6 +132,7 @@ public class InventoryDetailView extends JPanel implements IInventoryView{
 
         JPanel reorderLevelPanel = new JPanel();
         reorderLevelPanel.setLayout(new BoxLayout(reorderLevelPanel, BoxLayout.Y_AXIS));
+        reorderLevelPanel.setBackground(Color.WHITE);
         JLabel reorderLevelLabel = new JLabel("Reorder Level");
         reoderLevelField = new JFormattedTextField(numberFormatter);
         reorderLevelPanel.add(reorderLevelLabel);
@@ -136,6 +140,7 @@ public class InventoryDetailView extends JPanel implements IInventoryView{
 
         JPanel quantityPanel = new JPanel();
         quantityPanel.setLayout(new BoxLayout(quantityPanel, BoxLayout.Y_AXIS));
+        quantityPanel.setBackground(Color.WHITE);
         JLabel quantityLabel = new JLabel("Quantity");
         quantityField = new JFormattedTextField(numberFormatter);
         quantityPanel.add(quantityLabel);
@@ -143,6 +148,7 @@ public class InventoryDetailView extends JPanel implements IInventoryView{
 
         JPanel reorderQuantityPanel = new JPanel();
         reorderQuantityPanel.setLayout(new BoxLayout(reorderQuantityPanel, BoxLayout.Y_AXIS));
+        reorderQuantityPanel.setBackground(Color.WHITE);
         JLabel reorderQuantityLabel = new JLabel("Reorder Quantity");
         reorderQuantityField = new JFormattedTextField(numberFormatter);
         reorderQuantityPanel.add(reorderQuantityLabel);
@@ -150,6 +156,7 @@ public class InventoryDetailView extends JPanel implements IInventoryView{
 
         JPanel retailCostPanel = new JPanel();
         retailCostPanel.setLayout(new BoxLayout(retailCostPanel, BoxLayout.Y_AXIS));
+        retailCostPanel.setBackground(Color.WHITE);
         JLabel retailCostLabel = new JLabel("Retail Cost");
         retailCostField = new JFormattedTextField(new DecimalFormat("#0.00"));
         retailCostPanel.add(retailCostLabel);
@@ -157,6 +164,7 @@ public class InventoryDetailView extends JPanel implements IInventoryView{
 
         JPanel wholesaleCostPanel = new JPanel();
         wholesaleCostPanel.setLayout(new BoxLayout(wholesaleCostPanel, BoxLayout.Y_AXIS));
+        wholesaleCostPanel.setBackground(Color.WHITE);
         JLabel wholesaleCostLabel = new JLabel("Wholesale Cost");
         wholesaleCostField = new JFormattedTextField(new DecimalFormat("#0.00"));
         wholesaleCostPanel.add(wholesaleCostLabel);
@@ -164,6 +172,7 @@ public class InventoryDetailView extends JPanel implements IInventoryView{
 
         JPanel typePanel = new JPanel();
         typePanel.setLayout(new BoxLayout(typePanel, BoxLayout.Y_AXIS));
+        typePanel.setBackground(Color.WHITE);
         JLabel typeLabel = new JLabel("Type");
         typeField = new JTextField(10);
         typePanel.add(typeLabel);
@@ -171,6 +180,7 @@ public class InventoryDetailView extends JPanel implements IInventoryView{
 
         JPanel manufacturerPanel = new JPanel();
         manufacturerPanel.setLayout(new BoxLayout(manufacturerPanel, BoxLayout.Y_AXIS));
+        manufacturerPanel.setBackground(Color.WHITE);
         JLabel manufacturerLabel = new JLabel("Manufacturer");
         manufacturerField = new JTextField(10);
         manufacturerPanel.add(manufacturerLabel);

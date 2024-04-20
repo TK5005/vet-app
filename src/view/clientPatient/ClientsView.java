@@ -35,16 +35,32 @@ public class ClientsView extends JPanel implements IClientView {
 
         setLayout(new BorderLayout());
 
-        // Create the "Add Client" button
-        addButton = new JButton("Add Client");
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle the button click event
-                clientController.addClient();
-            }
-        });
+        createUI();
 
+        refresh();
+    }
+
+    private void createUI()
+    {
+        this.setBackground(Color.WHITE);
+        JPanel header = new JPanel();
+        header.setLayout(new FlowLayout(FlowLayout.LEFT));
+        header.setBackground(Color.WHITE);
+        addButton = new JButton("Add Client");
+        header.add(addButton);
+
+        // Add the table to a scroll pane
+        JScrollPane scrollPane = new JScrollPane(createClientsTable());
+        scrollPane.getViewport().setBackground(Color.WHITE);
+        // Add the components to the panel
+        add(header, BorderLayout.NORTH);
+        add(scrollPane, BorderLayout.CENTER);
+
+        createActionListeners();
+    }
+
+    private JTable createClientsTable()
+    {    
         // Create the table with two columns
         tableModel = new DefaultTableModel() {
             @Override
@@ -58,6 +74,7 @@ public class ClientsView extends JPanel implements IClientView {
         tableModel.addColumn("Actions");
 
         clientsTable = new JTable(tableModel);
+        clientsTable.setBackground(Color.WHITE);
         clientsTable.setRowHeight(50);
         clientsTable.getTableHeader().setOpaque(false);
         clientsTable.getTableHeader().setBackground(new Color(173, 216, 230));
@@ -77,14 +94,13 @@ public class ClientsView extends JPanel implements IClientView {
         clientsTable.getColumnModel().getColumn(1).setCellRenderer(new ButtonRenderer());
         clientsTable.getColumnModel().getColumn(1).setCellEditor(new ButtonEditor());
 
-        refresh();
+        return clientsTable;
+    }
 
-        // Add the table to a scroll pane
-        JScrollPane scrollPane = new JScrollPane(clientsTable);
-
-        // Add the components to the panel
-        add(addButton, BorderLayout.NORTH);
-        add(scrollPane, BorderLayout.CENTER);
+    private void createActionListeners() {
+        addButton.addActionListener(e -> {
+            clientController.addClient();
+        });
     }
 
     public void refresh() {
@@ -112,6 +128,7 @@ public class ClientsView extends JPanel implements IClientView {
 
         public ButtonRenderer() {
             setLayout(new FlowLayout(FlowLayout.CENTER));
+            setBackground(Color.WHITE);
             viewButton = new JButton("View");
             removeButton = new JButton("Remove");
             add(viewButton);
@@ -139,7 +156,7 @@ public class ClientsView extends JPanel implements IClientView {
             super(new JTextField());
 
             panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-
+            panel.setBackground(Color.WHITE);
             viewButton = new JButton("View");
             removeButton = new JButton("Remove");
 

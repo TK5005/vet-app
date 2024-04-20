@@ -2,6 +2,7 @@ package view.exam;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.text.NumberFormat;
@@ -100,6 +101,7 @@ public class ExamRecordView extends JPanel implements IClientView {
 
     private void createUI() {
         setLayout(new BorderLayout());
+        setBackground(Color.WHITE);
         JPanel header = createExamInfoSection();
         JPanel examInfoPanel = new JPanel();
         add(header, BorderLayout.NORTH);
@@ -111,11 +113,11 @@ public class ExamRecordView extends JPanel implements IClientView {
     private JPanel createExamInfoSection() {
         JPanel examInfo = new JPanel();
         examInfo.setLayout(new BorderLayout());
-
+        examInfo.setBackground(Color.WHITE);
         // Create the header panel
         JPanel header = new JPanel();
         header.setLayout(new FlowLayout(FlowLayout.LEFT));
-
+        header.setBackground(Color.WHITE);
         petNameField = new JTextField(20);
         petNameField.setEditable(false);
 
@@ -133,14 +135,16 @@ public class ExamRecordView extends JPanel implements IClientView {
 
         JPanel examViewBottom = new JPanel();
         examViewBottom.setLayout(new BorderLayout());
+        examViewBottom.setBackground(Color.WHITE);
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        buttonPanel.setBackground(Color.WHITE);
         detailsButton = new JButton("Details");
         treatmentButton = new JButton("Treatment");
         buttonPanel.add(detailsButton);
         buttonPanel.add(treatmentButton);
         examViewBottom.add(buttonPanel, BorderLayout.NORTH);
-
+        
         examCardPanel = new JPanel();
         cardLayout = new CardLayout();
         examCardPanel.setLayout(cardLayout);
@@ -162,9 +166,10 @@ public class ExamRecordView extends JPanel implements IClientView {
     private JPanel createExamDetails() {
         JPanel examDetails = new JPanel();
         examDetails.setLayout(new BoxLayout(examDetails, BoxLayout.Y_AXIS));
-
+        examDetails.setBackground(Color.WHITE);
         JPanel descriptionPanel = new JPanel();
         descriptionPanel.setLayout(new BoxLayout(descriptionPanel, BoxLayout.Y_AXIS));
+        descriptionPanel.setBackground(Color.WHITE);
         JLabel descriptionLabel = new JLabel("Description");
         descriptionField = new JTextArea(10, 50);
         descriptionPanel.add(descriptionLabel);
@@ -172,6 +177,7 @@ public class ExamRecordView extends JPanel implements IClientView {
 
         JPanel vitalsPanel = new JPanel();
         vitalsPanel.setLayout(new BoxLayout(vitalsPanel, BoxLayout.Y_AXIS));
+        vitalsPanel.setBackground(Color.WHITE);
         JLabel vitalsLabel = new JLabel("Vitals");
         vitalsField = new JTextArea(10, 50);
         vitalsPanel.add(vitalsLabel);
@@ -186,12 +192,13 @@ public class ExamRecordView extends JPanel implements IClientView {
     private JPanel createTreatmentDetails() {
         JPanel treatmentDetails = new JPanel();
         treatmentDetails.setLayout(new BorderLayout());
-
+        treatmentDetails.setBackground(Color.WHITE);
         JPanel treatmentHeader = new JPanel();
         treatmentHeader.setLayout(new FlowLayout(FlowLayout.LEFT));
-
+        treatmentHeader.setBackground(Color.WHITE);
         JPanel treatmentIDPanel = new JPanel();
         treatmentIDPanel.setLayout(new BoxLayout(treatmentIDPanel, BoxLayout.Y_AXIS));
+        treatmentIDPanel.setBackground(Color.WHITE);
         JLabel treatmentIDLabel = new JLabel("Treatment ID");
         treatmentIDField = new JTextField(10);
         treatmentIDField.setEditable(false);
@@ -200,6 +207,7 @@ public class ExamRecordView extends JPanel implements IClientView {
 
         JPanel medicationPanel = new JPanel();
         medicationPanel.setLayout(new BoxLayout(medicationPanel, BoxLayout.Y_AXIS));
+        medicationPanel.setBackground(Color.WHITE);
         JLabel medicationLabel = new JLabel("Medication");
         medicationField = new JTextField(10);
         medicationPanel.add(medicationLabel);
@@ -207,6 +215,7 @@ public class ExamRecordView extends JPanel implements IClientView {
 
         JPanel treatmentStartDatePanel = new JPanel();
         treatmentStartDatePanel.setLayout(new BoxLayout(treatmentStartDatePanel, BoxLayout.Y_AXIS));
+        treatmentStartDatePanel.setBackground(Color.WHITE);
         JLabel treatmentStartDateLabel = new JLabel("Start Date");
         treatmentStartDateField = new DatePicker();
         treatmentStartDatePanel.add(treatmentStartDateLabel);
@@ -214,6 +223,7 @@ public class ExamRecordView extends JPanel implements IClientView {
 
         JPanel treatmentEndDatePanel = new JPanel();
         treatmentEndDatePanel.setLayout(new BoxLayout(treatmentEndDatePanel, BoxLayout.Y_AXIS));
+        treatmentEndDatePanel.setBackground(Color.WHITE);
         JLabel treatmentEndDateLabel = new JLabel("End Date");
         treatmentEndDateField = new DatePicker();
         treatmentEndDatePanel.add(treatmentEndDateLabel);
@@ -226,6 +236,7 @@ public class ExamRecordView extends JPanel implements IClientView {
 
         JPanel directionsPanel = new JPanel();
         directionsPanel.setLayout(new BoxLayout(directionsPanel, BoxLayout.Y_AXIS));
+        directionsPanel.setBackground(Color.WHITE);
         JLabel directionsLabel = new JLabel("Directions");
         treatmentDirectionsField = new JTextArea(10, 50);
         directionsPanel.add(directionsLabel);
@@ -240,9 +251,11 @@ public class ExamRecordView extends JPanel implements IClientView {
     private JPanel createExamDataFields() {
         JPanel examDataFields = new JPanel();
         examDataFields.setLayout(new FlowLayout(FlowLayout.LEFT));
+        examDataFields.setBackground(Color.WHITE);
 
         JPanel examIDPanel = new JPanel();
         examIDPanel.setLayout(new BoxLayout(examIDPanel, BoxLayout.Y_AXIS));
+        examIDPanel.setBackground(Color.WHITE);
         JLabel examIDLabel = new JLabel("Exam ID");
         examIDField = new JTextField(10);
         examIDField.setEditable(false);
@@ -251,6 +264,7 @@ public class ExamRecordView extends JPanel implements IClientView {
 
         JPanel examinerPanel = new JPanel();
         examinerPanel.setLayout(new BoxLayout(examinerPanel, BoxLayout.Y_AXIS));
+        examinerPanel.setBackground(Color.WHITE);
         JLabel examinerLabel = new JLabel("Examiner");
         examinerBox = new JComboBox<Vet>(clientController.getVets());
         // set examinerBox to use the vets name as a label
@@ -261,6 +275,7 @@ public class ExamRecordView extends JPanel implements IClientView {
 
         JPanel techPanel = new JPanel();
         techPanel.setLayout(new BoxLayout(techPanel, BoxLayout.Y_AXIS));
+        techPanel.setBackground(Color.WHITE);
         JLabel techLabel = new JLabel("Tech");
         techBox = new JComboBox<Tech>(clientController.getTechs());
         // set techBox to use the techs name as a label
@@ -270,6 +285,7 @@ public class ExamRecordView extends JPanel implements IClientView {
 
         JPanel locationPanel = new JPanel();
         locationPanel.setLayout(new BoxLayout(locationPanel, BoxLayout.Y_AXIS));
+        locationPanel.setBackground(Color.WHITE);
         JLabel locationLabel = new JLabel("Location");
         locationField = new JTextField(10);
         locationPanel.add(locationLabel);
@@ -277,6 +293,7 @@ public class ExamRecordView extends JPanel implements IClientView {
 
         JPanel datePanel = new JPanel();
         datePanel.setLayout(new BoxLayout(datePanel, BoxLayout.Y_AXIS));
+        datePanel.setBackground(Color.WHITE);
         JLabel dateTimeLabel = new JLabel("Date/Time");
         dateField = new DatePicker();
         datePanel.add(dateTimeLabel);
@@ -284,6 +301,7 @@ public class ExamRecordView extends JPanel implements IClientView {
 
         JPanel timePanel = new JPanel();
         timePanel.setLayout(new BoxLayout(timePanel, BoxLayout.Y_AXIS));
+        timePanel.setBackground(Color.WHITE);
         JLabel timeLabel = new JLabel("Time");
         timeField = new TimePicker();
         timePanel.add(timeLabel);
@@ -291,6 +309,7 @@ public class ExamRecordView extends JPanel implements IClientView {
 
         JPanel weightPanel = new JPanel();
         weightPanel.setLayout(new BoxLayout(weightPanel, BoxLayout.Y_AXIS));
+        weightPanel.setBackground(Color.WHITE);
         JLabel weightLabel = new JLabel("Weight");
         weightField = new JFormattedTextField(numberFormat);
         weightPanel.add(weightLabel);

@@ -6,6 +6,7 @@ import control.IInventoryView;
 import control.InventoryController;
 
 import java.awt.CardLayout;
+import java.awt.Color;
 
 public class InventoryView extends JPanel implements IInventoryView{
     private InventoryController controller;
@@ -25,7 +26,7 @@ public class InventoryView extends JPanel implements IInventoryView{
     private void createUI() {
         layout = new CardLayout();
         setLayout(layout);
-
+        setBackground(Color.WHITE);
         InventoryListView listView = new InventoryListView();
         InventoryDetailView detailView = new InventoryDetailView();
         add(listView, "list");

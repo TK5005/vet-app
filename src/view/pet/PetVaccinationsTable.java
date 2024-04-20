@@ -23,12 +23,15 @@ public class PetVaccinationsTable extends JPanel implements IClientView {
     }
 
     public void createUI() {
+        setBackground(Color.WHITE);
+        this.setLayout(new BorderLayout());
         JPanel vaccinationTable = createVaccinationTable();
         this.add(vaccinationTable, BorderLayout.CENTER);
     }
 
     private JPanel createVaccinationTable() {
         JPanel vaccinationPanel = new JPanel();
+        vaccinationPanel.setBackground(Color.WHITE);
         vaccinationPanel.setLayout(new BorderLayout());
 
         JLabel vaccinationLabel = new JLabel("Vaccinations");
@@ -46,13 +49,14 @@ public class PetVaccinationsTable extends JPanel implements IClientView {
         tableModel.addColumn("Description");
 
         JTable vaccinationTable = new JTable(tableModel);
+        vaccinationTable.setBackground(Color.WHITE);
         vaccinationTable.setRowHeight(50);
         vaccinationTable.getTableHeader().setOpaque(false);
         vaccinationTable.getTableHeader().setBackground(new Color(173, 216, 230));
 
         // Add the table to a scroll pane
         JScrollPane scrollPane = new JScrollPane(vaccinationTable);
-
+        scrollPane.setBackground(Color.WHITE);
         vaccinationPanel.add(vaccinationLabel, BorderLayout.NORTH);
         vaccinationPanel.add(scrollPane, BorderLayout.CENTER);
 

@@ -47,9 +47,10 @@ public class InventoryListView extends JPanel implements IInventoryView{
 
     private void createUI() {
         this.setLayout(new BorderLayout());
-
+        setBackground(Color.WHITE);
         JPanel header = new JPanel();
         header.setLayout(new FlowLayout(FlowLayout.LEFT));
+        header.setBackground(Color.WHITE);
         newItemButton = new JButton("New Item");
         header.add(newItemButton);
         this.add(header, BorderLayout.NORTH);
@@ -67,7 +68,7 @@ public class InventoryListView extends JPanel implements IInventoryView{
     private JPanel createInventoryTable() {
         JPanel inventoryList = new JPanel();
         inventoryList.setLayout(new BorderLayout());
-
+        inventoryList.setBackground(Color.WHITE);
         // Create the table with two columns
         tableModel = new DefaultTableModel() {
             @Override
@@ -83,6 +84,7 @@ public class InventoryListView extends JPanel implements IInventoryView{
         tableModel.addColumn("Actions");
 
         JTable inventoryTable = new JTable(tableModel);
+        inventoryTable.setBackground(Color.WHITE);
         inventoryTable.setRowHeight(50);
         inventoryTable.getTableHeader().setOpaque(false);
         inventoryTable.getTableHeader().setBackground(new Color(173, 216, 230));
@@ -95,7 +97,7 @@ public class InventoryListView extends JPanel implements IInventoryView{
 
         // Add the table to a scroll pane
         JScrollPane scrollPane = new JScrollPane(inventoryTable);
-
+        scrollPane.setBackground(Color.WHITE);
         inventoryList.add(scrollPane, BorderLayout.CENTER);
 
         return inventoryList;
@@ -108,6 +110,7 @@ public class InventoryListView extends JPanel implements IInventoryView{
 
         public ButtonRenderer() {
             setLayout(new FlowLayout(FlowLayout.CENTER));
+            setBackground(Color.WHITE);
             viewButton = new JButton("View Details");
             add(viewButton);
         }
@@ -133,7 +136,7 @@ public class InventoryListView extends JPanel implements IInventoryView{
             super(new JTextField());
 
             panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-
+            panel.setBackground(Color.WHITE);
             viewButton = new JButton("View Details");
 
             panel.add(viewButton);
