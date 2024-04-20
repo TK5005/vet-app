@@ -19,6 +19,7 @@ import javax.swing.border.EmptyBorder;
 
 import control.AppController;
 import view.clientPatient.ClientPageView;
+import view.inventory.InventoryView;
 import view.invoice.InvoiceView;
 
 /**
@@ -103,7 +104,7 @@ public class UIPanel extends JPanel {
         invoiceView.setBackground(Color.WHITE);
         cards.add(invoiceView, "Invoices");
 
-        InventoryPanel inventoryPanel = new InventoryPanel(controller);
+        InventoryView inventoryPanel = new InventoryView();
         inventoryPanel.setBackground(Color.WHITE);
         cards.add(inventoryPanel, "Inventory");
 

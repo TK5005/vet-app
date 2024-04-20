@@ -16,6 +16,7 @@ public class DataModel {
     private ArrayList<Invoice> invoices;
     private ArrayList<Vaccination> vaccinations;
     private ArrayList<Appointment> appointments;
+    private ArrayList<Inventory> inventory;
 
     /**
      * Constructor for the data model
@@ -30,6 +31,7 @@ public class DataModel {
         invoices = new ArrayList<Invoice>();
         vaccinations = new ArrayList<Vaccination>();
         appointments = new ArrayList<Appointment>();
+        inventory = new ArrayList<Inventory>();
         loadClients();
         loadPets();
         loadVets();
@@ -39,6 +41,7 @@ public class DataModel {
         loadAppointments();
         loadVaccinations();
         loadInvoices();
+        loadInventory();
     }
 
     /**
@@ -451,6 +454,43 @@ public class DataModel {
         }
     }
 
+    // Inventory menthods
+    public void addInventoryItem(Inventory item) {
+        // Upate itemID so that it is unique
+        if (inventory.size() > 0) {
+            item.setItemID(inventory.get(inventory.size() - 1).getItemID() + 1);
+        } else {
+            item.setItemID(0);
+        }
+
+        // Add item to the list
+        inventory.add(item);
+    }
+
+    public Inventory[] getInventory() {
+        return inventory.toArray(new Inventory[inventory.size()]);
+    }
+
+    public Inventory getInventoryItem(int itemID) {
+        // Get item based on itemID
+        for (int i = 0; i < inventory.size(); i++) {
+            if (inventory.get(i).getItemID() == itemID) {
+                return inventory.get(i);
+            }
+        }
+        return null;
+    }
+
+    public void updateInventoryItem(int itemID, Inventory item) {
+        // Update item based on itemID
+        for (int i = 0; i < inventory.size(); i++) {
+            if (inventory.get(i).getItemID() == itemID) {
+                inventory.set(i, item);
+                break;
+            }
+        }
+    }
+
     // Temp Data methods
 
     /**
@@ -603,6 +643,23 @@ public class DataModel {
             appointment.setAppointmentDate(LocalDateTime.of(2021, 1, 1, 0, 0));
             appointment.setDescription("Appointment Description");
             appointments.add(appointment);
+        }
+    }
+
+    private void loadInventory() {
+        // Generate 10 inventory items
+        for (int i = 0; i < 10; i++) {
+            Inventory item = new Inventory();
+            item.setItemID(i);
+            item.setName("Item" + i);
+            item.setReorderLevel(10);
+            item.setQuantity(100);
+            item.setReorderQuantity(50);
+            item.setRetailCost(10.00);
+            item.setWholesaleCost(5.00);
+            item.setType("Item Type");
+            item.setManufacturer("Manufacturer");
+            inventory.add(item);
         }
     }
 

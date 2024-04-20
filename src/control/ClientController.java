@@ -88,8 +88,8 @@ public class ClientController {
      * @return An array of clients
      */
     public Client[] getClients() {
-        return clientRepository.Get();
-        //return dataModel.getClients();
+        //return clientRepository.Get();
+        return dataModel.getClients();
     }
 
     // Client methods
