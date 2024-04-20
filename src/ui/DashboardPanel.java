@@ -67,6 +67,8 @@ public class DashboardPanel extends JPanel {
             }
         });
         topPanel.add(loadDataButton);
+        setTable(returnedData, columns, name);
+        cardLayout.show(bottomJPanel, "Active Patients");
     }
 
     private void loadAppointments(String name) {
