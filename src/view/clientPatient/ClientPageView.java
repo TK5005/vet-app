@@ -9,6 +9,7 @@ import control.ClientController;
 import control.IClientView;
 import view.exam.ExamRecordView;
 import view.pet.PetInfoView;
+import view.pet.PetVaccineInfoView;
 
 public class ClientPageView extends JPanel implements IClientView {
     private CardLayout cardLayout;
@@ -18,6 +19,7 @@ public class ClientPageView extends JPanel implements IClientView {
     ClientInfoView clientInfo;
     PetInfoView petInfo;
     ExamRecordView examInfo;
+    PetVaccineInfoView petVaccinationInfo;
 
     public ClientPageView() {
         controller = ClientController.getInstance();
@@ -31,12 +33,14 @@ public class ClientPageView extends JPanel implements IClientView {
         clientInfo = new ClientInfoView();
         petInfo = new PetInfoView();
         examInfo = new ExamRecordView();
+        petVaccinationInfo = new PetVaccineInfoView();
 
         // Add your views to the card panel
         cardPanel.add(clientsView, "clientsView");
         cardPanel.add(clientInfo, "clientInfo");
         cardPanel.add(petInfo, "petInfo");
         cardPanel.add(examInfo, "examInfo");
+        cardPanel.add(petVaccinationInfo, "petVaccinationInfo");
 
         // Set the initial view to be shown
         cardLayout.show(cardPanel, "clientsView");
@@ -71,6 +75,15 @@ public class ClientPageView extends JPanel implements IClientView {
     }
 
     public void closeExamInfoView() {
+        petInfo.refresh();
+        cardLayout.show(cardPanel, "petInfo");
+    }
+
+    public void showPetVaccinationInfo() {
+        cardLayout.show(cardPanel, "petVaccinationInfo");
+    }
+
+    public void closePetVaccinationInfoView() {
         petInfo.refresh();
         cardLayout.show(cardPanel, "petInfo");
     }

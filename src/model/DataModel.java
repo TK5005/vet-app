@@ -491,6 +491,58 @@ public class DataModel {
         }
     }
 
+    public Vaccination[] getVaccinationsFromPetID(int petID) {
+        ArrayList<Vaccination> petVaccinations = new ArrayList<Vaccination>();
+        for (int i = 0; i < vaccinations.size(); i++) {
+            if (vaccinations.get(i).getPetId() == petID) {
+                petVaccinations.add(vaccinations.get(i));
+            }
+        }
+        return petVaccinations.toArray(new Vaccination[petVaccinations.size()]);
+    }
+
+    public void updateVaccination(int vaccinationID, Vaccination vaccination) {
+        // Update vaccination based on vaccinationID
+        for (int i = 0; i < vaccinations.size(); i++) {
+            if (vaccinations.get(i).getVaccinationId() == vaccinationID) {
+                vaccinations.set(i, vaccination);
+                break;
+            }
+        }
+    }
+
+    public void addVaccination(Vaccination vaccination) {
+        // Upate vaccinationID so that it is unique
+        if (vaccinations.size() > 0) {
+            vaccination.setVaccinationId(vaccinations.get(vaccinations.size() - 1).getVaccinationId() + 1);
+        } else {
+            vaccination.setVaccinationId(0);
+        }
+
+        // Add vaccination to the list
+        vaccinations.add(vaccination);
+    }
+
+    public void removeVaccination(int vaccinationID) {
+        // Delete vaccination based on vaccinationID
+        for (int i = 0; i < vaccinations.size(); i++) {
+            if (vaccinations.get(i).getVaccinationId() == vaccinationID) {
+                vaccinations.remove(i);
+                break;
+            }
+        }
+    }
+
+    public Vaccination getVaccination(int vaccinationID) {
+        // Get vaccination based on vaccinationID
+        for (int i = 0; i < vaccinations.size(); i++) {
+            if (vaccinations.get(i).getVaccinationId() == vaccinationID) {
+                return vaccinations.get(i);
+            }
+        }
+        return null;
+    }
+
     // Temp Data methods
 
     /**
@@ -628,6 +680,10 @@ public class DataModel {
         // Generate 10 vaccinations and assign one to each pet via patientID
         for (int i = 0; i < 10; i++) {
             Vaccination vaccination = new Vaccination();
+            vaccination.setVaccinationId(i);
+            vaccination.setPetId(i % 10);
+            vaccination.setName("Vaccination" + i);
+            vaccination.setDate(LocalDate.of(2021, 1, 1));
             vaccinations.add(vaccination);
         }
     }

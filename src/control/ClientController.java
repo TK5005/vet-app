@@ -14,6 +14,7 @@ import model.Invoice;
 import model.Pet;
 import model.Tech;
 import model.Treatment;
+import model.Vaccination;
 import model.Vet;
 import view.clientPatient.ClientPageView;
 
@@ -42,7 +43,7 @@ public class ClientController {
     private ClientPageView clientPage;
     private int currentPetID = -1;
     private int currentClientID = -1;
-
+    private int currentVaccintaionID = -1;
     private int currentExamID = -1;
 
     /**
@@ -80,6 +81,14 @@ public class ClientController {
 
     public int getCurrentExamID() {
         return currentExamID;
+    }
+
+    public void setCurrentVaccinationID(int currentVaccinationID) {
+        this.currentVaccintaionID = currentVaccinationID;
+    }
+
+    public int getCurrentVaccinationID() {
+        return currentVaccintaionID;
     }
 
     /**
@@ -266,6 +275,37 @@ public class ClientController {
         dataModel.updateTreatment(treatmentID, treatment);
     }
 
+    public Vaccination[] getVaccinationsFromPetID(int petID) {
+        return dataModel.getVaccinationsFromPetID(petID);
+    }
+
+    public void addVaccination(int petID) {
+        Vaccination vaccination = new Vaccination();
+        vaccination.setPetId(petID);
+        vaccination.setName("New Vaccination");
+        vaccination.setDate(LocalDate.now());
+        dataModel.addVaccination(vaccination);
+        refreshViews();
+    }
+
+    public void removeVaccination(int vaccinationID) {
+        dataModel.removeVaccination(vaccinationID);
+        refreshViews();
+    }
+
+    public Vaccination getVaccination(int vaccinationID) {
+        return dataModel.getVaccination(vaccinationID);
+    }
+
+    public void updateVaccination(int vaccinationID, String name, LocalDate date) {
+        Vaccination vaccination = dataModel.getVaccination(vaccinationID);
+        vaccination.setName(name);
+        vaccination.setDate(date);
+        dataModel.updateVaccination(vaccinationID, vaccination);
+        closeVaccinationInfoView();
+        refreshViews();
+    }
+
     /**
      * Get an Exam
      * 
@@ -393,6 +433,18 @@ public class ClientController {
     public void closeExamInfoView() {
         this.setCurrentExamID(-1);
         clientPage.closeExamInfoView();
+        refreshViews();
+    }
+
+    public void showVaccinationInfo(int vaccinationID) {
+        this.setCurrentVaccinationID(vaccinationID);
+        clientPage.showPetVaccinationInfo();
+        refreshViews();
+    }
+
+    public void closeVaccinationInfoView() {
+        this.setCurrentVaccinationID(-1);
+        clientPage.closePetVaccinationInfoView();
         refreshViews();
     }
 
