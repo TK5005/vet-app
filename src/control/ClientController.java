@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Repository.ClientRepository;
+import Repository.PetRepository;
 import model.Appointment;
 import model.Client;
 import model.DataModel;
@@ -39,6 +40,7 @@ public class ClientController {
 
     private DataModel dataModel;
     private ClientRepository clientRepository;
+    private PetRepository petRepository;
     private ArrayList<IClientView> views;
     private ClientPageView clientPage;
     private int currentPetID = -1;
@@ -52,6 +54,7 @@ public class ClientController {
     private ClientController() {
         dataModel = DataModel.getInstance();
         clientRepository = new ClientRepository();
+        petRepository = new PetRepository();
         views = new ArrayList<>();
     }
 
@@ -97,8 +100,8 @@ public class ClientController {
      * @return An array of clients
      */
     public Client[] getClients() {
-        //return clientRepository.Get();
-        return dataModel.getClients();
+        return clientRepository.getAll();
+        //return dataModel.getClients();
     }
 
     // Client methods
@@ -119,7 +122,8 @@ public class ClientController {
      */
     public void updateClient(int clientID, String fName, String lName,
             String phone, String email, String street, String city, String state, int zip) {
-        Client client = dataModel.getClient(clientID);
+        Client client = new Client();
+        client.setClientID(clientID);
         client.setFirstName(fName);
         client.setLastName(lName);
         client.setPhone(phone);
@@ -129,7 +133,8 @@ public class ClientController {
         client.setState(state);
         client.setZip(zip);
 
-        dataModel.updateClient(clientID, client);
+        //dataModel.updateClient(clientID, client);
+        clientRepository.updateClient(client);
         refreshViews();
     }
 
@@ -150,7 +155,8 @@ public class ClientController {
      * @return The client object
      */
     public Client getClient(int clientID) {
-        return dataModel.getClient(clientID);
+        //return dataModel.getClient(clientID);
+        return clientRepository.getSpecificClient(clientID);
     }
 
     /**
@@ -160,7 +166,8 @@ public class ClientController {
      * @return An array of pets
      */
     public Pet[] getPets(int clientID) {
-        return dataModel.getPets(clientID);
+        //return dataModel.getPets(clientID);
+        return petRepository.getPetsByClientID(clientID);
     }
 
     // Pet methods
@@ -192,7 +199,8 @@ public class ClientController {
         pet.setWeight(weight);
         pet.setMicrochipNumber(microchipNumber);
         pet.setRabiesTag(rabiesTag);
-        dataModel.updatePet(currentPetID, pet);
+        //dataModel.updatePet(currentPetID, pet);
+        petRepository.updatePet(pet);
         refreshViews();
     }
 
@@ -213,7 +221,8 @@ public class ClientController {
      * @return The pet object
      */
     public Pet getPet(int petID) {
-        return dataModel.getPet(petID);
+        //return dataModel.getPet(petID);
+        return petRepository.getSpecificPet(petID);
     }
 
     /**
