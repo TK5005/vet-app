@@ -19,6 +19,7 @@ public class ConnectionManager {
             Class.forName(driverName);
             try{
                 con = DriverManager.getConnection(url, username, password);
+                con.setAutoCommit(false);
             }catch(SQLException ex){
                 System.out.println("Failed to create the database connection");
             }
