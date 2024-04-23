@@ -1,3 +1,4 @@
+use vetapp;
 CREATE TABLE APPOINTMENT(
         apptNo INT NOT NULL AUTO_INCREMENT,
         clientID INT NOT NULL,
@@ -17,8 +18,8 @@ CREATE TABLE INVENTORY(
 
 CREATE TABLE STAFF(
         empID INT NOT NULL AUTO_INCREMENT,
-        fname VARCHAR(50) NOT NULL,
-        lname VARCHAR(50) NOT NULL,
+        firstName VARCHAR(50) NOT NULL,
+        lastName VARCHAR(50) NOT NULL,
         sex   CHAR(1),
         dob   DATE NOT NULL,
         ssn   CHAR(10) NOT NULL,
@@ -31,8 +32,8 @@ CREATE TABLE STAFF(
 
 CREATE TABLE CLIENT(
         clientID INT NOT NULL AUTO_INCREMENT,
-        fname VARCHAR(50) NOT NULL,
-        lname VARCHAR(50) NOT NULL,
+        firstName VARCHAR(50) NOT NULL,
+        lastName VARCHAR(50) NOT NULL,
         phone VARCHAR(15) NOT NULL,
         email VARCHAR(50) NOT NULL,
         street VARCHAR(50) NOT NULL,
@@ -64,12 +65,14 @@ CREATE TABLE PET(
         petID INT NOT NULL AUTO_INCREMENT,
         ownerID INT NOT NULL,
         name VARCHAR(50) NOT NULL,
-        dob DATE,
+        sex char(1) NOT NULL,
+        birthdate DATE,
         species VARCHAR(30),
         breed VARCHAR(30),
         color VARCHAR(30),
-        microchipNo VARCHAR(50),
-        rabiesTagNo VARCHAR(50),
+        weight int,
+        microchipNumber VARCHAR(50),
+        rabiesTag VARCHAR(50),
         primary key(petID));
 
 CREATE TABLE INVENTORY_MAINTENANCE(
