@@ -10,6 +10,17 @@ public class Appointment {
     private LocalDateTime appointmentDate;
     private String description;
 
+    public Appointment(){}
+    public Appointment (Integer appointmentID, int clientID, int petID, int staffID, LocalDateTime appointmentDate,
+                        String description){
+        this.appointmentID = appointmentID;
+        this.clientID = clientID;
+        this.petID = petID;
+        this.staffID = staffID;
+        this.appointmentDate = appointmentDate;
+        this.description = description;
+    }
+
     public int getAppointmentID() {
         return appointmentID;
     }

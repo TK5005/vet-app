@@ -11,7 +11,7 @@ public class Client {
     private String state;
     private int zip;
 
-    public Client(int clientID, String firstName, String lastName, String email, String phone, String street,
+    public Client(Integer clientID, String firstName, String lastName, String email, String phone, String street,
                   String city, String state, int zip){
         this.clientID = clientID;
         this.firstName = firstName;

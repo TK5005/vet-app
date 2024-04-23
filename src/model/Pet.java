@@ -15,6 +15,23 @@ public class Pet {
     private long microchipNumber;
     private long rabiesTag;
 
+    public Pet(){}
+
+    public Pet(Integer petID, int ownerID, String name, String sex, String color, String species, String breed,
+               LocalDate birthdate, int weight, long microchipNumber, long rabiesTag){
+        this.petID = petID;
+        this.ownerID = ownerID;
+        this.name = name;
+        this.sex = sex;
+        this.color = color;
+        this.species = species;
+        this.breed = breed;
+        this.birthdate = birthdate;
+        this.weight = weight;
+        this.microchipNumber = microchipNumber;
+        this.rabiesTag = rabiesTag;
+    }
+
     public int getPetID() {
         return petID;
     }
