@@ -6,14 +6,8 @@ import java.awt.FlowLayout;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.text.NumberFormatter;
-import javax.swing.JLabel;
-
-import javax.swing.BoxLayout;
 
 import control.IInventoryView;
 import control.InventoryController;
@@ -34,7 +28,8 @@ public class InventoryDetailView extends JPanel implements IInventoryView{
     private JFormattedTextField reorderQuantityField;
     private JFormattedTextField retailCostField;
     private JFormattedTextField wholesaleCostField;
-    private JTextField typeField;
+    //private JTextField typeField;
+    private JComboBox typeBox;
     private JTextField manufacturerField;
 
     NumberFormat integerFormat = NumberFormat.getIntegerInstance();
@@ -59,15 +54,16 @@ public class InventoryDetailView extends JPanel implements IInventoryView{
             if(item != null)
             {
                 item.setName(nameField.getText());
-                item.setType(typeField.getText());
+                //item.setType(typeField.getText());
+                item.setType((String) typeBox.getSelectedItem());
                 item.setManufacturer(manufacturerField.getText());
 
                 //  Update item numbers
                 item.setReorderLevel((Integer)reoderLevelField.getValue());
                 item.setQuantity((Integer)quantityField.getValue());
                 item.setReorderQuantity((Integer)reorderQuantityField.getValue());
-                item.setRetailCost((Double)retailCostField.getValue());
-                item.setWholesaleCost((Double)wholesaleCostField.getValue());
+                item.setRetailCost((Float)retailCostField.getValue());
+                item.setWholesaleCost((Float)wholesaleCostField.getValue());
 
                 controller.updateInventoryItem(item);
             }
@@ -88,7 +84,8 @@ public class InventoryDetailView extends JPanel implements IInventoryView{
             reorderQuantityField.setValue(item.getReorderQuantity());
             retailCostField.setValue(item.getRetailCost());
             wholesaleCostField.setValue(item.getWholesaleCost());
-            typeField.setText(item.getType());
+            //typeField.setText(item.getType());
+            typeBox.setSelectedItem(item.getType());
             manufacturerField.setText(item.getManufacturer());
         }
     }
@@ -174,9 +171,11 @@ public class InventoryDetailView extends JPanel implements IInventoryView{
         typePanel.setLayout(new BoxLayout(typePanel, BoxLayout.Y_AXIS));
         typePanel.setBackground(Color.WHITE);
         JLabel typeLabel = new JLabel("Type");
-        typeField = new JTextField(10);
+        //typeField = new JTextField(10);
+        typeBox = new JComboBox(controller.getInventoryTypes());
         typePanel.add(typeLabel);
-        typePanel.add(typeField);
+        //typePanel.add(typeField);
+        typePanel.add(typeBox);
 
         JPanel manufacturerPanel = new JPanel();
         manufacturerPanel.setLayout(new BoxLayout(manufacturerPanel, BoxLayout.Y_AXIS));

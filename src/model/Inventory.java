@@ -7,8 +7,8 @@ public class Inventory
     private int reorderLevel;
     private int quantity;
     private int reorderQuantity;
-    private double retailCost;
-    private double wholesaleCost;
+    private float retailCost;
+    private float wholesaleCost;
     private String type;
     private String manufacturer;
 
@@ -52,19 +52,19 @@ public class Inventory
         this.reorderQuantity = reorderQuantity;
     }
 
-    public double getRetailCost() {
+    public float getRetailCost() {
         return retailCost;
     }
 
-    public void setRetailCost(double retailCost) {
+    public void setRetailCost(float retailCost) {
         this.retailCost = retailCost;
     }
 
-    public double getWholesaleCost() {
+    public float getWholesaleCost() {
         return wholesaleCost;
     }
 
-    public void setWholesaleCost(double wholesaleCost) {
+    public void setWholesaleCost(float wholesaleCost) {
         this.wholesaleCost = wholesaleCost;
     }
 

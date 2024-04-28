@@ -1,13 +1,11 @@
 package model;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 public class Exam {
     private int examID;
     private int petID;
-    private LocalDate date;
-    private LocalTime time;
+    private LocalDateTime date;
     private int vetID;
     private int techID;
     private String description;
@@ -35,24 +33,14 @@ public class Exam {
         return petID;
     }
 
-    public void setPetID(int petID) {
-        this.petID = petID;
-    }
+    public void setPetID(int petID) {this.petID = petID;}
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public LocalTime getTime() {
-        return time;
-    }
-
-    public void setTime(LocalTime time) {
-        this.time = time;
+    public void setDate(LocalDateTime date) {
+        this.date=date;
     }
 
     public int getVetID() {

@@ -7,6 +7,7 @@ import java.awt.Component;
 import java.awt.FlowLayout;
 import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import javax.swing.BoxLayout;
@@ -21,14 +22,12 @@ import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 
 import com.github.lgooddatepicker.components.DatePicker;
+import com.github.lgooddatepicker.components.DateTimePicker;
 import com.github.lgooddatepicker.components.TimePicker;
 
 import control.ClientController;
 import control.IClientView;
-import model.Exam;
-import model.Tech;
-import model.Treatment;
-import model.Vet;
+import model.*;
 
 public class ExamRecordView extends JPanel implements IClientView {
     private class VetComboBoxRenderer extends JLabel implements ListCellRenderer<Vet> {
@@ -59,8 +58,7 @@ public class ExamRecordView extends JPanel implements IClientView {
     JComboBox<Vet> examinerBox;
     JComboBox<Tech> techBox;
     JTextField locationField;
-    DatePicker dateField;
-    TimePicker timeField;
+    DateTimePicker dateField;
     JFormattedTextField weightField;
     JTextArea descriptionField;
     JTextArea vitalsField;
@@ -71,6 +69,8 @@ public class ExamRecordView extends JPanel implements IClientView {
     CardLayout cardLayout;
     JTextField treatmentIDField;
     JTextField medicationField;
+    JComboBox<Medication> medicationBox;
+    JComboBox treatTypeBox;
     DatePicker treatmentStartDateField;
 
     DatePicker treatmentEndDateField;
@@ -205,10 +205,20 @@ public class ExamRecordView extends JPanel implements IClientView {
         treatmentIDPanel.add(treatmentIDLabel);
         treatmentIDPanel.add(treatmentIDField);
 
+        JPanel treatTypePanel = new JPanel();
+        treatTypePanel.setLayout(new BoxLayout(treatTypePanel, BoxLayout.Y_AXIS));
+        treatTypePanel.setBackground(Color.WHITE);
+        JLabel treatTypeLabel = new JLabel("Type");
+        treatTypeBox = new JComboBox(clientController.getTreatTypes());
+        treatTypePanel.add(treatTypeLabel);
+        treatTypePanel.add(treatTypeBox);
+
         JPanel medicationPanel = new JPanel();
         medicationPanel.setLayout(new BoxLayout(medicationPanel, BoxLayout.Y_AXIS));
         medicationPanel.setBackground(Color.WHITE);
         JLabel medicationLabel = new JLabel("Medication");
+
+        //TODO: Make this a ComboBox that calls MedicationRepository.getAllInStock() to get the list of medications in stock
         medicationField = new JTextField(10);
         medicationPanel.add(medicationLabel);
         medicationPanel.add(medicationField);
@@ -230,6 +240,7 @@ public class ExamRecordView extends JPanel implements IClientView {
         treatmentEndDatePanel.add(treatmentEndDateField);
 
         treatmentHeader.add(treatmentIDPanel);
+        treatmentHeader.add(treatTypePanel);
         treatmentHeader.add(medicationPanel);
         treatmentHeader.add(treatmentStartDatePanel);
         treatmentHeader.add(treatmentEndDatePanel);
@@ -295,17 +306,17 @@ public class ExamRecordView extends JPanel implements IClientView {
         datePanel.setLayout(new BoxLayout(datePanel, BoxLayout.Y_AXIS));
         datePanel.setBackground(Color.WHITE);
         JLabel dateTimeLabel = new JLabel("Date/Time");
-        dateField = new DatePicker();
+        dateField = new DateTimePicker();
         datePanel.add(dateTimeLabel);
         datePanel.add(dateField);
 
-        JPanel timePanel = new JPanel();
-        timePanel.setLayout(new BoxLayout(timePanel, BoxLayout.Y_AXIS));
-        timePanel.setBackground(Color.WHITE);
-        JLabel timeLabel = new JLabel("Time");
-        timeField = new TimePicker();
-        timePanel.add(timeLabel);
-        timePanel.add(timeField);
+        //JPanel timePanel = new JPanel();
+        //timePanel.setLayout(new BoxLayout(timePanel, BoxLayout.Y_AXIS));
+        //timePanel.setBackground(Color.WHITE);
+        //JLabel timeLabel = new JLabel("Time");
+        //timeField = new TimePicker();
+        //timePanel.add(timeLabel);
+        //timePanel.add(timeField);
 
         JPanel weightPanel = new JPanel();
         weightPanel.setLayout(new BoxLayout(weightPanel, BoxLayout.Y_AXIS));
@@ -320,7 +331,7 @@ public class ExamRecordView extends JPanel implements IClientView {
         examDataFields.add(techPanel);
         examDataFields.add(locationPanel);
         examDataFields.add(datePanel);
-        examDataFields.add(timePanel);
+        //examDataFields.add(timePanel);
         examDataFields.add(weightPanel);
 
         return examDataFields;
@@ -347,27 +358,32 @@ public class ExamRecordView extends JPanel implements IClientView {
     }
 
     private void updateExam() {
-        LocalDate date = dateField.getDate();
+        LocalDateTime date = dateField.getDateTimeStrict();
         int vetID = ((Vet) examinerBox.getSelectedItem()).getEmpID();
         int techID = ((Tech) techBox.getSelectedItem()).getEmpID();
         String description = descriptionField.getText();
         String vitals = vitalsField.getText();
         int weight = Integer.parseInt(weightField.getText());
         String location = locationField.getText();
-        LocalTime time = timeField.getTime();
-        clientController.updateExam(clientController.getCurrentExamID(), date, time, vetID, techID, description, vitals,
+        //LocalTime time = timeField.getTime();
+        clientController.updateExam(clientController.getCurrentExamID(), date, vetID, techID, description, vitals,
                 weight, location);
     }
 
     private void updateTreatment() {
+
+        /*TODO: if medication is selected here, make sure we perform an addOrUpdatePrescription call to update
+            Prescription table
+        */
+
         Treatment treatment = clientController.getTreatmentFromExamID(clientController.getCurrentExamID());
         LocalDate startDate = treatmentStartDateField.getDate();
         LocalDate endDate = treatmentEndDateField.getDate();
-        treatment.setMedication(medicationField.getText());
+        treatment.setMedicationID(Integer.parseInt(medicationField.getText()));
         treatment.setDirections(treatmentDirectionsField.getText());
         treatment.setStartDate(startDate);
         treatment.setEndDate(endDate);
-        clientController.updateTreatment(treatment.getTreatmentID(), treatment);
+        clientController.updateTreatment(treatment.getTreatmentID(), ((Vet) examinerBox.getSelectedItem()).getEmpID(), treatment);
     }
 
     private void refreshExam() {
@@ -378,8 +394,8 @@ public class ExamRecordView extends JPanel implements IClientView {
             examinerBox.setSelectedItem(clientController.getVet(exam.getVetID()));
             techBox.setSelectedItem(clientController.getTech(exam.getTechID()));
             locationField.setText(exam.getLocation());
-            dateField.setDate(exam.getDate());
-            timeField.setTime(exam.getTime());
+            dateField.setDateTimeStrict(exam.getDate());
+            //timeField.setTime(exam.getTime());
             weightField.setText(Long.toString(exam.getWeight()));
             descriptionField.setText(exam.getDescription());
             vitalsField.setText(exam.getVitals());
@@ -390,7 +406,7 @@ public class ExamRecordView extends JPanel implements IClientView {
         Treatment treatment = clientController.getTreatmentFromExamID(clientController.getCurrentExamID());
         if (treatment != null) {
             treatmentIDField.setText(Integer.toString(treatment.getTreatmentID()));
-            medicationField.setText(treatment.getMedication());
+            medicationField.setText(String.valueOf(treatment.getMedicationID()));
             treatmentStartDateField.setDate(treatment.getStartDate());
             treatmentEndDateField.setDate(treatment.getEndDate());
             treatmentDirectionsField.setText(treatment.getDirections());

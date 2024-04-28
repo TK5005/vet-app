@@ -3,9 +3,12 @@ package model;
 import java.time.LocalDate;
 
 public class Treatment {
+
     private int examID;
     private int treatmentID;
-    private String medication;
+    private String type;
+    //private String medication;
+    private int medicationID = -1;
     private LocalDate startDate;
     private LocalDate endDate;
     private String directions;
@@ -25,6 +28,10 @@ public class Treatment {
     public void setTreatmentID(int treatmentID) {
         this.treatmentID = treatmentID;
     }
+
+    public String getType(){return type;}
+
+    public void setType(String type){this.type = type;}
 
     public LocalDate getStartDate() {
         return startDate;
@@ -50,11 +57,15 @@ public class Treatment {
         this.directions = directions;
     }
 
-    public String getMedication() {
-        return medication;
-    }
+    public int getMedicationID(){return medicationID;}
 
-    public void setMedication(String medication) {
-        this.medication = medication;
-    }
+    public void setMedicationID(int medicationID){this.medicationID = medicationID;}
+
+//    public String getMedication() {
+//        return medication;
+//    }
+
+//    public void setMedication(String medication) {
+//        this.medication = medication;
+//    }
 }

@@ -7,6 +7,7 @@ import model.Inventory;
 import view.inventory.InventoryView;
 
 public class InventoryController {
+    enum InventoryType {Medication, Medical, Office}
     private static InventoryController instance;
     private DataModel dataModel;
     private ArrayList<IInventoryView> views;
@@ -44,6 +45,7 @@ public class InventoryController {
     }
 
     public void addNewItem() {
+        //TODO: Conditionally Check for Type = Medication and insert into Medication table accordingly
         Inventory item = new Inventory();
         item.setItemID(0);
         item.setName("New Item");
@@ -90,5 +92,9 @@ public class InventoryController {
         dataModel.updateInventoryItem(currentInventoryID, item);
         refreshViews();
         showInventoryList();
+    }
+
+    public InventoryType[] getInventoryTypes(){
+        return InventoryType.values();
     }
 }

@@ -598,8 +598,7 @@ public class DataModel {
             Exam exam = new Exam();
             exam.setExamID(i);
             exam.setPetID(i % 10);
-            exam.setDate(LocalDate.of(2021, 1, 1));
-            exam.setTime(LocalTime.of(8, 0));
+            exam.setDate(LocalDateTime.of(2021, 1, 1, 8, 0));
             exam.setVetID(i % 5);
             exam.setTechID(i % 5);
             exam.setDescription("Exam Description");
@@ -654,7 +653,7 @@ public class DataModel {
             Treatment treatment = new Treatment();
             treatment.setTreatmentID(i);
             treatment.setExamID(i % 10);
-            treatment.setMedication("Medication");
+            treatment.setMedicationID(1);
             treatment.setStartDate(LocalDate.of(2021, 1, 1));
             treatment.setEndDate(LocalDate.of(2021, 1, 1));
             treatment.setDirections("Directions");
@@ -711,8 +710,8 @@ public class DataModel {
             item.setReorderLevel(10);
             item.setQuantity(100);
             item.setReorderQuantity(50);
-            item.setRetailCost(10.00);
-            item.setWholesaleCost(5.00);
+            item.setRetailCost(10.00F);
+            item.setWholesaleCost(5.00F);
             item.setType("Item Type");
             item.setManufacturer("Manufacturer");
             inventory.add(item);

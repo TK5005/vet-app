@@ -1,10 +1,7 @@
 package Repository;
 
 import DAL.ConnectionManager;
-import model.Client;
 import model.Pet;
-
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -118,7 +115,7 @@ public class PetRepository {
                 System.err.println("Rolling back changes");
                 conn.rollback();
             } catch (SQLException e) {
-                System.err.println("Error rolling back client changes");
+                System.err.println("Error rolling back Pet changes");
                 e.printStackTrace();
             }
         }

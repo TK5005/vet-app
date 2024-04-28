@@ -1,9 +1,8 @@
 package control;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 import Repository.ClientRepository;
 import Repository.PetRepository;
@@ -20,6 +19,7 @@ import model.Vet;
 import view.clientPatient.ClientPageView;
 
 public class ClientController {
+    enum TreatType {Vaccine, Lifestyle, Medication, Test}
     private static ClientController instance;
 
     /**
@@ -265,9 +265,9 @@ public class ClientController {
      * @param examID The exam ID
      * @param exam   The new exam object
      */
-    public void updateExam(int examID, LocalDate date, LocalTime time, int vetID, int techID, String description,
-            String vitals,
-            int weight, String location) {
+    public void updateExam(int examID, LocalDateTime date, int vetID, int techID, String description,
+                           String vitals,
+                           int weight, String location) {
         Exam exam = dataModel.getExam(examID);
         exam.setVetID(vetID);
         exam.setTechID(techID);
@@ -276,11 +276,10 @@ public class ClientController {
         exam.setWeight(weight);
         exam.setLocation(location);
         exam.setDate(date);
-        exam.setTime(time);
         dataModel.updateExam(examID, exam);
     }
 
-    public void updateTreatment(int treatmentID, Treatment treatment) {
+    public void updateTreatment(int treatmentID, int vetID, Treatment treatment) {
         dataModel.updateTreatment(treatmentID, treatment);
     }
 
@@ -351,6 +350,8 @@ public class ClientController {
     public Treatment getTreatmentFromExamID(int examID) {
         return dataModel.getTreatmentFromExamID(examID);
     }
+
+    public TreatType[] getTreatTypes(){return TreatType.values();}
 
     public Vet[] getVets() {
         return dataModel.getVets();
