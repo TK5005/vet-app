@@ -1,3 +1,4 @@
+import DAL.ConnectionManager;
 import control.AppController;
 import ui.AppWindow;
 
@@ -8,6 +9,7 @@ import ui.AppWindow;
  */
 public class VetApp {
     public static void main(String[] args) {
+        ConnectionManager.populateProps();
         AppController controller = new AppController();
         AppWindow appWindow = new AppWindow();
         appWindow.start(controller);

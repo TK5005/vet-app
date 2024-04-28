@@ -27,7 +27,7 @@ public class TreatmentRepository {
                 Treatment add = new Treatment();
                 add.setExamID(rs.getInt("examID"));
                 add.setTreatmentID(rs.getInt("trmntID"));
-                add.setType(rs.getString("type"));
+                add.setType(Treatment.TreatType.valueOf(rs.getString("type")));
                 add.setMedicationID(rs.getInt("medID"));
                 add.setStartDate(rs.getDate("startDate").toLocalDate());
                 add.setEndDate(rs.getDate("endDate").toLocalDate());
@@ -53,7 +53,7 @@ public class TreatmentRepository {
                 Treatment add = new Treatment();
                 add.setExamID(rs.getInt("examID"));
                 add.setTreatmentID(rs.getInt("trmntID"));
-                add.setType(rs.getString("type"));
+                add.setType(Treatment.TreatType.valueOf(rs.getString("type")));
                 add.setMedicationID(rs.getInt("medID"));
                 add.setStartDate(rs.getDate("startDate").toLocalDate());
                 add.setEndDate(rs.getDate("endDate").toLocalDate());
@@ -74,7 +74,7 @@ public class TreatmentRepository {
         try(PreparedStatement create = conn.prepareStatement(sql)){
             create.setInt(1,mod.getExamID());
             create.setInt(2,mod.getMedicationID());
-            create.setString(3,mod.getType());
+            create.setString(3,mod.getTreatmentTypeString());
             create.setDate(4,java.sql.Date.valueOf(mod.getStartDate()));
             create.setDate(5,java.sql.Date.valueOf(mod.getEndDate()));
             create.setString(6,mod.getDirections());
@@ -107,7 +107,7 @@ public class TreatmentRepository {
 
         try (PreparedStatement update = conn.prepareStatement(sql)){
             update.setInt(1,mod.getMedicationID());
-            update.setString(2, mod.getType());
+            update.setString(2, mod.getTreatmentTypeString());
             update.setDate(3, java.sql.Date.valueOf(mod.getStartDate()));
             update.setDate(4, java.sql.Date.valueOf(mod.getEndDate()));
             update.setString(5, mod.getDirections());
@@ -125,6 +125,36 @@ public class TreatmentRepository {
                 e.printStackTrace();
             }
         }
+    }
+
+    public Treatment[] getVaccinationsByPetID(int petID){
+        String sql
+                = "SELECT * FROM TREATMENT t WHERE t.type = 'VACCINE' AND " +
+                " t.examID in (SELECT examID FROM EXAMINATION WHERE petID = ?)";
+
+        List<Treatment> ret = new ArrayList<>();
+        try(PreparedStatement get = conn.prepareStatement(sql)){
+
+            get.setInt(1,petID);
+            ResultSet rs = get.executeQuery();
+
+            while(rs.next()){
+                Treatment add = new Treatment();
+                add.setTreatmentID(rs.getInt("trmntID"));
+                add.setExamID(rs.getInt("examID"));
+                add.setMedicationID(rs.getInt("medID"));
+                add.setType(Treatment.TreatType.valueOf(rs.getString("type")));
+                add.setStartDate(rs.getDate("startDate").toLocalDate());
+                add.setEndDate(rs.getDate("endDate").toLocalDate());
+                add.setDirections(rs.getString("directions"));
+
+                ret.add(add);
+            }
+        }catch (SQLException ex) {
+            System.err.println("Error running Treatment Get statement");
+            ex.printStackTrace();
+        }
+        return ret.toArray(new Treatment[0]);
     }
 
 }

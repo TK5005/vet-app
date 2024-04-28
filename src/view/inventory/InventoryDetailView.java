@@ -172,7 +172,7 @@ public class InventoryDetailView extends JPanel implements IInventoryView{
         typePanel.setBackground(Color.WHITE);
         JLabel typeLabel = new JLabel("Type");
         //typeField = new JTextField(10);
-        typeBox = new JComboBox(controller.getInventoryTypes());
+        typeBox = new JComboBox(Inventory.getInventoryTypes());
         typePanel.add(typeLabel);
         //typePanel.add(typeField);
         typePanel.add(typeBox);

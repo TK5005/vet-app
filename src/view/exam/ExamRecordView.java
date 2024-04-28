@@ -1,10 +1,6 @@
 package view.exam;
 
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.FlowLayout;
+import java.awt.*;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -46,6 +42,17 @@ public class ExamRecordView extends JPanel implements IClientView {
         public Component getListCellRendererComponent(JList<? extends Tech> list, Tech value, int index,
                 boolean isSelected, boolean cellHasFocus) {
             if (value != null) {
+                setText(value.getName());
+            }
+            return this;
+        }
+    }
+
+    private class MedicationComboBoxRenderer extends JLabel implements ListCellRenderer<Medication>{
+        @Override
+        public Component getListCellRendererComponent(JList<? extends Medication> list, Medication value, int index,
+                                                      boolean isSelected, boolean cellHasFocus){
+            if(value != null){
                 setText(value.getName());
             }
             return this;
@@ -209,7 +216,7 @@ public class ExamRecordView extends JPanel implements IClientView {
         treatTypePanel.setLayout(new BoxLayout(treatTypePanel, BoxLayout.Y_AXIS));
         treatTypePanel.setBackground(Color.WHITE);
         JLabel treatTypeLabel = new JLabel("Type");
-        treatTypeBox = new JComboBox(clientController.getTreatTypes());
+        treatTypeBox = new JComboBox(Treatment.getTreatTypes());
         treatTypePanel.add(treatTypeLabel);
         treatTypePanel.add(treatTypeBox);
 
@@ -219,9 +226,12 @@ public class ExamRecordView extends JPanel implements IClientView {
         JLabel medicationLabel = new JLabel("Medication");
 
         //TODO: Make this a ComboBox that calls MedicationRepository.getAllInStock() to get the list of medications in stock
-        medicationField = new JTextField(10);
+        //medicationField = new JTextField(10);
+        medicationBox = new JComboBox<Medication>(clientController.getInStockMedications());
+        medicationBox.setRenderer(new MedicationComboBoxRenderer());
         medicationPanel.add(medicationLabel);
-        medicationPanel.add(medicationField);
+        //medicationPanel.add(medicationField);
+        medicationPanel.add(medicationBox);
 
         JPanel treatmentStartDatePanel = new JPanel();
         treatmentStartDatePanel.setLayout(new BoxLayout(treatmentStartDatePanel, BoxLayout.Y_AXIS));
@@ -406,7 +416,8 @@ public class ExamRecordView extends JPanel implements IClientView {
         Treatment treatment = clientController.getTreatmentFromExamID(clientController.getCurrentExamID());
         if (treatment != null) {
             treatmentIDField.setText(Integer.toString(treatment.getTreatmentID()));
-            medicationField.setText(String.valueOf(treatment.getMedicationID()));
+            //medicationField.setText(String.valueOf(treatment.getMedicationID()));
+            medicationBox.setSelectedItem(clientController.getInventoryNameByID(treatment.getMedicationID()));
             treatmentStartDateField.setDate(treatment.getStartDate());
             treatmentEndDateField.setDate(treatment.getEndDate());
             treatmentDirectionsField.setText(treatment.getDirections());

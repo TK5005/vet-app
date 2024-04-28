@@ -2,20 +2,22 @@ package control;
 
 import java.util.ArrayList;
 
+import Repository.InventoryRepository;
 import model.DataModel;
 import model.Inventory;
 import view.inventory.InventoryView;
 
 public class InventoryController {
-    enum InventoryType {Medication, Medical, Office}
     private static InventoryController instance;
     private DataModel dataModel;
+    private InventoryRepository inventoryRepository;
     private ArrayList<IInventoryView> views;
     private InventoryView inventoryView;
     private int currentInventoryID = -1;
 
     private InventoryController() {
         dataModel = DataModel.getInstance();
+        inventoryRepository = new InventoryRepository();
         views = new ArrayList<>();
     }
 
@@ -45,7 +47,7 @@ public class InventoryController {
     }
 
     public void addNewItem() {
-        //TODO: Conditionally Check for Type = Medication and insert into Medication table accordingly
+        //TODO: Conditionally Check for Type = MEDICATION and insert into Medication table accordingly
         Inventory item = new Inventory();
         item.setItemID(0);
         item.setName("New Item");
@@ -61,7 +63,8 @@ public class InventoryController {
     }
 
     public Inventory[] getInventory() {
-        return dataModel.getInventory();
+        //return dataModel.getInventory();
+        return inventoryRepository.getAll();
     }
 
     public void showInventoryDetails(int itemID) {
@@ -85,16 +88,15 @@ public class InventoryController {
     }
 
     public Inventory getCurrentInventoryItem() {
-        return dataModel.getInventoryItem(currentInventoryID);
+        //return dataModel.getInventoryItem(currentInventoryID);
+        return inventoryRepository.getSpecificItem(currentInventoryID);
     }
 
     public void updateInventoryItem(Inventory item) {
-        dataModel.updateInventoryItem(currentInventoryID, item);
+        //dataModel.updateInventoryItem(currentInventoryID, item);
+        item.setItemID(currentInventoryID);
+        inventoryRepository.updateInventory(item);
         refreshViews();
         showInventoryList();
-    }
-
-    public InventoryType[] getInventoryTypes(){
-        return InventoryType.values();
     }
 }

@@ -4,22 +4,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import Repository.ClientRepository;
-import Repository.PetRepository;
-import model.Appointment;
-import model.Client;
-import model.DataModel;
-import model.Exam;
-import model.Invoice;
-import model.Pet;
-import model.Tech;
-import model.Treatment;
-import model.Vaccination;
-import model.Vet;
+import Repository.*;
+import model.*;
 import view.clientPatient.ClientPageView;
 
 public class ClientController {
-    enum TreatType {Vaccine, Lifestyle, Medication, Test}
+
     private static ClientController instance;
 
     /**
@@ -41,6 +31,10 @@ public class ClientController {
     private DataModel dataModel;
     private ClientRepository clientRepository;
     private PetRepository petRepository;
+    private ExamRepository examRepository;
+    private TreatmentRepository treatmentRepository;
+    private InventoryRepository inventoryRepository;
+    private MedicationRepository medicationRepository;
     private ArrayList<IClientView> views;
     private ClientPageView clientPage;
     private int currentPetID = -1;
@@ -55,6 +49,10 @@ public class ClientController {
         dataModel = DataModel.getInstance();
         clientRepository = new ClientRepository();
         petRepository = new PetRepository();
+        examRepository = new ExamRepository();
+        treatmentRepository = new TreatmentRepository();
+        inventoryRepository = new InventoryRepository();
+        medicationRepository = new MedicationRepository();
         views = new ArrayList<>();
     }
 
@@ -283,8 +281,9 @@ public class ClientController {
         dataModel.updateTreatment(treatmentID, treatment);
     }
 
-    public Vaccination[] getVaccinationsFromPetID(int petID) {
-        return dataModel.getVaccinationsFromPetID(petID);
+    public Treatment[] getVaccinationsFromPetID(int petID) {
+        //return dataModel.getVaccinationsFromPetID(petID);
+        return treatmentRepository.getVaccinationsByPetID(petID);
     }
 
     public void addVaccination(int petID) {
@@ -351,8 +350,6 @@ public class ClientController {
         return dataModel.getTreatmentFromExamID(examID);
     }
 
-    public TreatType[] getTreatTypes(){return TreatType.values();}
-
     public Vet[] getVets() {
         return dataModel.getVets();
     }
@@ -373,6 +370,14 @@ public class ClientController {
             tableData[i][1] = appointments[i].getDescription();
         }
         return tableData;
+    }
+
+    public String getInventoryNameByID(int itemID){
+        return inventoryRepository.getSpecificItem(itemID).getName();
+    }
+
+    public Medication[] getInStockMedications(){
+        return medicationRepository.getAllInStock();
     }
 
     /**

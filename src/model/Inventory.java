@@ -2,6 +2,8 @@ package model;
 
 public class Inventory
 {
+    public static enum InventoryType {MEDICATION, MEDICAL, OFFICE}
+
     private int itemID;
     private String name;
     private int reorderLevel;
@@ -82,5 +84,15 @@ public class Inventory
 
     public void setManufacturer(String manufacturer) {
         this.manufacturer = manufacturer;
+    }
+
+    public static String[] getInventoryTypes(){
+        String[] options = new String[InventoryType.values().length];
+        int i = 0;
+        for(InventoryType t : InventoryType.values()){
+            options[i] = t.toString();
+            i++;
+        }
+        return options;
     }
 }

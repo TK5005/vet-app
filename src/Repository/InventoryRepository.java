@@ -50,17 +50,17 @@ public class InventoryRepository {
             ResultSet rs = get.executeQuery();
 
             while(rs.next()){
-                Inventory add = new Inventory();
 
-                add.setItemID(rs.getInt("itemID"));
-                add.setName(rs.getString("name"));
-                add.setManufacturer(rs.getString("manufacturer"));
-                add.setType(rs.getString("type"));
-                add.setQuantity(rs.getInt("quantity"));
-                add.setReorderLevel(rs.getInt("reorderLevel"));
-                add.setReorderQuantity(rs.getInt("reorderQuantity"));
-                add.setWholesaleCost(rs.getFloat("wholesaleCost"));
-                add.setRetailCost(rs.getFloat("retailCost"));
+                ret.setItemID(rs.getInt("itemID"));
+                ret.setName(rs.getString("name"));
+                ret.setManufacturer(rs.getString("manufacturer"));
+                ret.setType(rs.getString("type"));
+                ret.setQuantity(rs.getInt("quantity"));
+                ret.setReorderLevel(rs.getInt("reorderLevel"));
+                ret.setReorderQuantity(rs.getInt("reorderQuantity"));
+                ret.setWholesaleCost(rs.getFloat("wholesaleCost"));
+                ret.setRetailCost(rs.getFloat("retailCost"));
+
             }
         }catch (SQLException ex) {
             System.err.println("Error running Inventory Get statement");
@@ -122,7 +122,7 @@ public class InventoryRepository {
             update.setFloat(8, mod.getRetailCost());
             update.setInt(9, mod.getItemID());
 
-            update.executeQuery();
+            update.executeUpdate();
             conn.commit();
         }catch (SQLException ex) {
             System.err.println("Error updating Inventory entry");

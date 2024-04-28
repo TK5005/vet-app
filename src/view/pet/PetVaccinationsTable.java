@@ -18,12 +18,13 @@ import javax.swing.table.TableCellRenderer;
 
 import control.ClientController;
 import control.IClientView;
+import model.Treatment;
 import model.Vaccination;
 
 public class PetVaccinationsTable extends JPanel implements IClientView {
     private ClientController clientController;
     private DefaultTableModel tableModel;
-    private JButton addVaccinationButton;
+    //private JButton addVaccinationButton;
 
     public PetVaccinationsTable() {
         clientController = ClientController.getInstance();
@@ -37,14 +38,14 @@ public class PetVaccinationsTable extends JPanel implements IClientView {
         JPanel vaccinationTable = createVaccinationTable();
         this.add(vaccinationTable, BorderLayout.CENTER);
 
-        createEventListeners();
+        //createEventListeners();
     }
 
-    private void createEventListeners() {
-        addVaccinationButton.addActionListener(e -> {
-            clientController.addVaccination(clientController.getCurrentClientID());
-        });
-    }
+//    private void createEventListeners() {
+//        addVaccinationButton.addActionListener(e -> {
+//            clientController.addVaccination(clientController.getCurrentClientID());
+//        });
+//    }
 
     private JPanel createVaccinationTable() {
         JPanel vaccinationPanel = new JPanel();
@@ -54,8 +55,8 @@ public class PetVaccinationsTable extends JPanel implements IClientView {
         JPanel vaccinationHeader = new JPanel();
         vaccinationHeader.setLayout(new FlowLayout(FlowLayout.LEFT));
         vaccinationHeader.setBackground(Color.WHITE);
-        addVaccinationButton = new JButton("Add Vaccination");
-        vaccinationHeader.add(addVaccinationButton);
+        //addVaccinationButton = new JButton("Add Vaccination");
+        //vaccinationHeader.add(addVaccinationButton);
 
         // Create the table with two columns
         tableModel = new DefaultTableModel() {
@@ -81,7 +82,7 @@ public class PetVaccinationsTable extends JPanel implements IClientView {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
                     boolean hasFocus, int row, int column) {
-                JLabel label = new JLabel(Vaccination.class.cast(value).getName());
+                JLabel label = new JLabel(clientController.getInventoryNameByID(Treatment.class.cast(value).getMedicationID()));
                 label.setHorizontalAlignment(SwingConstants.CENTER);
                 return label;
             }
@@ -105,11 +106,11 @@ public class PetVaccinationsTable extends JPanel implements IClientView {
         tableModel.setRowCount(0);
 
         // Get the pets data from ClientController
-        Vaccination[] vaccinations = clientController.getVaccinationsFromPetID(clientController.getCurrentPetID());
+        Treatment[] vaccinations = clientController.getVaccinationsFromPetID(clientController.getCurrentPetID());
 
         // Populate the table with pet data
-        for (Vaccination vaccination : vaccinations) {
-            tableModel.addRow(new Object[] { vaccination, vaccination.getDate(), "" });
+        for (Treatment vaccination : vaccinations) {
+            tableModel.addRow(new Object[] { vaccination, vaccination.getStartDate(), "" });
         }
     }
 

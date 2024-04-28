@@ -48,7 +48,6 @@ CREATE TABLE CLIENT(
 
 CREATE TABLE MEDICATION(
         medID INT NOT NULL,
-        name VARCHAR(50) NOT NULL,
         interactions VARCHAR(250),
         primary key (medID));
 

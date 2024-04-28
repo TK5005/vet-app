@@ -3,10 +3,10 @@ package model;
 import java.time.LocalDate;
 
 public class Treatment {
-
+    public static enum TreatType {VACCINE, LIFESTYLE, MEDICATION, TEST}
     private int examID;
     private int treatmentID;
-    private String type;
+    private TreatType type;
     //private String medication;
     private int medicationID = -1;
     private LocalDate startDate;
@@ -29,9 +29,9 @@ public class Treatment {
         this.treatmentID = treatmentID;
     }
 
-    public String getType(){return type;}
+    public TreatType getType(){return type;}
 
-    public void setType(String type){this.type = type;}
+    public void setType(TreatType type){this.type = type;}
 
     public LocalDate getStartDate() {
         return startDate;
@@ -60,6 +60,35 @@ public class Treatment {
     public int getMedicationID(){return medicationID;}
 
     public void setMedicationID(int medicationID){this.medicationID = medicationID;}
+
+    public String getTreatmentTypeString() {
+        if (this.type != null) {
+            switch (this.type) {
+                case VACCINE:
+                    return "VACCINE";
+                case MEDICATION:
+                    return "MEDICATION";
+                case LIFESTYLE:
+                    return "LIFESTYLE";
+                case TEST:
+                    return "TEST";
+                default:
+                    return "";
+            }
+        } else {
+            return "";
+        }
+    }
+
+    public static String[] getTreatTypes(){
+        String [] options = new String[TreatType.values().length];
+        int i=0;
+        for(TreatType t : TreatType.values()){
+            options[i] = t.toString();
+            i++;
+        }
+        return options;
+    }
 
 //    public String getMedication() {
 //        return medication;
