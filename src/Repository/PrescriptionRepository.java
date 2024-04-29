@@ -70,7 +70,7 @@ public class PrescriptionRepository {
             create.setInt(2,medID);
             create.setInt(3,treatmentID);
 
-            create.executeQuery();
+            create.executeUpdate();
             conn.commit();
         }catch (SQLException ex) {
             System.err.println("Error inserting prescription entry");

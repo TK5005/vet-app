@@ -69,10 +69,9 @@ public class PetRepository {
             create.setLong(9, mod.getMicrochipNumber());
             create.setLong(10,mod.getRabiesTag());
 
-            ResultSet rs = create.executeQuery();
-
+            ResultSet rs = create.getGeneratedKeys();
             while(rs.next()){
-                mod.setPetID(rs.getInt("petID"));
+                mod.setPetID(rs.getInt(1));
             }
 
             conn.commit();

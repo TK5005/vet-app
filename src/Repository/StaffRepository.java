@@ -3,6 +3,8 @@ package Repository;
 import DAL.ConnectionManager;
 import model.DataModel;
 import model.Staff;
+import model.Tech;
+import model.Vet;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -80,6 +82,63 @@ public class StaffRepository {
         Staff[] cli = new Staff[ret.size()];
         cli = ret.toArray(new Staff[ret.size()]);
         return cli;
+    }
+    public Vet[] getVets(){
+        String sql
+                = "SELECT * FROM STAFF WHERE empID in (SELECT empID FROM VET)";
+        List<Vet> ret = new ArrayList<>();
+        try(PreparedStatement get = conn.prepareStatement(sql)){
+            ResultSet rs = get.executeQuery();
+            while(rs.next()){
+                Vet add = new Vet();
+                add.setEmpID(rs.getInt("empID"));
+                add.setFirstName(rs.getString("firstName"));
+                add.setLastName(rs.getString("lastName"));
+                add.setSex(rs.getString("sex"));
+                add.setDob(rs.getDate("dob").toLocalDate());
+                add.setSsn(rs.getString("ssn"));
+                add.setPhone(rs.getString("phone"));
+                add.setState(rs.getString("street"));
+                add.setCity(rs.getString("city"));
+                add.setState(rs.getString("state"));
+                add.setZip(rs.getInt("zip"));
+
+                ret.add(add);
+            }
+        }catch (SQLException ex) {
+            System.out.println("Error running Staff Get statement");
+            ex.printStackTrace();
+        }
+        return ret.toArray(new Vet[0]);
+    }
+
+    public Tech[] getTechs(){
+        String sql
+                = "SELECT * FROM STAFF WHERE empID in (SELECT empID FROM TECH)";
+        List<Tech> ret = new ArrayList<>();
+        try(PreparedStatement get = conn.prepareStatement(sql)){
+            ResultSet rs = get.executeQuery();
+            while(rs.next()){
+                Tech add = new Tech();
+                add.setEmpID(rs.getInt("empID"));
+                add.setFirstName(rs.getString("firstName"));
+                add.setLastName(rs.getString("lastName"));
+                add.setSex(rs.getString("sex"));
+                add.setDob(rs.getDate("dob").toLocalDate());
+                add.setSsn(rs.getString("ssn"));
+                add.setPhone(rs.getString("phone"));
+                add.setState(rs.getString("street"));
+                add.setCity(rs.getString("city"));
+                add.setState(rs.getString("state"));
+                add.setZip(rs.getInt("zip"));
+
+                ret.add(add);
+            }
+        }catch (SQLException ex) {
+            System.out.println("Error running Staff Get statement");
+            ex.printStackTrace();
+        }
+        return ret.toArray(new Tech[0]);
     }
     public void deleteStaff(int empID){
     }

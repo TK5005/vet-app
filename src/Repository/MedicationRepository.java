@@ -92,6 +92,7 @@ public class MedicationRepository {
             create.setString(2, mod.getName());
             create.setString(3, mod.getInteractions());
 
+            create.executeUpdate();
             conn.commit();
         }catch (SQLException ex) {
             System.err.println("Error inserting Medication entry");

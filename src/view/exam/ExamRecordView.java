@@ -54,7 +54,8 @@ public class ExamRecordView extends JPanel implements IClientView {
                                                       boolean isSelected, boolean cellHasFocus){
             if(value != null){
                 setText(value.getName());
-            }
+            }else
+                setText(" ");
             return this;
         }
     }
@@ -228,6 +229,7 @@ public class ExamRecordView extends JPanel implements IClientView {
         //TODO: Make this a ComboBox that calls MedicationRepository.getAllInStock() to get the list of medications in stock
         //medicationField = new JTextField(10);
         medicationBox = new JComboBox<Medication>(clientController.getInStockMedications());
+        medicationBox.insertItemAt(null, 0);
         medicationBox.setRenderer(new MedicationComboBoxRenderer());
         medicationPanel.add(medicationLabel);
         //medicationPanel.add(medicationField);
@@ -389,7 +391,7 @@ public class ExamRecordView extends JPanel implements IClientView {
         Treatment treatment = clientController.getTreatmentFromExamID(clientController.getCurrentExamID());
         LocalDate startDate = treatmentStartDateField.getDate();
         LocalDate endDate = treatmentEndDateField.getDate();
-        treatment.setMedicationID(Integer.parseInt(medicationField.getText()));
+        treatment.setMedicationID(medicationBox.getSelectedItem() != null ? ((Medication) medicationBox.getSelectedItem()).getItemID() : -1);
         treatment.setDirections(treatmentDirectionsField.getText());
         treatment.setStartDate(startDate);
         treatment.setEndDate(endDate);

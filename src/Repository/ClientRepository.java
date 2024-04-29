@@ -73,9 +73,10 @@ public class ClientRepository {
             create.setString(7,mod.getState());
             create.setInt(8,mod.getZip());
 
-            ResultSet rs = create.executeQuery();
+            create.executeUpdate();
+            ResultSet rs = create.getGeneratedKeys();
             while(rs.next()){
-                mod.setClientID(rs.getInt("ClientID"));
+                mod.setClientID(rs.getInt(1));
             }
             conn.commit();
         } catch (SQLException ex) {

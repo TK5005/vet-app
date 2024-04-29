@@ -1,5 +1,9 @@
 package control;
 
+import Repository.ClientRepository;
+import Repository.ExamRepository;
+import Repository.InvoiceRepository;
+import Repository.PetRepository;
 import model.DataModel;
 import model.Exam;
 import model.Invoice;
@@ -28,12 +32,20 @@ public class InvoiceController {
     private ArrayList<IInvoiceView> views;
 
     private InvoiceView invoiceView;
+    private InvoiceRepository invoiceRepository;
+    private ExamRepository examRepository;
+    private ClientRepository clientRepository;
+    private PetRepository petRepository;
 
     private int currentInvoiceID;
 
     private InvoiceController() {
         dataModel = DataModel.getInstance();
         views = new ArrayList<>();
+        invoiceRepository = new InvoiceRepository();
+        examRepository = new ExamRepository();
+        clientRepository = new ClientRepository();
+        petRepository = new PetRepository();
     }
 
     public void registerView(IInvoiceView view) {
@@ -59,19 +71,23 @@ public class InvoiceController {
     }
 
     public Invoice getInvoice(int invoiceID) {
-        return dataModel.getInvoice(invoiceID);
+        //return dataModel.getInvoice(invoiceID);
+        return invoiceRepository.getSpecificInvoice(invoiceID);
     }
 
     public Client getClient(int clientID) {
-        return dataModel.getClient(clientID);
+        //return dataModel.getClient(clientID);
+        return clientRepository.getSpecificClient(clientID);
     }
 
     public Pet getPet(int petID) {
-        return dataModel.getPet(petID);
+        //return dataModel.getPet(petID);
+        return petRepository.getSpecificPet(petID);
     }
 
     public Exam getExam(int examID) {
-        return dataModel.getExam(examID);
+        //return dataModel.getExam(examID);
+        return examRepository.getSpecificExam(examID);
     }
 
     public void showInvoiceList() {
@@ -118,18 +134,19 @@ public class InvoiceController {
         return examIDs;
     }
 
+
     public String[] getStatusOptions() {
         return Invoice.getStatusOptions();
     }
 
     public Object[][] getInvoiceTableData() {
-        Invoice[] invoices = dataModel.getInvoices();
+        Invoice[] invoices = invoiceRepository.getAll();
         Object[][] tableData = new Object[invoices.length][6];
         for (int i = 0; i < invoices.length; i++) {
-            Exam exam = dataModel.getExam(invoices[i].getExamID());
+            Exam exam = examRepository.getSpecificExam(invoices[i].getExamID());
             int invoiceID = invoices[i].getInvoiceID();
-            String clientName = dataModel.getClient(invoices[i].getClientID()).getName();
-            String petName = dataModel.getPet(exam.getPetID()).getName();
+            String clientName = clientRepository.getSpecificClient(invoices[i].getClientID()).getName();
+            String petName = petRepository.getSpecificPet(exam.getPetID()).getName();
             String invoiceDate = "";
             LocalDate date = invoices[i].getInvoiceDate();
             String amtDue = invoices[i].getFormattedAmtDue();

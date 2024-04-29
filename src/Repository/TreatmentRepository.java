@@ -79,10 +79,11 @@ public class TreatmentRepository {
             create.setDate(5,java.sql.Date.valueOf(mod.getEndDate()));
             create.setString(6,mod.getDirections());
 
-            ResultSet rs = create.executeQuery();
+            create.executeUpdate();
 
+            ResultSet rs = create.getGeneratedKeys();
             while(rs.next()){
-                mod.setTreatmentID(rs.getInt("trmntID"));
+                mod.setTreatmentID(rs.getInt(1));
             }
 
             conn.commit();
@@ -113,7 +114,7 @@ public class TreatmentRepository {
             update.setString(5, mod.getDirections());
 
             update.executeUpdate();
-
+            conn.commit();
         }catch (SQLException ex) {
             System.err.println("Error updating Treatment entry");
             ex.printStackTrace();

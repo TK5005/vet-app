@@ -85,12 +85,12 @@ public class InventoryRepository {
             create.setFloat(7, mod.getWholesaleCost());
             create.setFloat(8, mod.getRetailCost());
 
-            ResultSet rs = create.executeQuery();
-
+            create.executeUpdate();
+            ResultSet rs = create.getGeneratedKeys();
             while(rs.next()){
-                mod.setItemID(rs.getInt("itemID"));
+                mod.setItemID(rs.getInt(1));
             }
-
+            conn.commit();
         }catch (SQLException ex) {
             System.err.println("Error inserting Inventory entry");
             ex.printStackTrace();

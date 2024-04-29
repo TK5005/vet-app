@@ -35,6 +35,8 @@ public class ClientController {
     private TreatmentRepository treatmentRepository;
     private InventoryRepository inventoryRepository;
     private MedicationRepository medicationRepository;
+    private InvoiceRepository invoiceRepository;
+    private StaffRepository staffRepository;
     private ArrayList<IClientView> views;
     private ClientPageView clientPage;
     private int currentPetID = -1;
@@ -53,6 +55,8 @@ public class ClientController {
         treatmentRepository = new TreatmentRepository();
         inventoryRepository = new InventoryRepository();
         medicationRepository = new MedicationRepository();
+        invoiceRepository = new InvoiceRepository();
+        staffRepository = new StaffRepository();
         views = new ArrayList<>();
     }
 
@@ -334,7 +338,8 @@ public class ClientController {
     }
 
     public Tech[] getTechs() {
-        return dataModel.getTechs();
+        //return dataModel.getTechs();
+        return staffRepository.getTechs();
     }
 
     // Vet and Tech Methods
@@ -351,7 +356,8 @@ public class ClientController {
     }
 
     public Vet[] getVets() {
-        return dataModel.getVets();
+        //return dataModel.getVets();
+        return staffRepository.getVets();
     }
 
     public Appointment[] getAppointments(int petID) {
@@ -359,7 +365,8 @@ public class ClientController {
     }
 
     public Invoice[] getInvoices(int petID) {
-        return dataModel.getInvoices(petID);
+        //return dataModel.getInvoices(petID);
+        return invoiceRepository.getInvoicesByPetID(petID);
     }
 
     public Object[][] getPetAppointmentData() {

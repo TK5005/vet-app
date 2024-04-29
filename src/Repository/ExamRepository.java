@@ -90,10 +90,11 @@ public class ExamRepository {
             create.setInt(5, mod.getWeight());
             create.setString(6, mod.getLocation());
 
-            ResultSet rs = create.executeQuery();
+            create.executeUpdate();
+            ResultSet rs = create.getGeneratedKeys();
 
             while(rs.next()){
-                mod.setExamID(rs.getInt("examID"));
+                mod.setExamID(rs.getInt(1));
                 addVetExam(mod.getExamID(),mod.getVetID());
                 addTechExam(mod.getExamID(), mod.getTechID());
             }

@@ -58,7 +58,7 @@ CREATE TABLE VET(
 
 CREATE TABLE TECH(
         empID INT NOT NULL,
-        certifications VARCHAR(255),
+        certNumber VARCHAR(30),
         primary key (empID));
 
 CREATE TABLE PET(
@@ -131,7 +131,7 @@ CREATE TABLE INVOICE(
         invoiceNo INT NOT NULL AUTO_INCREMENT,
         examID INT NOT NULL,
         custID INT NOT NULL,
-        amtDue DECIMAL NOT NULL,
+        amtDue FLOAT NOT NULL,
         status VARCHAR(15) NOT NULL,
         invoiceDate DATE NOT NULL,
         primary key (invoiceNo));

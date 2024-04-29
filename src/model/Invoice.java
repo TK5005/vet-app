@@ -12,7 +12,7 @@ public class Invoice {
     private int invoiceID;
     private int examID;
     private int clientID;
-    private double amtDue = 0.0;
+    private float amtDue = 0.0F;
     private Status status;
     private LocalDate invoiceDate;
 
@@ -40,11 +40,11 @@ public class Invoice {
         this.clientID = clientID;
     }
 
-    public double getAmtDue() {
+    public float getAmtDue() {
         return amtDue;
     }
 
-    public void setAmtDue(double amtDue) {
+    public void setAmtDue(float amtDue) {
         this.amtDue = amtDue;
     }
 

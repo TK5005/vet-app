@@ -74,7 +74,7 @@ public class InvoiceDetailView extends JPanel implements IInvoiceView {
             Pet pet = controller.getPet(exam.getPetID());
             petNameField.setText(pet.getName());
 
-            invoiceAmtField.setText(Double.toString(invoice.getAmtDue()));
+            invoiceAmtField.setText(Float.toString(invoice.getAmtDue()));
             invoiceStatusField.setSelectedItem(invoice.getStatusString());
         }
     }
