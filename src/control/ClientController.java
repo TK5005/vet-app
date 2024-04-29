@@ -257,6 +257,11 @@ public class ClientController {
         dataModel.addTreatment(treatment);
     }
 
+    public Treatment[] getTreatments() {
+        int examID = this.getCurrentExamID();
+        return dataModel.getTreatments(examID);
+    }
+
     /**
      * Update an exam
      * 

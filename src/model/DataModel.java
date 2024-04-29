@@ -546,6 +546,16 @@ public class DataModel {
         return null;
     }
 
+    public Treatment[] getTreatments(int examID) {
+        ArrayList<Treatment> examTreatments = new ArrayList<Treatment>();
+        for (int i = 0; i < treatments.size(); i++) {
+            if (treatments.get(i).getExamID() == examID) {
+                examTreatments.add(treatments.get(i));
+            }
+        }
+        return examTreatments.toArray(new Treatment[examTreatments.size()]);
+    }
+
     // Temp Data methods
 
     /**
@@ -656,10 +666,10 @@ public class DataModel {
             Treatment treatment = new Treatment();
             treatment.setTreatmentID(i);
             treatment.setExamID(i % 10);
-            treatment.setMedicationID(1);
+            treatment.setType(Treatment.TreatType.VACCINE);
             treatment.setStartDate(LocalDate.of(2021, 1, 1));
             treatment.setEndDate(LocalDate.of(2021, 1, 1));
-            treatment.setDirections("Directions");
+            treatment.setDirections("Treatment Directions");
             treatments.add(treatment);
         }
     }
