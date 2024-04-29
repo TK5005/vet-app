@@ -17,6 +17,7 @@ public class DataModel {
     private ArrayList<Vaccination> vaccinations;
     private ArrayList<Appointment> appointments;
     private ArrayList<Inventory> inventory;
+    private ArrayList<Staff> staffs;
 
     /**
      * Constructor for the data model
@@ -32,6 +33,7 @@ public class DataModel {
         vaccinations = new ArrayList<Vaccination>();
         appointments = new ArrayList<Appointment>();
         inventory = new ArrayList<Inventory>();
+        staffs = new ArrayList<Staff>();
         loadClients();
         loadPets();
         loadVets();
@@ -42,6 +44,7 @@ public class DataModel {
         loadVaccinations();
         loadInvoices();
         loadInventory();
+        loadStaff();
     }
 
     /**
@@ -695,7 +698,7 @@ public class DataModel {
             appointment.setClientID(i % 5);
             appointment.setPetID(i % 10);
             appointment.setStaffID(i % 5);
-            appointment.setAppointmentDate(LocalDateTime.of(2021, 1, 1, 0, 0));
+            appointment.setAppointmentDate(LocalDate.of(2021, 1, 1));
             appointment.setDescription("Appointment Description");
             appointments.add(appointment);
         }
@@ -719,18 +722,85 @@ public class DataModel {
     }
 
     /* Vien's Methods, to integrate */
+    /**
+     * staff
+     * 
+     * @param empID The staff ID
+     */
+    public void deleteStaff(int empID) {
+        // Delete staff based on empID
+        for (int i = 0; i < staffs.size(); i++) {
+            if (staffs.get(i).getEmpID() == empID) {
+                staffs.remove(i);
+                break;
+            }
+        }
+    }
+    public void updateStaff(int empID, Staff info) {
+        // Update staff info based on empID
+        for (int i = 0; i < staffs.size(); i++) {
+            if (staffs.get(i).getEmpID() == empID) {
+                staffs.set(i,info);
+                break;
+            }
+        }
+    }
+    public void addStaff(Staff newStaff) {
+        // Upate clientID so that it is unique
+        if (staffs.size() > 0) {
+            newStaff.setEmpID(staffs.get(staffs.size() - 1).getEmpID() + 1);
+        } else {
+            newStaff.setEmpID(0);
+        }
+
+        // Add client to the list
+        staffs.add(newStaff);
+    }
+    public Staff[] getStaffs() {
+        return staffs.toArray(new Staff[staffs.size()]);
+    }
+
+    // appointment methods
+    public ArrayList<Appointment> updateAppointments(long petID, Appointment app) {
+        ArrayList<Appointment> petAppointments = new ArrayList<Appointment>();
+        for (int i = 0; i < appointments.size(); i++) {
+            if (appointments.get(i).getPetID() == petID) {
+                petAppointments.set(i,app);
+            }
+        }
+        return petAppointments;
+    }
+    public Appointment[] deleteAppointments(long petID) {
+        ArrayList<Appointment> petAppointments = new ArrayList<Appointment>();
+        for (int i = 0; i < appointments.size(); i++) {
+            if (appointments.get(i).getPetID() == petID) {
+                petAppointments.remove(appointments.get(i));
+            }
+        }
+        return petAppointments.toArray(new Appointment[petAppointments.size()]);
+    }
+    public Appointment[] getAppointmentsClient(long id) {
+        ArrayList<Appointment> clientAppointments = new ArrayList<Appointment>();
+        for (int i = 0; i < appointments.size(); i++) {
+            if (appointments.get(i).getClientID()== id) {
+                clientAppointments.add(appointments.get(i));
+            }
+        }
+        return clientAppointments.toArray(new Appointment[clientAppointments.size()]);
+    }
+    public Appointment[] getAppointments() {
+        return appointments.toArray(new Appointment[appointments.size()]);
+    }
 
     public String[][] loadActivePatient() {
-        // String[] columns = {"Patient", "Check In", "Location","Doctor/Tech","Reason
-        // for Visit"};
         String[][] data = { { "Tom", "4/5/2024", "Exam1", "test/test", "Vaccination" },
                 { "Mary", "5/5/2024", "Test", "test/test", "Trimming" } };
         return data;
     }
 
     public String[][] loadTempAppointments() {
-        String[][] data = { { "Smith Henry", "Brandy", "443-123-4567", "4/28/2024 8:00AM", "test" },
-                { "Mary", "Sassy", "443-890-1234", "5/23/2024 2:30PM", "test" } };
+        String[][] data = { {"1", "Smith Henry", "Brandy", "443-123-4567", "4/28/2024 8:00AM", "" },
+                { "2","Mary", "Sassy", "443-890-1234", "5/23/2024 2:30PM", "" } };
         return data;
     }
 
@@ -743,6 +813,12 @@ public class DataModel {
     public String[][] loadMedication() {
         String[][] data = { { "Smith Henry", "Brandy", "443-123-4567", "12", "Yes" },
                 { "Mary", "Sassy", "443-890-1234", "5", "No" } };
+        return data;
+    }
+
+    public String[][] loadStaff() {
+         String[][] data = { {"1", "sb12","Smith Brandy","vet","",""},
+                { "2", "tes34","test","tech","",""  } };
         return data;
     }
 }

@@ -6,6 +6,7 @@ import model.DataModel;
 
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,9 +23,11 @@ public class AppointmentRepository {
         try (PreparedStatement get = conn.prepareStatement(sql)){
             ResultSet rs = get.executeQuery();
             while(rs.next()){
+                LocalDate appDate = rs.getDate("appointmentDate").toLocalDate();
+                String appTime = rs.getTimestamp("appointmentDate").toLocalDateTime().toLocalTime().toString();
                 ret.add (new Appointment(rs.getInt("appointmentID"), rs.getInt("clientID"),
                         rs.getInt("petID"), rs.getInt("staffID"),
-                        rs.getTimestamp("appointmentDate").toLocalDateTime(), rs.getString("description")));
+                        appDate, appTime, rs.getString("description")));
             }
         }catch (SQLException ex) {
             System.err.println("Error running Client Get statement");
@@ -32,5 +35,40 @@ public class AppointmentRepository {
         }
 
         return ret.toArray(new Appointment[0]);
+    }
+
+    public Appointment[] GetApp(int appID){
+        Statement stmt = null;
+        ResultSet rs = null;
+        List<Appointment> ret = new ArrayList<>();
+        try {
+            String sql = "Select * from Appointment Where appID="+appID;
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(sql);
+            Appointment app = new Appointment();
+            while(rs.next()){
+                app.setAppointmentID(rs.getInt("apptNo"));
+                app.setClientID(rs.getInt("clientID"));
+                app.setPetID(rs.getInt("petID"));
+                app.setStaffID(rs.getInt("staffID"));
+                app.setAppointmentDate(rs.getObject("appointmentDate",LocalDate.class)); 
+                app.setDescription(rs.getString("description"));
+                app.setAppointmentTime(rs.getString("Time"));
+                ret.add(app);                    
+            }
+        }catch (SQLException ex) {
+            System.out.println("Error running Appointment Get statement");
+            ex.printStackTrace();
+        }
+        Appointment[] cli = new Appointment[ret.size()];
+        cli = ret.toArray(new Appointment[ret.size()]);
+        return cli;
+    }
+
+    public void deleteAppoitment(int id){
+        
+    }
+    public void addAppoitment(Appointment appointment){
+        
     }
 }
