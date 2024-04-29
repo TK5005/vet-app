@@ -16,7 +16,7 @@ public class ClientRepository {
 
     //Get statement to retrieve all clients
     public Client[] getAll() {
-        String sql = "Select * from Client";
+        String sql = "SELECT * FROM CLIENT";
         List<Client> ret = new ArrayList<>();
         try (PreparedStatement get = conn.prepareStatement(sql)) {
 
@@ -34,7 +34,7 @@ public class ClientRepository {
     }
 
     public Client getSpecificClient(int clientID){
-        String sql = "Select * from Client where clientID = ?";
+        String sql = "SELECT * FROM CLIENT WHERE clientID = ?";
         Client ret = new Client();
 
         try(PreparedStatement get = conn.prepareStatement(sql)){

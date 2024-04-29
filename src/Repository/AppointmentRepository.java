@@ -18,7 +18,7 @@ public class AppointmentRepository {
     }
 
     public Appointment[] getAll(){
-        String sql = "Select * from Appointment";
+        String sql = "SELECT * FROM APPOINTMENT";
         List<Appointment> ret = new ArrayList<>();
         try (PreparedStatement get = conn.prepareStatement(sql)){
             ResultSet rs = get.executeQuery();
@@ -42,7 +42,7 @@ public class AppointmentRepository {
         ResultSet rs = null;
         List<Appointment> ret = new ArrayList<>();
         try {
-            String sql = "Select * from Appointment Where appID="+appID;
+            String sql = "SELECT * FROM APPOINTMENT WHERE appID="+appID;
             stmt = conn.createStatement();
             rs = stmt.executeQuery(sql);
             Appointment app = new Appointment();

@@ -15,10 +15,11 @@ public class ExamRepository {
 
     public Exam[] getExamsByPetID(int petID){
         String sql =
-            "select e.examID, e.petID, e.exam_datetime, e.description, e.weight, e.location, t.empID as techID, " +
-                "v.empID as vetID, e.vitals from examination e " +
-                    "join vet_exams v on e.examID = v.examID " +
-                    "join tech_exams t on e.examID = v.examID where petID = ?";
+            "SELECT e.examID, e.petID, e.exam_datetime, e.description, e.weight, e.location, t.empID as techID, " +
+                "v.empID as vetID, e.vitals from EXAMINATION e " +
+                    "join VET_EXAMS v on e.examID = v.examID " +
+                    "join TECH_EXAMS t on e.examID = v.examID " +
+                    "WHERE petID = ?";
 
         List<Exam> ret = new ArrayList<>();
 
@@ -49,10 +50,10 @@ public class ExamRepository {
 
     public Exam getSpecificExam(int examID){
         String sql =
-                "select e.examID, e.petID, e.exam_datetime, e.description, e.weight, e.location, t.empID as techID, " +
-                        "v.empID as vetID, e.vitals from examination e " +
-                        "join vet_exams v on e.examID = v.examID " +
-                        "join tech_exams t on e.examID = v.examID where e.examID = ?";
+                "SELECT e.examID, e.petID, e.exam_datetime, e.description, e.weight, e.location, t.empID as techID, " +
+                        "v.empID as vetID, e.vitals from EXAMINATION e " +
+                        "join VET_EXAMS v on e.examID = v.examID " +
+                        "join TECH_EXAMS t on e.examID = v.examID WHERE e.examID = ?";
         Exam ret = null;
         try(PreparedStatement get = conn.prepareStatement(sql)){
             get.setInt(1,examID);
@@ -80,7 +81,7 @@ public class ExamRepository {
     public Exam addExam(Exam mod) {
         String sql
                 = "INSERT INTO EXAMINATION (petID, exam_datetime, description, vitals, weight, location) " +
-                "values(?,?,?,?,?,?,?)";
+                "VALUES(?,?,?,?,?,?,?)";
 
         try (PreparedStatement create = conn.prepareStatement(sql)) {
             create.setInt(1, mod.getPetID());

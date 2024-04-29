@@ -16,7 +16,7 @@ public class PrescriptionRepository {
     public PrescriptionRepository(){conn = ConnectionManager.getConnection();}
 
     public Prescription[] getAll(){
-        String sql = "select * from Prescription";
+        String sql = "SELECT * FROM PRESCRIPTION";
         List<Prescription> ret = new ArrayList<>();
 
         try(PreparedStatement get = conn.prepareStatement(sql)){
@@ -39,7 +39,7 @@ public class PrescriptionRepository {
     }
 
     public Prescription[] getPrescriptionsByVet(int vetID){
-        String sql = "select * from Prescription where empID = ?";
+        String sql = "SELECT * FROM PRESCRIPTION WHERE empID = ?";
         List<Prescription> ret = new ArrayList<>();
 
         try(PreparedStatement get = conn.prepareStatement(sql)){

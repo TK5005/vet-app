@@ -26,7 +26,7 @@ public class StaffRepository {
         ResultSet rs = null;
         List<Staff> ret = new ArrayList<>();
         try {
-            String sql = "Select * from Staff";
+            String sql = "SELECT * FROM STAFF";
             stmt = conn.createStatement();
             rs = stmt.executeQuery(sql);
             Staff staff = new Staff();
@@ -57,7 +57,7 @@ public class StaffRepository {
         ResultSet rs = null;
         List<Staff> ret = new ArrayList<>();
         try {
-            String sql = "Select * from Staff Where empID="+empID;
+            String sql = "SELECT * FROM STAFF WHERE empID="+empID;
             stmt = conn.createStatement();
             rs = stmt.executeQuery(sql);
             Staff staff = new Staff();

@@ -13,7 +13,7 @@ public class InventoryRepository {
     public InventoryRepository(){this.conn = ConnectionManager.getConnection();}
 
     public Inventory[] getAll(){
-        String sql = "select * from inventory";
+        String sql = "SELECT * FROM INVENTORY";
         List<Inventory> ret = new ArrayList<>();
 
         try(PreparedStatement get = conn.prepareStatement(sql)){
@@ -41,7 +41,7 @@ public class InventoryRepository {
     }
 
     public Inventory getSpecificItem(int itemID){
-        String sql = "select * from inventory where itemID = ?";
+        String sql = "SELECT * FROM INVENTORY WHERE itemID = ?";
         Inventory ret = new Inventory();
 
         try(PreparedStatement get = conn.prepareStatement(sql)){
@@ -109,7 +109,7 @@ public class InventoryRepository {
     public void updateInventory(Inventory mod){
         String sql
                 = "UPDATE INVENTORY SET name = ?, manufacturer = ?, type = ?, quantity = ?, reorderLevel = ?, " +
-                "reorderQuantity = ?, wholesaleCost = ?, retailCost = ? where itemID = ?";
+                "reorderQuantity = ?, wholesaleCost = ?, retailCost = ? WHERE itemID = ?";
 
         try(PreparedStatement update = conn.prepareStatement(sql)){
             update.setString(1, mod.getName());

@@ -125,7 +125,7 @@ public class InvoiceRepository {
     public Invoice[] getInvoicesByPetID(int petID){
         String sql =
                 "SELECT * FROM INVOICE WHERE examID IN" +
-                        " (SELECT examID from EXAMINATION WHERE petID = ?)";
+                        " (SELECT examID FROM EXAMINATION WHERE petID = ?)";
         List<Invoice> ret = new ArrayList<>();
 
         try(PreparedStatement get = conn.prepareStatement(sql)){

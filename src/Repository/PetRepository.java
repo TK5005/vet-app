@@ -12,7 +12,7 @@ public class PetRepository {
     public PetRepository(){this.conn = ConnectionManager.getConnection();}
 
     public Pet[] getPetsByClientID(int clientID){
-        String sql = "select * from pet where ownerID = ?";
+        String sql = "SELECT * FROM PET WHERE ownerID = ?";
         List<Pet> ret = new ArrayList<>();
         try(PreparedStatement get = conn.prepareStatement(sql)){
             get.setInt(1,clientID);
@@ -32,7 +32,7 @@ public class PetRepository {
     }
 
     public Pet getSpecificPet(int petID) {
-        String sql = "select * from pet where petID = ?";
+        String sql = "SELECT * FROM PET WHERE petID = ?";
         Pet ret = null;
 
         try (PreparedStatement get = conn.prepareStatement(sql)) {

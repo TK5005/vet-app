@@ -17,7 +17,7 @@ public class MedicationRepository {
     public MedicationRepository(){this.conn = ConnectionManager.getConnection();}
 
     public Medication[] getAll(){
-        String sql = "select * from medication join inventory on medID = itemID";
+        String sql = "SELECT * FROM MEDICATION JOIN INVENTORY ON medID = itemID";
         List<Medication> ret = new ArrayList<>();
 
         try(PreparedStatement get = conn.prepareStatement(sql)){
@@ -39,7 +39,7 @@ public class MedicationRepository {
     }
 
     public Medication[] getAllInStock(){
-        String sql = "select * from medication join inventory on medID = itemID where quantity > 0";
+        String sql = "SELECT * FROM MEDICATION JOIN INVENTORY ON medID = itemID WHERE QUANTITY > 0";
         List<Medication> ret = new ArrayList<>();
 
         try(PreparedStatement get = conn.prepareStatement(sql)){
@@ -61,7 +61,7 @@ public class MedicationRepository {
     }
 
     public Medication getSpecificMedication(int medID){
-        String sql = "select * from medication join inventory on medID = itemID where medID = ?";
+        String sql = "SELECT * FROM MEDICATION JOIN INVENTORY ON medID = itemID WHERE medID = ?";
         Medication ret = null;
 
         try(PreparedStatement get = conn.prepareStatement(sql)){
@@ -110,7 +110,7 @@ public class MedicationRepository {
 
     public void updateMedication(Medication mod){
         String sql =
-                "UPDATE MEDICATION SET name = ?, interaction = ? where medID = ?";
+                "UPDATE MEDICATION SET name = ?, interaction = ? WHERE medID = ?";
 
         try(PreparedStatement update = conn.prepareStatement(sql)){
             update.setString(1, mod.getName());

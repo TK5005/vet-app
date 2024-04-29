@@ -17,7 +17,7 @@ public class TreatmentRepository {
     public TreatmentRepository(){this.conn = ConnectionManager.getConnection();}
 
     public Treatment[] getTreatmentsByExamID(int examID){
-        String sql = "select * from treatment where examID = ?";
+        String sql = "SELECT * FROM TREATMENT WHERE examID = ?";
         List<Treatment> ret = new ArrayList<>();
         try(PreparedStatement get = conn.prepareStatement(sql)){
             get.setInt(1,examID);
@@ -43,7 +43,7 @@ public class TreatmentRepository {
     }
 
     public Treatment getSpecificTreatment(int treatmentID){
-        String sql = "select * from treatment where treatmentID = ?";
+        String sql = "SELECT * FROM TREATMENT WHERE treatmentID = ?";
         Treatment ret = null;
 
         try (PreparedStatement get = conn.prepareStatement(sql)) {
