@@ -18,6 +18,7 @@ public class DataModel {
     private ArrayList<Appointment> appointments;
     private ArrayList<Inventory> inventory;
     private ArrayList<Staff> staffs;
+    private ArrayList<Medication> medications;
 
     /**
      * Constructor for the data model
@@ -34,6 +35,7 @@ public class DataModel {
         appointments = new ArrayList<Appointment>();
         inventory = new ArrayList<Inventory>();
         staffs = new ArrayList<Staff>();
+        medications = new ArrayList<Medication>();
         loadClients();
         loadPets();
         loadVets();
@@ -45,6 +47,7 @@ public class DataModel {
         loadInvoices();
         loadInventory();
         loadStaff();
+        loadMedications();
     }
 
     /**
@@ -309,6 +312,16 @@ public class DataModel {
         }
     }
 
+    public Treatment getTreatment(int treatmentID) {
+        // Get treatment based on treatmentID
+        for (int i = 0; i < treatments.size(); i++) {
+            if (treatments.get(i).getTreatmentID() == treatmentID) {
+                return treatments.get(i);
+            }
+        }
+        return null;
+    }
+
     /**
      * Get an Exam
      * 
@@ -546,6 +559,16 @@ public class DataModel {
         return null;
     }
 
+    public Treatment[] getTreatments(int examID) {
+        ArrayList<Treatment> examTreatments = new ArrayList<Treatment>();
+        for (int i = 0; i < treatments.size(); i++) {
+            if (treatments.get(i).getExamID() == examID) {
+                examTreatments.add(treatments.get(i));
+            }
+        }
+        return examTreatments.toArray(new Treatment[examTreatments.size()]);
+    }
+
     // Temp Data methods
 
     /**
@@ -656,10 +679,10 @@ public class DataModel {
             Treatment treatment = new Treatment();
             treatment.setTreatmentID(i);
             treatment.setExamID(i % 10);
-            treatment.setMedicationID(1);
+            treatment.setType(Treatment.TreatType.VACCINE);
             treatment.setStartDate(LocalDate.of(2021, 1, 1));
             treatment.setEndDate(LocalDate.of(2021, 1, 1));
-            treatment.setDirections("Directions");
+            treatment.setDirections("Treatment Directions");
             treatments.add(treatment);
         }
     }
@@ -719,6 +742,29 @@ public class DataModel {
             item.setManufacturer("Manufacturer");
             inventory.add(item);
         }
+    }
+
+    private void loadMedications() {
+        // Generate 10 medications
+        for (int i = 0; i < 10; i++) {
+            Medication medication = new Medication();
+            medication.setMedicationID(i);
+            medication.setName("Medication" + i);
+            medication.setDosage("Dosage");
+            medication.setQuantity(100);
+            medication.setCost(10.00F);
+            medications.add(medication);
+        }
+    }
+
+    public Medication getMedication(int medicationID) {
+        // Get medication based on medicationID
+        for (int i = 0; i < medications.size(); i++) {
+            if (medications.get(i).getMedicationID() == medicationID) {
+                return medications.get(i);
+            }
+        }
+        return null;
     }
 
     /* Vien's Methods, to integrate */

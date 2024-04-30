@@ -31,6 +31,25 @@ public class Treatment {
 
     public TreatType getType(){return type;}
 
+    public void setType(String type){
+        switch(type){
+            case "VACCINE":
+                this.type = TreatType.VACCINE;
+                break;
+            case "LIFESTYLE":
+                this.type = TreatType.LIFESTYLE;
+                break;
+            case "MEDICATION":
+                this.type = TreatType.MEDICATION;
+                break;
+            case "TEST":
+                this.type = TreatType.TEST;
+                break;
+            default:
+                this.type = null;
+        }
+    }
+
     public void setType(TreatType type){this.type = type;}
 
     public LocalDate getStartDate() {
