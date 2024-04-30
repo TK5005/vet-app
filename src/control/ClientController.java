@@ -262,6 +262,10 @@ public class ClientController {
         return dataModel.getTreatments(examID);
     }
 
+    public Treatment getTreatment(int treatmentID) {
+        return dataModel.getTreatment(treatmentID);
+    }
+
     /**
      * Update an exam
      * 
@@ -282,8 +286,13 @@ public class ClientController {
         dataModel.updateExam(examID, exam);
     }
 
-    public void updateTreatment(int treatmentID, int vetID, Treatment treatment) {
-        dataModel.updateTreatment(treatmentID, treatment);
+    public void updateTreatment(Treatment treatment) {
+        dataModel.updateTreatment(treatment.getTreatmentID(), treatment);
+        refreshViews();
+    }
+
+    public Medication getMedication(int medicationID) {
+        return dataModel.getMedication(medicationID);
     }
 
     public Treatment[] getVaccinationsFromPetID(int petID) {

@@ -50,7 +50,7 @@ public class AppWindow extends JFrame {
 
         // Display the window
         this.pack();
-        this.setSize(800, 600);
+        this.setSize(1920, 1080);
         this.setVisible(true);
     }
 }

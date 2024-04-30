@@ -7,9 +7,13 @@ import model.Treatment;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.PopupFactory;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.JScrollPane;
@@ -17,12 +21,19 @@ import java.awt.Color;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import javax.swing.JWindow;
+import javax.swing.Popup;
 
 public class TreatmentTable extends JPanel implements IClientView {
     private JTable treatmentTable;
     private DefaultTableModel tableModel;
     private JButton addTreatmentButton;
     private ClientController clientController;
+    private TreatmentInfo treatmentInfo;
     
     public TreatmentTable() {
         clientController = ClientController.getInstance();
@@ -91,6 +102,53 @@ public class TreatmentTable extends JPanel implements IClientView {
         this.add(scrollPane, BorderLayout.CENTER);
     }
 
+    private void showTreatmentInfo(int treatmentID)
+    {
+        treatmentInfo = new TreatmentInfo(treatmentID);
+        JDialog treatmentDialog = new JDialog();
+        treatmentDialog.add(treatmentInfo);
+        treatmentDialog.pack();
+        treatmentDialog.setLocationRelativeTo(null);
+        treatmentDialog.setVisible(true);
+    }
+
+    private void ConfirmDeletion(int id){
+        JFrame frame = new JFrame("Confirm");
+        final JOptionPane optionPane = new JOptionPane(
+                "Are you sure to delete?",
+                JOptionPane.QUESTION_MESSAGE,
+                JOptionPane.YES_NO_OPTION);
+
+        final JDialog dialog = new JDialog(frame, "Confirm",
+                                true);
+        dialog.setContentPane(optionPane);
+        dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+        dialog.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent we) {
+                //setLabel("user attempt to close window.");
+            }
+        });
+        optionPane.addPropertyChangeListener(new PropertyChangeListener() {
+            public void propertyChange(PropertyChangeEvent e) {
+                String prop = e.getPropertyName();
+
+                if (dialog.isVisible() && (e.getSource() == optionPane) && (prop.equals(JOptionPane.VALUE_PROPERTY))) {
+                    dialog.setVisible(false);
+                }
+            }
+        });
+        dialog.pack();
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+
+        int value = ((Integer)optionPane.getValue()).intValue();
+        if (value == JOptionPane.YES_OPTION) {
+            clientController.removeVaccination(id);
+        } else if (value == JOptionPane.NO_OPTION) {
+           //no - close window
+        }
+    }
+
     // Custom renderer
     class ButtonRenderer extends JPanel implements TableCellRenderer {
         private JButton viewButton;
@@ -135,12 +193,14 @@ public class TreatmentTable extends JPanel implements IClientView {
 
             // Add action listener for the Remove button
             removeButton.addActionListener(e -> {
-                
+                int treatmentID = Integer.parseInt(table.getValueAt(currentRow, 0).toString());
+                ConfirmDeletion(treatmentID);
             });
 
             // Add action listener for the View button
             viewButton.addActionListener(e -> {
-                
+                int treatmentID = Integer.parseInt(table.getValueAt(currentRow, 0).toString());
+                showTreatmentInfo(treatmentID);
             });
         }
 

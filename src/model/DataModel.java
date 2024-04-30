@@ -18,6 +18,7 @@ public class DataModel {
     private ArrayList<Appointment> appointments;
     private ArrayList<Inventory> inventory;
     private ArrayList<Staff> staffs;
+    private ArrayList<Medication> medications;
 
     /**
      * Constructor for the data model
@@ -34,6 +35,7 @@ public class DataModel {
         appointments = new ArrayList<Appointment>();
         inventory = new ArrayList<Inventory>();
         staffs = new ArrayList<Staff>();
+        medications = new ArrayList<Medication>();
         loadClients();
         loadPets();
         loadVets();
@@ -45,6 +47,7 @@ public class DataModel {
         loadInvoices();
         loadInventory();
         loadStaff();
+        loadMedications();
     }
 
     /**
@@ -307,6 +310,16 @@ public class DataModel {
                 break;
             }
         }
+    }
+
+    public Treatment getTreatment(int treatmentID) {
+        // Get treatment based on treatmentID
+        for (int i = 0; i < treatments.size(); i++) {
+            if (treatments.get(i).getTreatmentID() == treatmentID) {
+                return treatments.get(i);
+            }
+        }
+        return null;
     }
 
     /**
@@ -729,6 +742,29 @@ public class DataModel {
             item.setManufacturer("Manufacturer");
             inventory.add(item);
         }
+    }
+
+    private void loadMedications() {
+        // Generate 10 medications
+        for (int i = 0; i < 10; i++) {
+            Medication medication = new Medication();
+            medication.setMedicationID(i);
+            medication.setName("Medication" + i);
+            medication.setDosage("Dosage");
+            medication.setQuantity(100);
+            medication.setCost(10.00F);
+            medications.add(medication);
+        }
+    }
+
+    public Medication getMedication(int medicationID) {
+        // Get medication based on medicationID
+        for (int i = 0; i < medications.size(); i++) {
+            if (medications.get(i).getMedicationID() == medicationID) {
+                return medications.get(i);
+            }
+        }
+        return null;
     }
 
     /* Vien's Methods, to integrate */
