@@ -1,9 +1,13 @@
 package view.treatment;
 
-import control.ClientController;
-import control.IClientView;
-import model.Client;
-import model.Treatment;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
@@ -11,22 +15,15 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.PopupFactory;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.JScrollPane;
-import java.awt.Color;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.FlowLayout;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import javax.swing.JWindow;
-import javax.swing.Popup;
+
+import control.ClientController;
+import control.IClientView;
+import model.Treatment;
 
 public class TreatmentTable extends JPanel implements IClientView {
     private JTable treatmentTable;
@@ -60,7 +57,7 @@ public class TreatmentTable extends JPanel implements IClientView {
 
     public void createEventListeners() {
         addTreatmentButton.addActionListener(e -> {
-
+            clientController.addTreatment();
         });
     }
 
@@ -143,7 +140,7 @@ public class TreatmentTable extends JPanel implements IClientView {
 
         int value = ((Integer)optionPane.getValue()).intValue();
         if (value == JOptionPane.YES_OPTION) {
-            clientController.removeVaccination(id);
+            clientController.removeTreatment(id);
         } else if (value == JOptionPane.NO_OPTION) {
            //no - close window
         }

@@ -281,6 +281,17 @@ public class DataModel {
         return treatment.getTreatmentID();
     }
 
+    public void removeTreatment(int treatmentID)
+    {
+        // Delete treatment based on treatmentID
+        for (int i = 0; i < treatments.size(); i++) {
+            if (treatments.get(i).getTreatmentID() == treatmentID) {
+                treatments.remove(i);
+                break;
+            }
+        }
+    }
+
     /**
      * Update an exam
      * 

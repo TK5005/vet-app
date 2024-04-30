@@ -252,6 +252,11 @@ public class ClientController {
         refreshViews();
     }
 
+    public void addTreatment()
+    {
+        addTreatment(this.getCurrentExamID());
+    }
+
     public void addTreatment(int examID) {
         Treatment treatment = new Treatment();
         treatment.setExamID(examID);
@@ -259,6 +264,13 @@ public class ClientController {
         treatment.setEndDate(LocalDate.now());
         treatment.setDirections("New Treatment");
         dataModel.addTreatment(treatment);
+        refreshViews();
+    }
+
+    public void removeTreatment(int treatmentID)
+    {
+        dataModel.removeTreatment(treatmentID);
+        refreshViews();
     }
 
     public Treatment[] getTreatments() {
