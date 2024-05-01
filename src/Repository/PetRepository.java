@@ -51,6 +51,12 @@ public class PetRepository {
         return ret;
     }
 
+    public void removePet(int petID)
+    {
+        //TODO: Implement removePet in PetRepository
+        System.out.println("TODO: Implement removePet in PetRepository");
+    }
+
     //Inserts a new pet into the pet table and returns the given pet model with the new petID
     public Pet addPet(Pet mod){
         String sql
@@ -69,11 +75,13 @@ public class PetRepository {
             create.setLong(9, mod.getMicrochipNumber());
             create.setLong(10,mod.getRabiesTag());
 
+            create.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+            
             ResultSet rs = create.getGeneratedKeys();
             while(rs.next()){
                 mod.setPetID(rs.getInt(1));
             }
-
+            
             conn.commit();
         }catch (SQLException ex) {
             System.err.println("Error inserting Pet entry");

@@ -28,10 +28,11 @@ public class ClientController {
         return instance;
     }
 
-    private DataModel dataModel;
+    //private DataModel dataModel;
     private ClientRepository clientRepository;
     private PetRepository petRepository;
     private ExamRepository examRepository;
+    private AppointmentRepository appointmentRepository;
     private TreatmentRepository treatmentRepository;
     private InventoryRepository inventoryRepository;
     private MedicationRepository medicationRepository;
@@ -48,7 +49,6 @@ public class ClientController {
      * Constructor for the client controller
      */
     private ClientController() {
-        dataModel = DataModel.getInstance();
         clientRepository = new ClientRepository();
         petRepository = new PetRepository();
         examRepository = new ExamRepository();
@@ -57,6 +57,7 @@ public class ClientController {
         medicationRepository = new MedicationRepository();
         invoiceRepository = new InvoiceRepository();
         staffRepository = new StaffRepository();
+        appointmentRepository = new AppointmentRepository();
         views = new ArrayList<>();
     }
 
@@ -96,26 +97,21 @@ public class ClientController {
         return currentVaccintaionID;
     }
 
-    /**
-     * Get all clients
-     * 
-     * @return An array of clients
-     */
     public Client[] getClients() {
         return clientRepository.getAll();
-        //return dataModel.getClients();
     }
 
-    // Client methods
-
-    /**
-     * Add a new client
-     */
     public void addClient() {
         Client client = new Client();
         client.setFirstName("New");
         client.setLastName("Client");
-        dataModel.addClient(client);
+        client.setPhone("000-000-0000");
+        client.setEmail("");
+        client.setStreet("");
+        client.setCity("");
+        client.setState("");
+        client.setZip(0);
+        clientRepository.createClient(client);
         refreshViews();
     }
 
@@ -123,7 +119,8 @@ public class ClientController {
      * Update a client
      */
     public void updateClient(int clientID, String fName, String lName,
-            String phone, String email, String street, String city, String state, int zip) {
+                                String phone, String email, String street,
+                                String city, String state, int zip) {
         Client client = new Client();
         client.setClientID(clientID);
         client.setFirstName(fName);
@@ -134,30 +131,16 @@ public class ClientController {
         client.setCity(city);
         client.setState(state);
         client.setZip(zip);
-
-        //dataModel.updateClient(clientID, client);
         clientRepository.updateClient(client);
         refreshViews();
     }
 
-    /**
-     * Delete a client
-     * 
-     * @param clientID The client ID
-     */
     public void deleteClient(int clientID) {
-        dataModel.deleteClient(clientID);
+        clientRepository.removeClient(clientID);
         refreshViews();
     }
 
-    /**
-     * Get a client
-     * 
-     * @param clientID The client ID
-     * @return The client object
-     */
     public Client getClient(int clientID) {
-        //return dataModel.getClient(clientID);
         return clientRepository.getSpecificClient(clientID);
     }
 
@@ -174,24 +157,25 @@ public class ClientController {
 
     // Pet methods
 
-    /**
-     * Add a new pet
-     * 
-     * @param clientID The client ID
-     */
     public void addPet() {
         Pet pet = new Pet();
+        pet.setOwnerID(this.getCurrentClientID());
         pet.setName("New Pet");
-        dataModel.addPet(pet, this.getCurrentClientID());
+        pet.setSex("-");
+        pet.setBirthdate(LocalDate.now());
+        pet.setSpecies("-");
+        pet.setBreed("-");
+        pet.setColor("-");
+        pet.setWeight(0);
+        pet.setMicrochipNumber(0);
+        pet.setRabiesTag(0);
+        petRepository.addPet(pet);
         refreshViews();
     }
 
-    /**
-     * Update a pet
-     */
     public void updatePet(int petID, String name, String sex, String color, String species,
             String breed, LocalDate birthdate, int weight, long microchipNumber, long rabiesTag) {
-        Pet pet = dataModel.getPet(petID);
+        Pet pet = petRepository.getSpecificPet(petID);
         pet.setName(name);
         pet.setSex(sex);
         pet.setColor(color);
@@ -201,7 +185,6 @@ public class ClientController {
         pet.setWeight(weight);
         pet.setMicrochipNumber(microchipNumber);
         pet.setRabiesTag(rabiesTag);
-        //dataModel.updatePet(currentPetID, pet);
         petRepository.updatePet(pet);
         refreshViews();
     }
@@ -212,7 +195,7 @@ public class ClientController {
      * @param petID The pet ID
      */
     public void deletePet(int petID) {
-        dataModel.deletePet(petID);
+        petRepository.removePet(petID);
         refreshViews();
     }
 
@@ -223,7 +206,6 @@ public class ClientController {
      * @return The pet object
      */
     public Pet getPet(int petID) {
-        //return dataModel.getPet(petID);
         return petRepository.getSpecificPet(petID);
     }
 
@@ -234,21 +216,20 @@ public class ClientController {
      * @return An array of exams
      */
     public Exam[] getExams(int petID) {
-        return dataModel.getExams(petID);
+        return examRepository.getExamsByPetID(petID);
     }
 
     // Exam methods
 
-    /**
-     * Add a new exam
-     * 
-     * @param patientID The patient ID
-     */
     public void addExam() {
         Exam exam = new Exam();
+        exam.setPetID(this.getCurrentPetID());
+        exam.setDate(LocalDateTime.now());
         exam.setDescription("New Exam");
-        int examID = dataModel.addExam(exam, this.getCurrentPetID());
-        addTreatment(examID);
+        exam.setVitals("Enter Vitals Here...");
+        exam.setWeight(0);
+        exam.setLocation("Location");
+        examRepository.addExam(exam);
         refreshViews();
     }
 
@@ -260,38 +241,34 @@ public class ClientController {
     public void addTreatment(int examID) {
         Treatment treatment = new Treatment();
         treatment.setExamID(examID);
+        treatment.setMedicationID(0);
+        treatment.setType(Treatment.TreatType.LIFESTYLE);
         treatment.setStartDate(LocalDate.now());
         treatment.setEndDate(LocalDate.now());
         treatment.setDirections("New Treatment");
-        dataModel.addTreatment(treatment);
+        treatmentRepository.addTreatment(treatment);
         refreshViews();
     }
 
     public void removeTreatment(int treatmentID)
     {
-        dataModel.removeTreatment(treatmentID);
+        treatmentRepository.removeTreatment(treatmentID);
         refreshViews();
     }
 
     public Treatment[] getTreatments() {
         int examID = this.getCurrentExamID();
-        return dataModel.getTreatments(examID);
+        return treatmentRepository.getTreatmentsByExamID(examID);
     }
 
     public Treatment getTreatment(int treatmentID) {
-        return dataModel.getTreatment(treatmentID);
+        return treatmentRepository.getSpecificTreatment(treatmentID);
     }
 
-    /**
-     * Update an exam
-     * 
-     * @param examID The exam ID
-     * @param exam   The new exam object
-     */
     public void updateExam(int examID, LocalDateTime date, int vetID, int techID, String description,
                            String vitals,
                            int weight, String location) {
-        Exam exam = dataModel.getExam(examID);
+        Exam exam = examRepository.getSpecificExam(examID);
         exam.setVetID(vetID);
         exam.setTechID(techID);
         exam.setDescription(description);
@@ -299,104 +276,62 @@ public class ClientController {
         exam.setWeight(weight);
         exam.setLocation(location);
         exam.setDate(date);
-        dataModel.updateExam(examID, exam);
+        examRepository.updateExam(exam);
     }
 
     public void updateTreatment(Treatment treatment) {
-        dataModel.updateTreatment(treatment.getTreatmentID(), treatment);
+        treatmentRepository.updateTreatment(treatment);
         refreshViews();
     }
 
     public Medication getMedication(int medicationID) {
-        return dataModel.getMedication(medicationID);
+        return medicationRepository.getSpecificMedication(medicationID);
     }
 
     public Treatment[] getVaccinationsFromPetID(int petID) {
-        //return dataModel.getVaccinationsFromPetID(petID);
         return treatmentRepository.getVaccinationsByPetID(petID);
     }
 
-    public void addVaccination(int petID) {
-        Vaccination vaccination = new Vaccination();
-        vaccination.setPetId(petID);
-        vaccination.setName("New Vaccination");
-        vaccination.setDate(LocalDate.now());
-        dataModel.addVaccination(vaccination);
-        refreshViews();
-    }
-
-    public void removeVaccination(int vaccinationID) {
-        dataModel.removeVaccination(vaccinationID);
-        refreshViews();
-    }
-
-    public Vaccination getVaccination(int vaccinationID) {
-        return dataModel.getVaccination(vaccinationID);
-    }
-
-    public void updateVaccination(int vaccinationID, String name, LocalDate date) {
-        Vaccination vaccination = dataModel.getVaccination(vaccinationID);
-        vaccination.setName(name);
-        vaccination.setDate(date);
-        dataModel.updateVaccination(vaccinationID, vaccination);
-        closeVaccinationInfoView();
-        refreshViews();
-    }
-
-    /**
-     * Get an Exam
-     * 
-     * @param examID The exam ID
-     * @return The exam object
-     */
     public Exam getExam(int examID) {
-        return dataModel.getExam(examID);
+        return examRepository.getSpecificExam(examID);
     }
 
-    /**
-     * Delete an exam
-     * 
-     * @param examID The exam ID
-     */
     public void deleteExam(int examID) {
-        dataModel.deleteExam(examID);
+        examRepository.deleteExam(examID);
         refreshViews();
     }
 
     public Tech[] getTechs() {
-        //return dataModel.getTechs();
         return staffRepository.getTechs();
     }
 
     // Vet and Tech Methods
     public Vet getVet(int vetID) {
-        return dataModel.getVet(vetID);
+        return staffRepository.getVet(vetID);
     }
 
     public Tech getTech(int techID) {
-        return dataModel.getTech(techID);
+        return staffRepository.getTech(techID);
     }
 
-    public Treatment getTreatmentFromExamID(int examID) {
-        return dataModel.getTreatmentFromExamID(examID);
+    public Treatment[] getTreatmentFromExamID(int examID) {
+        return treatmentRepository.getTreatmentsByExamID(examID);
     }
 
     public Vet[] getVets() {
-        //return dataModel.getVets();
         return staffRepository.getVets();
     }
 
     public Appointment[] getAppointments(int petID) {
-        return dataModel.getAppointments(petID);
+        return appointmentRepository.getAppointmentsByPetID(petID);
     }
 
     public Invoice[] getInvoices(int petID) {
-        //return dataModel.getInvoices(petID);
         return invoiceRepository.getInvoicesByPetID(petID);
     }
 
     public Object[][] getPetAppointmentData() {
-        Appointment[] appointments = dataModel.getAppointments(currentPetID);
+        Appointment[] appointments = appointmentRepository.getAppointmentsByPetID(currentPetID);
         Object[][] tableData = new Object[appointments.length][2];
         for (int i = 0; i < appointments.length; i++) {
             tableData[i][0] = appointments[i].getAppointmentDate();
@@ -413,86 +348,45 @@ public class ClientController {
         return medicationRepository.getAllInStock();
     }
 
-    /**
-     * Set the client page
-     * 
-     * @param clientPage The client page
-     */
+    // Page navigation methods
+
     public void setClientPage(ClientPageView clientPage) {
         this.clientPage = clientPage;
     }
 
-    // Page navigation methods
-
-    /**
-     * Show the client info page
-     * 
-     * @param clientID The client ID
-     */
     public void showClientInfo(int clientID) {
         this.setCurrentClientID(clientID);
         refreshViews();
         clientPage.showClientInfo();
     }
 
-    /**
-     * Close the client info page
-     */
     public void closeClientInfoView() {
         this.setCurrentClientID(-1);
         clientPage.closeClientInfoView();
         refreshViews();
     }
 
-    /**
-     * Show the exam info page
-     * 
-     * @param examID The exam ID
-     */
     public void showExamInfo(int examID) {
         this.setCurrentExamID(examID);
         refreshViews();
         clientPage.showExamInfo();
     }
 
-    /**
-     * Show the pet info page
-     * 
-     * @param patientID The patient ID
-     */
     public void showPetInfo(int petID) {
         this.setCurrentPetID(petID);
         refreshViews();
         clientPage.showPetInfo();
     }
 
-    /**
-     * Close the pet info page
-     */
     public void closePetInfoView() {
         this.setCurrentPetID(-1);
         clientPage.closePetInfoView();
         refreshViews();
     }
 
-    /**
-     * Close the exam info page
-     */
     public void closeExamInfoView() {
         this.setCurrentExamID(-1);
         clientPage.closeExamInfoView();
-        refreshViews();
-    }
-
-    public void showVaccinationInfo(int vaccinationID) {
-        this.setCurrentVaccinationID(vaccinationID);
-        clientPage.showPetVaccinationInfo();
-        refreshViews();
-    }
-
-    public void closeVaccinationInfoView() {
-        this.setCurrentVaccinationID(-1);
-        clientPage.closePetVaccinationInfoView();
         refreshViews();
     }
 

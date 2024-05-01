@@ -4,10 +4,10 @@ import Repository.ClientRepository;
 import Repository.ExamRepository;
 import Repository.InvoiceRepository;
 import Repository.PetRepository;
-import model.DataModel;
 import model.Exam;
 import model.Invoice;
 import model.Pet;
+import model.Invoice.Status;
 import view.invoice.InvoiceView;
 import model.Client;
 
@@ -28,7 +28,6 @@ public class InvoiceController {
         return instance;
     }
 
-    private DataModel dataModel;
     private ArrayList<IInvoiceView> views;
 
     private InvoiceView invoiceView;
@@ -40,7 +39,6 @@ public class InvoiceController {
     private int currentInvoiceID;
 
     private InvoiceController() {
-        dataModel = DataModel.getInstance();
         views = new ArrayList<>();
         invoiceRepository = new InvoiceRepository();
         examRepository = new ExamRepository();
@@ -71,22 +69,18 @@ public class InvoiceController {
     }
 
     public Invoice getInvoice(int invoiceID) {
-        //return dataModel.getInvoice(invoiceID);
         return invoiceRepository.getSpecificInvoice(invoiceID);
     }
 
     public Client getClient(int clientID) {
-        //return dataModel.getClient(clientID);
         return clientRepository.getSpecificClient(clientID);
     }
 
     public Pet getPet(int petID) {
-        //return dataModel.getPet(petID);
         return petRepository.getSpecificPet(petID);
     }
 
     public Exam getExam(int examID) {
-        //return dataModel.getExam(examID);
         return examRepository.getSpecificExam(examID);
     }
 
@@ -103,19 +97,27 @@ public class InvoiceController {
 
     public void addInvoice() {
         Invoice invoice = new Invoice();
-        dataModel.addInvoice(invoice);
+        invoice.setExamID(0);
+        invoice.setClientID(0);
+        invoice.setAmtDue(0.0f);
+        invoice.setStatus(Status.UNPAID);
+        invoice.setInvoiceDate(LocalDate.now());
+        invoiceRepository.addInvoice(invoice);
         refreshViews();
     }
 
     public void removeInvoice(int invoiceID) {
-        dataModel.deleteInvoice(invoiceID);
+        invoiceRepository.removeInvoice(invoiceID);
         refreshViews();
     }
 
     public void updateInvoice(int invoiceID, int examID, String status, LocalDate invoiceDate, String amtDue) {
-        Invoice invoice = dataModel.getInvoice(invoiceID);
+        Invoice invoice = invoiceRepository.getSpecificInvoice(invoiceID);
         invoice.setExamID(examID);
-        invoice.setClientID(dataModel.getPet(dataModel.getExam(examID).getPetID()).getOwnerID());
+        Exam exam = examRepository.getSpecificExam(examID);
+        Pet pet = petRepository.getSpecificPet(exam.getPetID());
+        Client client = clientRepository.getSpecificClient(pet.getOwnerID());
+        invoice.setClientID(client.getClientID());
         for (Invoice.Status s : Invoice.Status.values()) {
             if (s.toString().equals(status)) {
                 invoice.setStatus(s);
@@ -126,7 +128,7 @@ public class InvoiceController {
     }
 
     public int[] getExamIDs() {
-        Exam[] exams = dataModel.getExams();
+        Exam[] exams = examRepository.getAllExams();
         int[] examIDs = new int[exams.length];
         for (int i = 0; i < exams.length; i++) {
             examIDs[i] = exams[i].getExamID();

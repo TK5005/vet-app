@@ -1,4 +1,4 @@
-use drodrig9db;
+use vetapp;
 insert into TREATMENT (examID,medID,type,startDate,endDate,directions)
 values('1','1','VACCINE','2024-04-15','2024-04-15','N/A One Time Injection');
 

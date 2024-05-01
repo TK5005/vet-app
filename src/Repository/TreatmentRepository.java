@@ -67,7 +67,7 @@ public class TreatmentRepository {
         return ret;
     }
 
-    public Treatment addTreatment(Treatment mod, int vetID){
+    public Treatment addTreatment(Treatment mod){
         String sql
                 = "INSERT INTO TREATMENT (examID, medID, type, startDate, endDate, directions) " +
                 "VALUES(?, ?, ?, ?, ?, ?)";
@@ -101,7 +101,7 @@ public class TreatmentRepository {
         return mod;
     }
 
-    public void updateTreatment(Treatment mod, int vetID){
+    public void updateTreatment(Treatment mod){
         String sql
                 = "UPDATE TREATMENT SET medID = ?, type = ?, startDate = ?, endDate = ?, directions = ? " +
                 "WHERE trmntID = ?";
@@ -158,4 +158,8 @@ public class TreatmentRepository {
         return ret.toArray(new Treatment[0]);
     }
 
+    public void removeTreatment(int treatmentID){
+        //TODO: Implement removeTreatment in TreatmentRepository
+        System.out.println("TODO: Implement removeTreatment in TreatmentRepository");
+    }
 }

@@ -418,14 +418,14 @@ public class ExamRecordView extends JPanel implements IClientView {
     }
 
     private void refreshTreatment() {
-        Treatment treatment = clientController.getTreatmentFromExamID(clientController.getCurrentExamID());
+       /* Treatment treatment = clientController.getTreatmentFromExamID(clientController.getCurrentExamID());
         if (treatment != null) {
-            /*treatmentIDField.setText(Integer.toString(treatment.getTreatmentID()));
+            treatmentIDField.setText(Integer.toString(treatment.getTreatmentID()));
             //medicationField.setText(String.valueOf(treatment.getMedicationID()));
             medicationBox.setSelectedItem(clientController.getInventoryNameByID(treatment.getMedicationID()));
             treatmentStartDateField.setDate(treatment.getStartDate());
             treatmentEndDateField.setDate(treatment.getEndDate());
-            treatmentDirectionsField.setText(treatment.getDirections());*/
-        }
+            treatmentDirectionsField.setText(treatment.getDirections());
+        }*/
     }
 }

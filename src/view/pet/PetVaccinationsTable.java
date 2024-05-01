@@ -35,6 +35,8 @@ public class PetVaccinationsTable extends JPanel implements IClientView {
         setBackground(Color.WHITE);
         this.setLayout(new BorderLayout());
         JPanel vaccinationTable = createVaccinationTable();
+        JLabel title = new JLabel("Vaccinations");
+        this.add(title, BorderLayout.NORTH);
         this.add(vaccinationTable, BorderLayout.CENTER);
     }
 

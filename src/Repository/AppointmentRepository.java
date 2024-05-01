@@ -17,6 +17,27 @@ public class AppointmentRepository {
         this.conn = ConnectionManager.getConnection();
     }
 
+    public Appointment[] getAppointmentsByPetID(int petID)
+    {
+        String sql = "SELECT * FROM APPOINTMENT WHERE petID = ?";
+        List<Appointment> ret = new ArrayList<>();
+        try (PreparedStatement get = conn.prepareStatement(sql)) {
+            get.setInt(1, petID);
+            ResultSet rs = get.executeQuery();
+            while (rs.next()) {
+                LocalDate appDate = rs.getDate("appointmentDate").toLocalDate();
+                String appTime = rs.getTimestamp("appointmentDate").toLocalDateTime().toLocalTime().toString();
+                ret.add(new Appointment(rs.getInt("appointmentID"), rs.getInt("clientID"),
+                        rs.getInt("petID"), rs.getInt("staffID"),
+                        appDate, appTime, rs.getString("description")));
+            }
+        } catch (SQLException ex) {
+            System.err.println("Error running Client Get statement");
+            ex.printStackTrace();
+        }
+        return ret.toArray(new Appointment[0]);
+    }
+
     public Appointment[] getAll(){
         String sql = "SELECT * FROM APPOINTMENT";
         List<Appointment> ret = new ArrayList<>();

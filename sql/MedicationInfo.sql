@@ -1,4 +1,4 @@
-use drodrig9db;
+use vetapp;
 insert into MEDICATION (medID, interactions)
 values('1','NONE');
 

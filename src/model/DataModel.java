@@ -77,22 +77,7 @@ public class DataModel {
         return clients.toArray(new Client[clients.size()]);
     }
 
-    /**
-     * Add a new client
-     * 
-     * @param client The client to add
-     */
-    public void addClient(Client client) {
-        // Upate clientID so that it is unique
-        if (clients.size() > 0) {
-            client.setClientID(clients.get(clients.size() - 1).getClientID() + 1);
-        } else {
-            client.setClientID(0);
-        }
-
-        // Add client to the list
-        clients.add(client);
-    }
+    
 
     /**
      * Update a client
@@ -879,3 +864,18 @@ public class DataModel {
         return data;
     }
 }
+
+/*
+ * 
+    public void addClient(Client client) {
+        // Upate clientID so that it is unique
+        if (clients.size() > 0) {
+            client.setClientID(clients.get(clients.size() - 1).getClientID() + 1);
+        } else {
+            client.setClientID(0);
+        }
+
+        // Add client to the list
+        clients.add(client);
+    }
+ */

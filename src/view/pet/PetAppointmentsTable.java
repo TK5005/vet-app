@@ -26,8 +26,6 @@ public class PetAppointmentsTable extends JPanel implements IClientView {
     public void createUI() {
         setBackground(Color.WHITE);
         this.setLayout(new BorderLayout());
-        
-        JPanel appointmentHeader = createAppointmentHeader();
 
         // Create the table with two columns
         tableModel = new DefaultTableModel() {
@@ -50,21 +48,9 @@ public class PetAppointmentsTable extends JPanel implements IClientView {
         // Add the table to a scroll pane
         JScrollPane scrollPane = new JScrollPane(appointmentTable);
         scrollPane.setBackground(Color.WHITE);
-
-        this.add(appointmentHeader, BorderLayout.NORTH);
-        this.add(scrollPane, BorderLayout.CENTER);
-    }
-
-    private JPanel createAppointmentHeader()
-    {
-        JPanel appointmentHeader = new JPanel();
         JLabel appointmentLabel = new JLabel("Appointments");
-        
-        appointmentHeader.setLayout(new FlowLayout(FlowLayout.LEFT));
-        appointmentHeader.setBackground(Color.WHITE);
-        appointmentHeader.add(appointmentLabel);
-
-        return appointmentHeader;
+        this.add(appointmentLabel, BorderLayout.NORTH);
+        this.add(scrollPane, BorderLayout.CENTER);
     }
 
     public void refresh() {

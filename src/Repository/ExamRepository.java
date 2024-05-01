@@ -81,7 +81,7 @@ public class ExamRepository {
     public Exam addExam(Exam mod) {
         String sql
                 = "INSERT INTO EXAMINATION (petID, exam_datetime, description, vitals, weight, location) " +
-                "VALUES(?,?,?,?,?,?,?)";
+                "VALUES(?,?,?,?,?,?)";
 
         try (PreparedStatement create = conn.prepareStatement(sql)) {
             create.setInt(1, mod.getPetID());
@@ -91,7 +91,7 @@ public class ExamRepository {
             create.setInt(5, mod.getWeight());
             create.setString(6, mod.getLocation());
 
-            create.executeUpdate();
+            create.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
             ResultSet rs = create.getGeneratedKeys();
 
             while(rs.next()){
@@ -229,5 +229,18 @@ public class ExamRepository {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void deleteExam(int examID)
+    {
+        //TODO: Implement deleteExam
+        System.out.println("deleteExam not implemented");
+    }
+
+    public Exam[] getAllExams()
+    {
+        //TODO: Implement getAllExams
+        System.out.println("getAllExams not implemented");
+        return null;
     }
 }

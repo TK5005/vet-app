@@ -14,6 +14,12 @@ public class ClientRepository {
         this.conn = ConnectionManager.getConnection();
     }
 
+    public void removeClient(int clientID)
+    {
+        // TODO: Implement removeClient in ClientRepository
+        System.out.println("TODO: Implement removeClient in ClientRepository");
+    }
+
     //Get statement to retrieve all clients
     public Client[] getAll() {
         String sql = "SELECT * FROM CLIENT";
@@ -74,10 +80,11 @@ public class ClientRepository {
             create.setInt(8,mod.getZip());
 
             create.executeUpdate();
+            /*
             ResultSet rs = create.getGeneratedKeys();
             while(rs.next()){
                 mod.setClientID(rs.getInt(1));
-            }
+            }*/
             conn.commit();
         } catch (SQLException ex) {
             System.err.println("Error inserting Client entry");
