@@ -29,7 +29,7 @@ public class InventoryDetailView extends JPanel implements IVetAppView{
     private JFormattedTextField retailCostField;
     private JFormattedTextField wholesaleCostField;
     //private JTextField typeField;
-    private JComboBox typeBox;
+    private JComboBox<String> typeBox;
     private JTextField manufacturerField;
 
     NumberFormat integerFormat = NumberFormat.getIntegerInstance();
@@ -172,7 +172,7 @@ public class InventoryDetailView extends JPanel implements IVetAppView{
         typePanel.setBackground(Color.WHITE);
         JLabel typeLabel = new JLabel("Type");
         //typeField = new JTextField(10);
-        typeBox = new JComboBox(Inventory.getInventoryTypes());
+        typeBox = new JComboBox<String>(Inventory.getInventoryTypes());
         typePanel.add(typeLabel);
         //typePanel.add(typeField);
         typePanel.add(typeBox);

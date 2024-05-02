@@ -1,16 +1,20 @@
 package view.appointmentView;
 
-import java.awt.*;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
+import java.awt.Color;
+import java.awt.GridLayout;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 import com.github.lgooddatepicker.components.DatePicker;
 
-import model.Appointment;
 import control.AppController;
+import model.Appointment;
 
 public class NewAppointment {
     Appointment appt;
@@ -22,11 +26,9 @@ public class NewAppointment {
     JTextField time;
     JTextField description;
     private final Color selectedColor = new Color(173, 216, 230);
-    private AppController controller;
 
     public NewAppointment(AppController controller){
         appt = new Appointment();
-        this.controller = controller;
         createUI();
     }
     private void createUI(){
@@ -44,8 +46,6 @@ public class NewAppointment {
             appt.setAppointmentDate(date2);
             appt.setAppointmentTime(time.getText());
             appt.setDescription(description.getText());
-            //controller.
-           
         }
     
     }

@@ -130,7 +130,6 @@ public class InvoiceListView extends JPanel implements IVetAppView {
     class ButtonEditor extends DefaultCellEditor {
         protected JPanel panel;
         protected JButton viewButton;
-        private JTable table;
         private int currentRow;
 
         public ButtonEditor() {
@@ -160,7 +159,6 @@ public class InvoiceListView extends JPanel implements IVetAppView {
         @Override
         public Component getTableCellEditorComponent(JTable table, Object value,
                 boolean isSelected, int row, int column) {
-            this.table = table; // Capture the table
             this.currentRow = row; // Capture the current row
             return panel;
         }

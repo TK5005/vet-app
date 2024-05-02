@@ -1,10 +1,12 @@
 package view.exam;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.FlowLayout;
 import java.text.NumberFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -20,11 +22,13 @@ import javax.swing.ListCellRenderer;
 
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DateTimePicker;
-import com.github.lgooddatepicker.components.TimePicker;
 
 import control.ClientController;
 import control.IVetAppView;
-import model.*;
+import model.Exam;
+import model.Medication;
+import model.Tech;
+import model.Vet;
 import view.treatment.TreatmentTable;
 
 public class ExamRecordView extends JPanel implements IVetAppView {
