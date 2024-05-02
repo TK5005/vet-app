@@ -2,7 +2,6 @@ package view.pet;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -11,9 +10,9 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import control.ClientController;
-import control.IClientView;
+import control.IVetAppView;
 
-public class PetAppointmentsTable extends JPanel implements IClientView {
+public class PetAppointmentsTable extends JPanel implements IVetAppView {
     private ClientController clientController;
     private DefaultTableModel tableModel;
 

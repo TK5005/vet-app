@@ -79,7 +79,7 @@ public class InventoryRepository {
         try(PreparedStatement create = conn.prepareStatement(sql)){
             create.setString(1, mod.getName());
             create.setString(2, mod.getManufacturer());
-            create.setString(3, mod.getType());
+            create.setString(3, mod.getType().toString());
             create.setInt(4, mod.getQuantity());
             create.setInt(5, mod.getReorderLevel());
             create.setInt(6, mod.getReorderQuantity());
@@ -115,7 +115,7 @@ public class InventoryRepository {
         try(PreparedStatement update = conn.prepareStatement(sql)){
             update.setString(1, mod.getName());
             update.setString(2, mod.getManufacturer());
-            update.setString(3, mod.getType());
+            update.setString(3, mod.getType().toString());
             update.setInt(4, mod.getQuantity());
             update.setInt(5, mod.getReorderLevel());
             update.setInt(6, mod.getReorderQuantity());
@@ -136,6 +136,12 @@ public class InventoryRepository {
                 e.printStackTrace();
             }
         }
+    }
+
+    //TODO: Impement Inventory Deletion
+    public void deleteInventoryItem(int inventoryID)
+    {
+        System.out.println("TODO: Implement Invetory Deletion");
     }
 
     // Medication Methods

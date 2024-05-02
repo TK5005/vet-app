@@ -2,13 +2,13 @@ package view.inventory;
 
 import javax.swing.JPanel;
 
-import control.IInventoryView;
+import control.IVetAppView;
 import control.InventoryController;
 
 import java.awt.CardLayout;
 import java.awt.Color;
 
-public class InventoryView extends JPanel implements IInventoryView{
+public class InventoryView extends JPanel implements IVetAppView{
     private InventoryController controller;
     private CardLayout layout;
 
@@ -28,9 +28,7 @@ public class InventoryView extends JPanel implements IInventoryView{
         setLayout(layout);
         setBackground(Color.WHITE);
         InventoryListView listView = new InventoryListView();
-        InventoryDetailView detailView = new InventoryDetailView();
         add(listView, "list");
-        add(detailView, "detail");
         layout.show(this, "list");
     }
 

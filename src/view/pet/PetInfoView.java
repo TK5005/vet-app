@@ -19,12 +19,12 @@ import javax.swing.JTextField;
 import com.github.lgooddatepicker.components.DatePicker;
 
 import control.ClientController;
-import control.IClientView;
+import control.IVetAppView;
 import model.Client;
 import model.Pet;
 import view.exam.ExamTable;
 
-public class PetInfoView extends JPanel implements IClientView {
+public class PetInfoView extends JPanel implements IVetAppView {
     private JTextField nameField;
     private JTextField patientIDField;
     private JTextField clientNameField;

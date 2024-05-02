@@ -1,20 +1,19 @@
 package control;
 
+import java.time.LocalDate;
+
 import Repository.ClientRepository;
 import Repository.ExamRepository;
 import Repository.InvoiceRepository;
 import Repository.PetRepository;
+import model.Client;
 import model.Exam;
 import model.Invoice;
-import model.Pet;
 import model.Invoice.Status;
+import model.Pet;
 import view.invoice.InvoiceView;
-import model.Client;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-
-public class InvoiceController {
+public class InvoiceController extends ViewController{
     private static InvoiceController instance;
 
     public static InvoiceController getInstance() {
@@ -28,8 +27,6 @@ public class InvoiceController {
         return instance;
     }
 
-    private ArrayList<IInvoiceView> views;
-
     private InvoiceView invoiceView;
     private InvoiceRepository invoiceRepository;
     private ExamRepository examRepository;
@@ -39,21 +36,10 @@ public class InvoiceController {
     private int currentInvoiceID;
 
     private InvoiceController() {
-        views = new ArrayList<>();
         invoiceRepository = new InvoiceRepository();
         examRepository = new ExamRepository();
         clientRepository = new ClientRepository();
         petRepository = new PetRepository();
-    }
-
-    public void registerView(IInvoiceView view) {
-        views.add(view);
-    }
-
-    public void refreshViews() {
-        for (IInvoiceView view : views) {
-            view.refresh();
-        }
     }
 
     public void setInvoicePanel(InvoiceView invoiceView) {
@@ -76,6 +62,10 @@ public class InvoiceController {
         return clientRepository.getSpecificClient(clientID);
     }
 
+    public Client[] getClients() {
+        return clientRepository.getAll();
+    }
+
     public Pet getPet(int petID) {
         return petRepository.getSpecificPet(petID);
     }
@@ -86,12 +76,6 @@ public class InvoiceController {
 
     public void showInvoiceList() {
         invoiceView.showListView();
-        refreshViews();
-    }
-
-    public void showInvoiceDetail(int invoiceID) {
-        currentInvoiceID = invoiceID;
-        invoiceView.showDetailView();
         refreshViews();
     }
 
@@ -111,7 +95,7 @@ public class InvoiceController {
         refreshViews();
     }
 
-    public void updateInvoice(int invoiceID, int examID, String status, LocalDate invoiceDate, String amtDue) {
+    public void updateInvoice(int invoiceID, int examID, String status, LocalDate invoiceDate, float amtDue) {
         Invoice invoice = invoiceRepository.getSpecificInvoice(invoiceID);
         invoice.setExamID(examID);
         Exam exam = examRepository.getSpecificExam(examID);
@@ -123,12 +107,22 @@ public class InvoiceController {
                 invoice.setStatus(s);
             }
         }
+        invoice.setAmtDue(amtDue);
         invoice.setInvoiceDate(invoiceDate);
+        invoiceRepository.updateInvoice(invoice);
         refreshViews();
     }
 
+    public String getClientName(int invoiceID) {
+        Invoice invoice = invoiceRepository.getSpecificInvoice(invoiceID);
+        Exam exam = examRepository.getSpecificExam(invoice.getExamID());
+        Pet pet = petRepository.getSpecificPet(exam.getPetID());
+        Client client = clientRepository.getSpecificClient(pet.getOwnerID());
+        return client.getName();
+    }
+
     public int[] getExamIDs() {
-        Exam[] exams = examRepository.getAllExams();
+        Exam[] exams = examRepository.getAllBasicExamData();
         int[] examIDs = new int[exams.length];
         for (int i = 0; i < exams.length; i++) {
             examIDs[i] = exams[i].getExamID();
