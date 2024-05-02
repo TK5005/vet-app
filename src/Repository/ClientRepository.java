@@ -80,6 +80,7 @@ public class ClientRepository {
             create.setInt(8,mod.getZip());
 
             create.executeUpdate();
+            //TODO: Need to add this back in and fix the error, removed for now to ge tthe code to work.
             /*
             ResultSet rs = create.getGeneratedKeys();
             while(rs.next()){

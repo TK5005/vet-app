@@ -115,6 +115,7 @@ public class ExamRepository {
         return mod;
     }
 
+    // Added examID to the query - KS
     public void updateExam(Exam mod){
         String sql
                 = "UPDATE EXAMINATION SET exam_datetime = ?, description = ?, vitals = ?, weight = ?, location = ? " +
@@ -126,10 +127,10 @@ public class ExamRepository {
             update.setString(3, mod.getVitals());
             update.setInt(4, mod.getWeight());
             update.setString(5, mod.getLocation());
-
+            update.setInt(6, mod.getExamID());
             update.executeUpdate();
             updateVetExam(mod.getExamID(), mod.getVetID());
-            updateTechExam(mod.getExamID(), mod.getVetID());
+            updateTechExam(mod.getExamID(), mod.getTechID());
 
         }catch (SQLException ex) {
             System.err.println("Error updating Exam entry");
@@ -166,14 +167,16 @@ public class ExamRepository {
         }
     }
 
+    // Changed to executeUpdate - KS
+    // Changed TECH_EXAMS to VET_EXAMS - KS
     private void updateVetExam(int examID, int vetID) {
-        String sql = "UPDATE TECH_EXAMS SET vetID = ? WHERE examID = ?";
+        String sql = "UPDATE VET_EXAMS SET empID = ? WHERE examID = ?";
 
         try (PreparedStatement update = conn.prepareStatement(sql)) {
             update.setInt(1, vetID);
             update.setInt(2, examID);
 
-            update.executeQuery();
+            update.executeUpdate();
 
         } catch (SQLException ex) {
             System.err.println("Error inserting vet_exams entry");
@@ -188,6 +191,7 @@ public class ExamRepository {
         }
     }
 
+    // Changed to executeUpdate - KS
     private void addTechExam(int examID, int techID){
         String sql = "INSERT INTO TECH_EXAMS VALUES (?, ?)";
 
@@ -195,7 +199,7 @@ public class ExamRepository {
             create.setInt(1,techID);
             create.setInt(2,examID);
 
-            create.executeQuery();
+            create.executeUpdate();
 
         }catch (SQLException ex) {
             System.err.println("Error inserting tech_exams entry");
@@ -209,14 +213,16 @@ public class ExamRepository {
             }
         }
     }
+
+    // Changed to executeUpdate - KS
     private void updateTechExam(int examID, int techID){
-        String sql = "UPDATE TECH_EXAMS SET techID = ? WHERE examID = ?";;
+        String sql = "UPDATE TECH_EXAMS SET empID = ? WHERE examID = ?";;
 
         try (PreparedStatement update = conn.prepareStatement(sql)){
             update.setInt(1,techID);
             update.setInt(2,examID);
 
-            update.executeQuery();
+            update.executeUpdate();
 
         }catch (SQLException ex) {
             System.err.println("Error updating tech_exams entry");

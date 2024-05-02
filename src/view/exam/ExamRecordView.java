@@ -374,8 +374,14 @@ public class ExamRecordView extends JPanel implements IClientView {
 
     private void updateExam() {
         LocalDateTime date = dateField.getDateTimeStrict();
-        int vetID = ((Vet) examinerBox.getSelectedItem()).getEmpID();
-        int techID = ((Tech) techBox.getSelectedItem()).getEmpID();
+        Vet vet = (Vet) examinerBox.getSelectedItem();
+        Tech tech = (Tech) techBox.getSelectedItem();
+        int vetID = 1;
+        int techID = 2;
+        if(vet != null && tech != null){
+            vetID = vet.getEmpID();
+            techID = tech.getEmpID();
+        }
         String description = descriptionField.getText();
         String vitals = vitalsField.getText();
         int weight = Integer.parseInt(weightField.getText());
