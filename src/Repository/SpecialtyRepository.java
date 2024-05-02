@@ -1,7 +1,7 @@
 package Repository;
 
 import DAL.ConnectionManager;
-import model.Certification;
+import model.Specialty;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,74 +10,74 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CertificationRepository {
+public class SpecialtyRepository {
     private final Connection conn;
 
-    public CertificationRepository(){conn = ConnectionManager.getConnection();}
+    public SpecialtyRepository(){conn = ConnectionManager.getConnection();}
 
-    public Certification[] getCertsByTechID(int techID){
+    public Specialty[] getSpecialtiesByVetID(int vetID){
         String sql
-                = "SELECT * FROM CERTIFICATIONS WHERE empID = ?";
-        List<Certification> ret = new ArrayList<>();
+                = "SELECT * FROM SPECIALTIES WHERE empID = ?";
+        List<Specialty> ret = new ArrayList<>();
         try(PreparedStatement get = conn.prepareStatement(sql)){
-            get.setInt(1,techID);
+            get.setInt(1,vetID);
 
             ResultSet rs = get.executeQuery();
 
             while (rs.next()){
-                Certification add = new Certification();
+                Specialty add = new Specialty();
                 add.setEmpID(rs.getInt("empID"));
-                add.setCertification(rs.getString("name"));
+                add.setSpecialty(rs.getString("name"));
 
                 ret.add(add);
             }
         }catch (SQLException ex) {
-            System.err.println("Error running Certification Get statement");
+            System.err.println("Error running Specialty Get statement");
             ex.printStackTrace();
         }
-        return ret.toArray(new Certification[0]);
+        return ret.toArray(new Specialty[0]);
     }
 
-    public void addCertification(Certification mod){
+    public void addSpecialty(Specialty mod){
         String sql =
-                "INSERT INTO CERTIFICATIONS VALUES(?,?)";
+                "INSERT INTO SPECIALTIES VALUES(?,?)";
 
         try(PreparedStatement create = conn.prepareStatement(sql)){
             create.setInt(1, mod.getEmpID());
-            create.setString(2,mod.getCertification());
+            create.setString(2,mod.getSpecialty());
 
             create.executeUpdate();
             conn.commit();
         }catch (SQLException ex) {
-            System.err.println("Error inserting Certification entry");
+            System.err.println("Error inserting Specialty entry");
             ex.printStackTrace();
             try {
                 System.err.println("Rolling back changes");
                 conn.rollback();
             } catch (SQLException e) {
-                System.err.println("Error rolling back Certification changes");
+                System.err.println("Error rolling back Specialty changes");
                 e.printStackTrace();
             }
         }
     }
-    public void deleteCertification(Certification mod){
+    public void deleteSpecialty(Specialty mod){
         String sql
-                = "DELETE FROM CERTIFICATIONS WHERE empID = ? AND name = ?";
+                = "DELETE FROM SPECIALTIES WHERE empID = ? AND name = ?";
 
         try(PreparedStatement delete = conn.prepareStatement(sql)){
             delete.setInt(1,mod.getEmpID());
-            delete.setString(2,mod.getCertification());
+            delete.setString(2,mod.getSpecialty());
 
             delete.executeUpdate();
             conn.commit();
         }catch (SQLException ex) {
-            System.err.println("Error deleting Certification entry");
+            System.err.println("Error deleting Specialty entry");
             ex.printStackTrace();
             try {
                 System.err.println("Rolling back changes");
                 conn.rollback();
             } catch (SQLException e) {
-                System.err.println("Error rolling back Certification changes");
+                System.err.println("Error rolling back Specialty changes");
                 e.printStackTrace();
             }
         }

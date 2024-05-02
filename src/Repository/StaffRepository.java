@@ -142,7 +142,91 @@ public class StaffRepository {
     }
     public void deleteStaff(int empID){
     }
-    public void addStaff(Staff user){
+    public Staff addStaff(Staff mod){
+        String sql
+                = "INSERT INTO STAFF (firstName,lastName,sex,dob,ssn,phone,street,city,state,zip) " +
+                "VALUES(?,?,?,?,?,?,?,?,?,?)";
+
+        try(PreparedStatement create = conn.prepareStatement(sql)){
+            create.setString(1,mod.getFirstName());
+            create.setString(2,mod.getLastName());
+            create.setString(3,mod.getSex());
+            create.setDate(4, java.sql.Date.valueOf(mod.getDob()));
+            create.setString(5,mod.getSsn());
+            create.setString(6,mod.getPhone());
+            create.setString(7,mod.getStreet());
+            create.setString(8,mod.getCity());
+            create.setString(9,mod.getState());
+            create.setInt(10,mod.getZip());
+
+            create.executeUpdate();
+            ResultSet rs = create.getGeneratedKeys();
+            while(rs.next()){
+                mod.setEmpID(rs.getInt(1));
+            }
+            conn.commit();
+        }catch (SQLException ex) {
+            System.err.println("Error updating Staff entry");
+            ex.printStackTrace();
+            try {
+                System.err.println("Rolling back changes");
+                conn.rollback();
+            } catch (SQLException e) {
+                System.err.println("Error rolling back Staff changes");
+                e.printStackTrace();
+            }
+        }
+        return mod;
+    }
+
+    public Vet addVet(Vet mod){
+        Staff newStaff = addStaff(mod);
+        mod.setEmpID(newStaff.getEmpID());
+        String sql =
+                "INSERT INTO VET VALUES(?,?)";
+        try(PreparedStatement create = conn.prepareStatement(sql)){
+            create.setInt(1, mod.getEmpID());
+            create.setString(2,mod.getLicenseNumber());
+
+            create.executeUpdate();
+            conn.commit();
+        }catch (SQLException ex) {
+            System.err.println("Error updating Vet entry");
+            ex.printStackTrace();
+            try {
+                System.err.println("Rolling back changes");
+                conn.rollback();
+            } catch (SQLException e) {
+                System.err.println("Error rolling back Vet changes");
+                e.printStackTrace();
+            }
+        }
+        return mod;
+    }
+
+    public Tech addTech(Tech mod){
+        Staff newStaff = addStaff(mod);
+        mod.setEmpID(newStaff.getEmpID());
+        String sql =
+                "INSERT INTO TECH VALUES(?,?)";
+        try(PreparedStatement create = conn.prepareStatement(sql)){
+            create.setInt(1, mod.getEmpID());
+            create.setString(2,mod.getCertNumber());
+
+            create.executeUpdate();
+            conn.commit();
+        }catch (SQLException ex) {
+            System.err.println("Error updating Tech entry");
+            ex.printStackTrace();
+            try {
+                System.err.println("Rolling back changes");
+                conn.rollback();
+            } catch (SQLException e) {
+                System.err.println("Error rolling back Tech changes");
+                e.printStackTrace();
+            }
+        }
+        return mod;
     }
 }
 

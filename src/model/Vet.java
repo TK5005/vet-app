@@ -1,17 +1,17 @@
 package model;
 
 public class Vet extends Staff {
-    private long licenseNumber;
+    private String licenseNumber;
 
     public Vet() {
         super();
     }
 
-    public long getLicenseNumber() {
+    public String getLicenseNumber() {
         return licenseNumber;
     }
 
-    public void setLicenseNumber(long licenseNumber) {
+    public void setLicenseNumber(String licenseNumber) {
         this.licenseNumber = licenseNumber;
     }
 }
