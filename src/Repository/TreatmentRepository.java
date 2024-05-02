@@ -42,8 +42,10 @@ public class TreatmentRepository {
         return ret.toArray(new Treatment[0]);
     }
 
+    // Changed treatmentID to trmntID in the query - KS
+    // Added ret = add to return the treatment object - KS
     public Treatment getSpecificTreatment(int treatmentID){
-        String sql = "SELECT * FROM TREATMENT WHERE treatmentID = ?";
+        String sql = "SELECT * FROM TREATMENT WHERE trmntID = ?";
         Treatment ret = null;
 
         try (PreparedStatement get = conn.prepareStatement(sql)) {
@@ -58,8 +60,9 @@ public class TreatmentRepository {
                 add.setStartDate(rs.getDate("startDate").toLocalDate());
                 add.setEndDate(rs.getDate("endDate").toLocalDate());
                 add.setDirections(rs.getString("directions"));
-
+                ret = add;
             }
+            
         } catch (SQLException ex) {
             System.err.println("Error running Treatment Get statement");
             ex.printStackTrace();
@@ -67,7 +70,7 @@ public class TreatmentRepository {
         return ret;
     }
 
-    public Treatment addTreatment(Treatment mod, int vetID){
+    public Treatment addTreatment(Treatment mod){
         String sql
                 = "INSERT INTO TREATMENT (examID, medID, type, startDate, endDate, directions) " +
                 "VALUES(?, ?, ?, ?, ?, ?)";
@@ -101,7 +104,8 @@ public class TreatmentRepository {
         return mod;
     }
 
-    public void updateTreatment(Treatment mod, int vetID){
+    // Added treatmentID to the query - KS
+    public void updateTreatment(Treatment mod){
         String sql
                 = "UPDATE TREATMENT SET medID = ?, type = ?, startDate = ?, endDate = ?, directions = ? " +
                 "WHERE trmntID = ?";
@@ -112,7 +116,7 @@ public class TreatmentRepository {
             update.setDate(3, java.sql.Date.valueOf(mod.getStartDate()));
             update.setDate(4, java.sql.Date.valueOf(mod.getEndDate()));
             update.setString(5, mod.getDirections());
-
+            update.setInt(6, mod.getTreatmentID());
             update.executeUpdate();
             conn.commit();
         }catch (SQLException ex) {
@@ -158,4 +162,8 @@ public class TreatmentRepository {
         return ret.toArray(new Treatment[0]);
     }
 
+    public void removeTreatment(int treatmentID){
+        //TODO: Implement removeTreatment in TreatmentRepository
+        System.out.println("TODO: Implement removeTreatment in TreatmentRepository");
+    }
 }

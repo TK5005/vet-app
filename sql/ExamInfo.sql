@@ -1,4 +1,4 @@
-use drodrig9db;
+use vetapp;
 insert into EXAMINATION (petID,exam_datetime,description,vitals,weight,location)
 values('1','2024-04-15 08:30:00','Yearly checkup everything looks great',
     'BP: 120/80 Temp: 100', 35, 'Exam 1');

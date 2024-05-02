@@ -24,7 +24,6 @@ import model.Vaccination;
 public class PetVaccinationsTable extends JPanel implements IClientView {
     private ClientController clientController;
     private DefaultTableModel tableModel;
-    //private JButton addVaccinationButton;
 
     public PetVaccinationsTable() {
         clientController = ClientController.getInstance();
@@ -36,27 +35,15 @@ public class PetVaccinationsTable extends JPanel implements IClientView {
         setBackground(Color.WHITE);
         this.setLayout(new BorderLayout());
         JPanel vaccinationTable = createVaccinationTable();
+        JLabel title = new JLabel("Vaccinations");
+        this.add(title, BorderLayout.NORTH);
         this.add(vaccinationTable, BorderLayout.CENTER);
-
-        //createEventListeners();
     }
-
-//    private void createEventListeners() {
-//        addVaccinationButton.addActionListener(e -> {
-//            clientController.addVaccination(clientController.getCurrentClientID());
-//        });
-//    }
 
     private JPanel createVaccinationTable() {
         JPanel vaccinationPanel = new JPanel();
         vaccinationPanel.setBackground(Color.WHITE);
         vaccinationPanel.setLayout(new BorderLayout());
-
-        JPanel vaccinationHeader = new JPanel();
-        vaccinationHeader.setLayout(new FlowLayout(FlowLayout.LEFT));
-        vaccinationHeader.setBackground(Color.WHITE);
-        //addVaccinationButton = new JButton("Add Vaccination");
-        //vaccinationHeader.add(addVaccinationButton);
 
         // Create the table with two columns
         tableModel = new DefaultTableModel() {
@@ -69,7 +56,6 @@ public class PetVaccinationsTable extends JPanel implements IClientView {
 
         tableModel.addColumn("Name");
         tableModel.addColumn("Date");
-        tableModel.addColumn("Actions");
 
         JTable vaccinationTable = new JTable(tableModel);
         vaccinationTable.setBackground(Color.WHITE);
@@ -88,14 +74,9 @@ public class PetVaccinationsTable extends JPanel implements IClientView {
             }
         });
 
-        // Custom renderer and editor for the action column
-        vaccinationTable.getColumnModel().getColumn(2).setCellRenderer(new ButtonRenderer());
-        vaccinationTable.getColumnModel().getColumn(2).setCellEditor(new ButtonEditor());
-
         // Add the table to a scroll pane
         JScrollPane scrollPane = new JScrollPane(vaccinationTable);
         scrollPane.setBackground(Color.WHITE);
-        vaccinationPanel.add(vaccinationHeader, BorderLayout.NORTH);
         vaccinationPanel.add(scrollPane, BorderLayout.CENTER);
 
         return vaccinationPanel;
@@ -110,74 +91,7 @@ public class PetVaccinationsTable extends JPanel implements IClientView {
 
         // Populate the table with pet data
         for (Treatment vaccination : vaccinations) {
-            tableModel.addRow(new Object[] { vaccination, vaccination.getStartDate(), "" });
-        }
-    }
-
-    // Custom renderer
-    class ButtonRenderer extends JPanel implements TableCellRenderer {
-        private JButton editButton;
-        private JButton removeButton;
-
-        public ButtonRenderer() {
-            setLayout(new FlowLayout(FlowLayout.CENTER));
-            setBackground(Color.WHITE);
-            editButton = new JButton("Edit");
-            add(editButton);
-            removeButton = new JButton("Remove");
-            add(removeButton);
-        }
-
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value,
-                boolean isSelected, boolean hasFocus, int row, int column) {
-            // You can customize the buttons further here, such as setting a different text
-            // based on the cell value
-            return this;
-        }
-    }
-
-    // Custom editor
-    class ButtonEditor extends DefaultCellEditor {
-        protected JPanel panel;
-        protected JButton editButton;
-        protected JButton removeButton;
-        private JTable table;
-        private int currentRow;
-
-        public ButtonEditor() {
-            super(new JTextField());
-
-            panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-            panel.setBackground(Color.WHITE);
-            editButton = new JButton("Edit");
-            removeButton = new JButton("Remove");
-            panel.add(editButton);
-            panel.add(removeButton);
-
-            // Add action listener for the View button
-            editButton.addActionListener(e -> {
-                int vaccinationID = Vaccination.class.cast(tableModel.getValueAt(currentRow, 0)).getVaccinationId();
-                clientController.showVaccinationInfo(vaccinationID);
-            });
-
-            removeButton.addActionListener(e -> {
-                int vaccinationID = Vaccination.class.cast(tableModel.getValueAt(currentRow, 0)).getVaccinationId();
-                clientController.removeVaccination(vaccinationID);
-            });
-        }
-
-        @Override
-        public Component getTableCellEditorComponent(JTable table, Object value,
-                boolean isSelected, int row, int column) {
-            this.table = table; // Capture the table
-            this.currentRow = row; // Capture the current row
-            return panel;
-        }
-
-        @Override
-        public Object getCellEditorValue() {
-            return "";
+            tableModel.addRow(new Object[] { vaccination, vaccination.getStartDate()});
         }
     }
 }

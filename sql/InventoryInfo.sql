@@ -1,4 +1,4 @@
-use drodrig9db;
+use vetapp;
 insert into INVENTORY (name, manufacturer, type, quantity,reorderLevel,reorderQuantity,wholesaleCost,retailCost)
 values('Vaccine A','ABC Pharma','MEDICATION',100,50,100,50.00,75.00);
 

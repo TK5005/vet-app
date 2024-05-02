@@ -61,10 +61,7 @@ public class TreatmentInfo extends JPanel {
     {
         Medication meds = (Medication) medicationBox.getSelectedItem();
         treatment.setType((String) treatTypeBox.getSelectedItem());
-        if(meds != null)
-        {
-            treatment.setMedicationID(meds.getMedicationID());
-        }
+        treatment.setMedicationID(meds.getMedicationID());
         treatment.setStartDate(treatmentStartDateField.getDate());
         treatment.setEndDate(treatmentEndDateField.getDate());
         treatment.setDirections(treatmentDirectionsField.getText());

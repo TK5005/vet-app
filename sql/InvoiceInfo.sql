@@ -1,4 +1,4 @@
-use drodrig9db;
+use vetapp;
 insert into INVOICE (examID,custID,amtDue,status,INVOICEDate)
 values('1','1',175.15, 'UNPAID','2024-04-15');
 

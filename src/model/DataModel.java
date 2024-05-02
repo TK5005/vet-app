@@ -77,22 +77,7 @@ public class DataModel {
         return clients.toArray(new Client[clients.size()]);
     }
 
-    /**
-     * Add a new client
-     * 
-     * @param client The client to add
-     */
-    public void addClient(Client client) {
-        // Upate clientID so that it is unique
-        if (clients.size() > 0) {
-            client.setClientID(clients.get(clients.size() - 1).getClientID() + 1);
-        } else {
-            client.setClientID(0);
-        }
-
-        // Add client to the list
-        clients.add(client);
-    }
+    
 
     /**
      * Update a client
@@ -279,6 +264,17 @@ public class DataModel {
         // Add treatment to the list
         treatments.add(treatment);
         return treatment.getTreatmentID();
+    }
+
+    public void removeTreatment(int treatmentID)
+    {
+        // Delete treatment based on treatmentID
+        for (int i = 0; i < treatments.size(); i++) {
+            if (treatments.get(i).getTreatmentID() == treatmentID) {
+                treatments.remove(i);
+                break;
+            }
+        }
     }
 
     /**
@@ -868,3 +864,18 @@ public class DataModel {
         return data;
     }
 }
+
+/*
+ * 
+    public void addClient(Client client) {
+        // Upate clientID so that it is unique
+        if (clients.size() > 0) {
+            client.setClientID(clients.get(clients.size() - 1).getClientID() + 1);
+        } else {
+            client.setClientID(0);
+        }
+
+        // Add client to the list
+        clients.add(client);
+    }
+ */

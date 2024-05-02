@@ -228,5 +228,19 @@ public class StaffRepository {
         }
         return mod;
     }
+
+    public Vet getVet(int vetID)
+    {
+        //TODO: Implement this method
+        System.out.println("Get Vet Not Implemented");
+        return null;
+    }
+
+    public Tech getTech(int techID)
+    {
+        //TODO: Implement this method
+        System.out.println("Get Tech Not Implemented");
+        return null;
+    }
 }
 
