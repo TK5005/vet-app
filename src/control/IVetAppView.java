@@ -1,5 +1,5 @@
 package control;
 
-public interface IInventoryView {
+public interface IVetAppView {
     void refresh();
 }

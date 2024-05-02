@@ -14,10 +14,10 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
-import control.IInvoiceView;
+import control.IVetAppView;
 import control.InvoiceController;
 
-public class InvoiceListView extends JPanel implements IInvoiceView {
+public class InvoiceListView extends JPanel implements IVetAppView {
     private InvoiceController controller;
     private JButton addInvoiceButton;
     private JTable invoiceTable;

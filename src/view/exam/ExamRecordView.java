@@ -23,11 +23,11 @@ import com.github.lgooddatepicker.components.DateTimePicker;
 import com.github.lgooddatepicker.components.TimePicker;
 
 import control.ClientController;
-import control.IClientView;
+import control.IVetAppView;
 import model.*;
 import view.treatment.TreatmentTable;
 
-public class ExamRecordView extends JPanel implements IClientView {
+public class ExamRecordView extends JPanel implements IVetAppView {
     private class VetComboBoxRenderer extends JLabel implements ListCellRenderer<Vet> {
         @Override
         public Component getListCellRendererComponent(JList<? extends Vet> list, Vet value, int index,

@@ -14,11 +14,11 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
-import control.IInventoryView;
+import control.IVetAppView;
 import control.InventoryController;
 import model.Inventory;
 
-public class InventoryListView extends JPanel implements IInventoryView{
+public class InventoryListView extends JPanel implements IVetAppView{
     private InventoryController controller;
 
     private JButton newItemButton;

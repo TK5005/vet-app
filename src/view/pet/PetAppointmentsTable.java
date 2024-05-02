@@ -11,9 +11,9 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import control.ClientController;
-import control.IClientView;
+import control.IVetAppView;
 
-public class PetAppointmentsTable extends JPanel implements IClientView {
+public class PetAppointmentsTable extends JPanel implements IVetAppView {
     private ClientController clientController;
     private DefaultTableModel tableModel;
 

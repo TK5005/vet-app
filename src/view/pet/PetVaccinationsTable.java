@@ -17,11 +17,11 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 import control.ClientController;
-import control.IClientView;
+import control.IVetAppView;
 import model.Treatment;
 import model.Vaccination;
 
-public class PetVaccinationsTable extends JPanel implements IClientView {
+public class PetVaccinationsTable extends JPanel implements IVetAppView {
     private ClientController clientController;
     private DefaultTableModel tableModel;
 

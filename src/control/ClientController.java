@@ -2,13 +2,28 @@ package control;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
-import Repository.*;
-import model.*;
-import view.clientPatient.ClientPageView;
+import Repository.AppointmentRepository;
+import Repository.ClientRepository;
+import Repository.ExamRepository;
+import Repository.InventoryRepository;
+import Repository.InvoiceRepository;
+import Repository.MedicationRepository;
+import Repository.PetRepository;
+import Repository.StaffRepository;
+import Repository.TreatmentRepository;
+import model.Appointment;
+import model.Client;
+import model.Exam;
+import model.Invoice;
+import model.Medication;
+import model.Pet;
+import model.Tech;
+import model.Treatment;
+import model.Vet;
+import view.clientPatient.ClientsView;
 
-public class ClientController {
+public class ClientController extends ViewController {
 
     private static ClientController instance;
 
@@ -38,8 +53,8 @@ public class ClientController {
     private MedicationRepository medicationRepository;
     private InvoiceRepository invoiceRepository;
     private StaffRepository staffRepository;
-    private ArrayList<IClientView> views;
-    private ClientPageView clientPage;
+    
+    private ClientsView clientPage;
     private int currentPetID = -1;
     private int currentClientID = -1;
     private int currentVaccintaionID = -1;
@@ -49,6 +64,7 @@ public class ClientController {
      * Constructor for the client controller
      */
     private ClientController() {
+        super();
         clientRepository = new ClientRepository();
         petRepository = new PetRepository();
         examRepository = new ExamRepository();
@@ -58,11 +74,6 @@ public class ClientController {
         invoiceRepository = new InvoiceRepository();
         staffRepository = new StaffRepository();
         appointmentRepository = new AppointmentRepository();
-        views = new ArrayList<>();
-    }
-
-    public void registerView(IClientView view) {
-        views.add(view);
     }
 
     public void setCurrentPetID(int currentPetID) {
@@ -350,7 +361,7 @@ public class ClientController {
 
     // Page navigation methods
 
-    public void setClientPage(ClientPageView clientPage) {
+    public void setClientPage(ClientsView clientPage) {
         this.clientPage = clientPage;
     }
 
@@ -388,14 +399,5 @@ public class ClientController {
         this.setCurrentExamID(-1);
         clientPage.closeExamInfoView();
         refreshViews();
-    }
-
-    /**
-     * Refresh the views
-     */
-    private void refreshViews() {
-        for (IClientView view : views) {
-            view.refresh();
-        }
     }
 }

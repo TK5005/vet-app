@@ -1,20 +1,19 @@
 package control;
 
+import java.time.LocalDate;
+
 import Repository.ClientRepository;
 import Repository.ExamRepository;
 import Repository.InvoiceRepository;
 import Repository.PetRepository;
+import model.Client;
 import model.Exam;
 import model.Invoice;
-import model.Pet;
 import model.Invoice.Status;
+import model.Pet;
 import view.invoice.InvoiceView;
-import model.Client;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-
-public class InvoiceController {
+public class InvoiceController extends ViewController{
     private static InvoiceController instance;
 
     public static InvoiceController getInstance() {
@@ -28,8 +27,6 @@ public class InvoiceController {
         return instance;
     }
 
-    private ArrayList<IInvoiceView> views;
-
     private InvoiceView invoiceView;
     private InvoiceRepository invoiceRepository;
     private ExamRepository examRepository;
@@ -39,21 +36,10 @@ public class InvoiceController {
     private int currentInvoiceID;
 
     private InvoiceController() {
-        views = new ArrayList<>();
         invoiceRepository = new InvoiceRepository();
         examRepository = new ExamRepository();
         clientRepository = new ClientRepository();
         petRepository = new PetRepository();
-    }
-
-    public void registerView(IInvoiceView view) {
-        views.add(view);
-    }
-
-    public void refreshViews() {
-        for (IInvoiceView view : views) {
-            view.refresh();
-        }
     }
 
     public void setInvoicePanel(InvoiceView invoiceView) {

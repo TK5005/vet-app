@@ -9,7 +9,7 @@ import java.text.NumberFormat;
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
 
-import control.IInventoryView;
+import control.IVetAppView;
 import control.InventoryController;
 import model.Inventory;
 
@@ -17,7 +17,7 @@ import java.text.ParseException;
 
 
 
-public class InventoryDetailView extends JPanel implements IInventoryView{
+public class InventoryDetailView extends JPanel implements IVetAppView{
     public InventoryController controller;
     private JButton saveButton;
     private JButton closeButton;

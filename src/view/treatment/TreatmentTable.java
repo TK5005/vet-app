@@ -22,10 +22,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 import control.ClientController;
-import control.IClientView;
+import control.IVetAppView;
 import model.Treatment;
 
-public class TreatmentTable extends JPanel implements IClientView {
+public class TreatmentTable extends JPanel implements IVetAppView {
     private JTable treatmentTable;
     private DefaultTableModel tableModel;
     private JButton addTreatmentButton;

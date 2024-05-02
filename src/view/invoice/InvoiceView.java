@@ -5,10 +5,10 @@ import java.awt.Color;
 
 import javax.swing.JPanel;
 
-import control.IInvoiceView;
+import control.IVetAppView;
 import control.InvoiceController;
 
-public class InvoiceView extends JPanel implements IInvoiceView {
+public class InvoiceView extends JPanel implements IVetAppView {
     private InvoiceController controller;
     private CardLayout layout;
 

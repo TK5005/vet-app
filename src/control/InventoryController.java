@@ -1,24 +1,20 @@
 package control;
 
-import java.util.ArrayList;
-
 import Repository.InventoryRepository;
 import model.DataModel;
 import model.Inventory;
 import view.inventory.InventoryView;
 
-public class InventoryController {
+public class InventoryController extends ViewController{
     private static InventoryController instance;
     private DataModel dataModel;
     private InventoryRepository inventoryRepository;
-    private ArrayList<IInventoryView> views;
     private InventoryView inventoryView;
     private int currentInventoryID = -1;
 
     private InventoryController() {
         dataModel = DataModel.getInstance();
         inventoryRepository = new InventoryRepository();
-        views = new ArrayList<>();
     }
 
     public static InventoryController getInstance() {
@@ -34,16 +30,6 @@ public class InventoryController {
 
     public void setInventoryView(InventoryView inventoryView) {
         this.inventoryView = inventoryView;
-    }
-
-    public void registerView(IInventoryView view) {
-        views.add(view);
-    }
-
-    public void refreshViews() {
-        for (IInventoryView view : views) {
-            view.refresh();
-        }
     }
 
     public void addNewItem() {

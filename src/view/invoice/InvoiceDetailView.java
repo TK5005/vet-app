@@ -14,14 +14,14 @@ import javax.swing.JTextField;
 
 import com.github.lgooddatepicker.components.DatePicker;
 
-import control.IInvoiceView;
+import control.IVetAppView;
 import control.InvoiceController;
 import model.Client;
 import model.Exam;
 import model.Invoice;
 import model.Pet;
 
-public class InvoiceDetailView extends JPanel implements IInvoiceView {
+public class InvoiceDetailView extends JPanel implements IVetAppView {
     private InvoiceController controller;
 
     private JTextField invoiceIDField;
