@@ -18,6 +18,7 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import control.AppController;
+import control.ClientController;
 import view.clientPatient.ClientsView;
 import view.inventory.InventoryView;
 import view.invoice.InvoiceView;
@@ -132,6 +133,7 @@ public class UIPanel extends JPanel {
         JButton pressedButton = (JButton) e.getSource();
         cardLayout.show(cards, pressedButton.getText());
         updateButtonSelection(pressedButton);
+        controller.refreshViews();
     }
 
     private void updateButtonSelection(JButton selectedButton) {
