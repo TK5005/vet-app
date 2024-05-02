@@ -1,28 +1,18 @@
 package model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Appointment {
     private int appointmentID;
     private int clientID;
     private int petID;
     private int staffID;
-    private String appointmentTime;
-    private LocalDate appointmentDate;
+    private LocalDateTime appointmentDate;
+    private LocalDateTime checkInTime;
     private String description;
 
     public Appointment(){}
-    public Appointment (Integer appointmentID, int clientID, int petID, int staffID,
-                        LocalDate appointmentDate, String appointmentTime,
-                        String description){
-        this.appointmentID = appointmentID;
-        this.clientID = clientID;
-        this.petID = petID;
-        this.staffID = staffID;
-        this.appointmentDate = appointmentDate;
-        this.appointmentTime = appointmentTime;
-        this.description = description;
-    }
 
     public int getAppointmentID() {
         return appointmentID;
@@ -56,19 +46,12 @@ public class Appointment {
         this.staffID = staffID;
     }
 
-    public LocalDate getAppointmentDate() {
+    public LocalDateTime getAppointmentDate() {
         return appointmentDate;
     }
 
-    public void setAppointmentDate(LocalDate appointmentDate) {
+    public void setAppointmentDate(LocalDateTime appointmentDate) {
         this.appointmentDate = appointmentDate;
-    }
-    public String getAppointmentTime() {
-        return appointmentTime;
-    }
-
-    public void setAppointmentTime(String appointmentTime) {
-        this.appointmentTime = appointmentTime;
     }
 
     public String getDescription() {
@@ -77,5 +60,13 @@ public class Appointment {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public LocalDateTime getCheckInTime() {
+        return checkInTime;
+    }
+
+    public void setCheckInTime(LocalDateTime checkInTime) {
+        this.checkInTime = checkInTime;
     }
 }

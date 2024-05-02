@@ -48,7 +48,7 @@ public class AdminNewUser {
             user.setStreet(street.getText());
             user.setCity(city.getText());
             user.setState(state.getText());
-            user.setZip(Integer.parseInt(zip.getText()));
+            user.setZip(zip.getText());
             controller.addStaff(user);
         }
     }

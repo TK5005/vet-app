@@ -41,7 +41,7 @@ public class StaffRepository {
                 staff.setStreet(rs.getString("street"));
                 staff.setCity(rs.getString("city"));
                 staff.setState(rs.getString("state"));
-                staff.setZip(rs.getInt("zip"));
+                staff.setZip(rs.getString("zip"));
                 ret.add(staff);                        
             }
         }catch (SQLException ex) {
@@ -72,7 +72,7 @@ public class StaffRepository {
                 staff.setStreet(rs.getString("street"));
                 staff.setCity(rs.getString("city"));
                 staff.setState(rs.getString("state"));
-                staff.setZip(rs.getInt("zip"));
+                staff.setZip(rs.getString("zip"));
                 ret.add(staff);                        
             }
         }catch (SQLException ex) {
@@ -85,7 +85,7 @@ public class StaffRepository {
     }
     public Vet[] getVets(){
         String sql
-                = "SELECT * FROM STAFF WHERE empID in (SELECT empID FROM VET)";
+                = "SELECT s.*, v.licenseNo FROM STAFF s JOIN VET v ON v.empID = s.empID";
         List<Vet> ret = new ArrayList<>();
         try(PreparedStatement get = conn.prepareStatement(sql)){
             ResultSet rs = get.executeQuery();
@@ -101,20 +101,55 @@ public class StaffRepository {
                 add.setState(rs.getString("street"));
                 add.setCity(rs.getString("city"));
                 add.setState(rs.getString("state"));
-                add.setZip(rs.getInt("zip"));
+                add.setZip(rs.getString("zip"));
+                add.setLicenseNumber(rs.getString("licenseNo"));
 
                 ret.add(add);
             }
         }catch (SQLException ex) {
-            System.out.println("Error running Staff Get statement");
+            System.out.println("Error running Vet Get statement");
             ex.printStackTrace();
         }
         return ret.toArray(new Vet[0]);
     }
+    public Vet getVet(int vetID)
+    {
+        String sql
+                = "SELECT s.*, v.licenseNo FROM STAFF s JOIN VET v ON v.empID = s.empID " +
+                "WHERE s.empID = ?";
+        Vet ret = null;
+        try(PreparedStatement get = conn.prepareStatement(sql)){
+            get.setInt(1,vetID);
+
+            ResultSet rs = get.executeQuery();
+
+            while(rs.next()){
+                ret = new Vet();
+                ret.setEmpID(rs.getInt("empID"));
+                ret.setFirstName(rs.getString("firstName"));
+                ret.setLastName(rs.getString("lastName"));
+                ret.setSex(rs.getString("sex"));
+                ret.setDob(rs.getDate("dob").toLocalDate());
+                ret.setSsn(rs.getString("ssn"));
+                ret.setPhone(rs.getString("phone"));
+                ret.setState(rs.getString("street"));
+                ret.setCity(rs.getString("city"));
+                ret.setState(rs.getString("state"));
+                ret.setZip(rs.getString("zip"));
+                ret.setLicenseNumber(rs.getString("licenseNo"));
+            }
+
+        }catch (SQLException ex) {
+            System.out.println("Error running Vet Get statement");
+            ex.printStackTrace();
+        }
+
+        return ret;
+    }
 
     public Tech[] getTechs(){
         String sql
-                = "SELECT * FROM STAFF WHERE empID in (SELECT empID FROM TECH)";
+                = "SELECT s.*, t.certNumber FROM STAFF s JOIN TECH t ON t.empID = s.empID";
         List<Tech> ret = new ArrayList<>();
         try(PreparedStatement get = conn.prepareStatement(sql)){
             ResultSet rs = get.executeQuery();
@@ -130,7 +165,8 @@ public class StaffRepository {
                 add.setState(rs.getString("street"));
                 add.setCity(rs.getString("city"));
                 add.setState(rs.getString("state"));
-                add.setZip(rs.getInt("zip"));
+                add.setZip(rs.getString("zip"));
+                add.setCertNumber(rs.getString("certNumber"));
 
                 ret.add(add);
             }
@@ -140,8 +176,45 @@ public class StaffRepository {
         }
         return ret.toArray(new Tech[0]);
     }
+
+    public Tech getTech(int techID)
+    {
+        String sql
+                = "SELECT s.*, t.certNumber FROM STAFF s JOIN TECH t ON t.empID = s.empID " +
+                "WHERE s.empID = ?";
+        Tech ret = null;
+        try(PreparedStatement get = conn.prepareStatement(sql)){
+            get.setInt(1,techID);
+
+            ResultSet rs = get.executeQuery();
+
+            while(rs.next()){
+                ret = new Tech();
+                ret.setEmpID(rs.getInt("empID"));
+                ret.setFirstName(rs.getString("firstName"));
+                ret.setLastName(rs.getString("lastName"));
+                ret.setSex(rs.getString("sex"));
+                ret.setDob(rs.getDate("dob").toLocalDate());
+                ret.setSsn(rs.getString("ssn"));
+                ret.setPhone(rs.getString("phone"));
+                ret.setState(rs.getString("street"));
+                ret.setCity(rs.getString("city"));
+                ret.setState(rs.getString("state"));
+                ret.setZip(rs.getString("zip"));
+                ret.setCertNumber(rs.getString("certNumber"));
+            }
+
+        }catch (SQLException ex) {
+            System.out.println("Error running Tech Get statement");
+            ex.printStackTrace();
+        }
+
+        return ret;
+    }
+
     public void deleteStaff(int empID){
     }
+
     public Staff addStaff(Staff mod){
         String sql
                 = "INSERT INTO STAFF (firstName,lastName,sex,dob,ssn,phone,street,city,state,zip) " +
@@ -157,7 +230,7 @@ public class StaffRepository {
             create.setString(7,mod.getStreet());
             create.setString(8,mod.getCity());
             create.setString(9,mod.getState());
-            create.setInt(10,mod.getZip());
+            create.setString(10,mod.getZip());
 
             create.executeUpdate();
             ResultSet rs = create.getGeneratedKeys();
@@ -177,6 +250,38 @@ public class StaffRepository {
             }
         }
         return mod;
+    }
+
+    public void updateStaff(Staff mod){
+        String sql
+                = "UPDATE STAFF SET firstName = ?, lastName=?,sex=?,dob=?,ssn=?,phone=?,street=?,city=?,state=?,zip=? " +
+                "WHERE empID=?";
+
+        try(PreparedStatement update = conn.prepareStatement(sql)){
+            update.setString(1, mod.getFirstName());
+            update.setString(2, mod.getLastName());
+            update.setString(3, mod.getSex());
+            update.setDate(4, java.sql.Date.valueOf(mod.getDob()));
+            update.setString(5, mod.getSsn());
+            update.setString(6, mod.getPhone());
+            update.setString(7, mod.getStreet());
+            update.setString(8, mod.getCity());
+            update.setString(9, mod.getState());
+            update.setString(10, mod.getZip());
+
+            update.executeUpdate();
+            conn.commit();
+        }catch (SQLException ex) {
+            System.err.println("Error updating Staff entry");
+            ex.printStackTrace();
+            try {
+                System.err.println("Rolling back changes");
+                conn.rollback();
+            } catch (SQLException e) {
+                System.err.println("Error rolling back Staff changes");
+                e.printStackTrace();
+            }
+        }
     }
 
     public Vet addVet(Vet mod){
@@ -204,6 +309,30 @@ public class StaffRepository {
         return mod;
     }
 
+    public void updateVet(Vet mod){
+        updateStaff(mod);
+        String sql
+                ="UPDATE VET SET licenseNo=? WHERE empID=?";
+
+        try(PreparedStatement update = conn.prepareStatement(sql)){
+            update.setString(1, mod.getLicenseNumber());
+            update.setInt(2,mod.getEmpID());
+
+            update.executeUpdate();
+            conn.commit();
+        }catch (SQLException ex) {
+            System.err.println("Error updating Vet entry");
+            ex.printStackTrace();
+            try {
+                System.err.println("Rolling back changes");
+                conn.rollback();
+            } catch (SQLException e) {
+                System.err.println("Error rolling back Vet changes");
+                e.printStackTrace();
+            }
+        }
+    }
+
     public Tech addTech(Tech mod){
         Staff newStaff = addStaff(mod);
         mod.setEmpID(newStaff.getEmpID());
@@ -229,18 +358,28 @@ public class StaffRepository {
         return mod;
     }
 
-    public Vet getVet(int vetID)
-    {
-        //TODO: Implement this method
-        System.out.println("Get Vet Not Implemented");
-        return null;
-    }
+    public void updateTech(Tech mod) {
+        updateStaff(mod);
+        String sql
+                = "UPDATE TECH SET certNumber=? WHERE empID=?";
 
-    public Tech getTech(int techID)
-    {
-        //TODO: Implement this method
-        System.out.println("Get Tech Not Implemented");
-        return null;
+        try (PreparedStatement update = conn.prepareStatement(sql)) {
+            update.setString(1, mod.getCertNumber());
+            update.setInt(2, mod.getEmpID());
+
+            update.executeUpdate();
+            conn.commit();
+        } catch (SQLException ex) {
+            System.err.println("Error updating Tech entry");
+            ex.printStackTrace();
+            try {
+                System.err.println("Rolling back changes");
+                conn.rollback();
+            } catch (SQLException e) {
+                System.err.println("Error rolling back Tech changes");
+                e.printStackTrace();
+            }
+        }
     }
 }
 

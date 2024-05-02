@@ -645,7 +645,7 @@ public class DataModel {
             vet.setStreet("1234 Main St");
             vet.setCity("Baltimore");
             vet.setState("MD");
-            vet.setZip(Integer.parseInt("2123" + i));
+            vet.setZip("2123" + i);
             vets.add(vet);
         }
     }
@@ -664,7 +664,7 @@ public class DataModel {
             tech.setStreet("1234 Main St");
             tech.setCity("Baltimore");
             tech.setState("MD");
-            tech.setZip(Integer.parseInt("2123" + i));
+            tech.setZip("2123" + i);
             techs.add(tech);
         }
     }
@@ -717,7 +717,7 @@ public class DataModel {
             appointment.setClientID(i % 5);
             appointment.setPetID(i % 10);
             appointment.setStaffID(i % 5);
-            appointment.setAppointmentDate(LocalDate.of(2021, 1, 1));
+            appointment.setAppointmentDate(LocalDateTime.of(2021, 1, 1,12,12,12));
             appointment.setDescription("Appointment Description");
             appointments.add(appointment);
         }
@@ -744,11 +744,11 @@ public class DataModel {
         // Generate 10 medications
         for (int i = 0; i < 10; i++) {
             Medication medication = new Medication();
-            medication.setMedicationID(i);
+            medication.setItemID(i);
             medication.setName("Medication" + i);
             medication.setDosage("Dosage");
             medication.setQuantity(100);
-            medication.setCost(10.00F);
+            medication.setRetailCost(10.00F);
             medications.add(medication);
         }
     }
@@ -756,7 +756,7 @@ public class DataModel {
     public Medication getMedication(int medicationID) {
         // Get medication based on medicationID
         for (int i = 0; i < medications.size(); i++) {
-            if (medications.get(i).getMedicationID() == medicationID) {
+            if (medications.get(i).getItemID() == medicationID) {
                 return medications.get(i);
             }
         }

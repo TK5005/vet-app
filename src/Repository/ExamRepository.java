@@ -152,7 +152,7 @@ public class ExamRepository {
             create.setInt(1,vetID);
             create.setInt(2,examID);
 
-            create.executeQuery();
+            create.executeUpdate();
 
         }catch (SQLException ex) {
             System.err.println("Error inserting vet_exams entry");

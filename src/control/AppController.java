@@ -63,9 +63,9 @@ public class AppController {
     }
 
     public void deleteAppointment(int appID) {
-        appRepo.deleteAppoitment(appID);
+        appRepo.deleteAppointment(appID);
     }
     public void addAppointment(Appointment appointment) {
-        appRepo.addAppoitment(appointment);
+        appRepo.addAppointment(appointment);
     }
 }

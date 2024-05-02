@@ -35,7 +35,7 @@ public class ClientController {
     private AppointmentRepository appointmentRepository;
     private TreatmentRepository treatmentRepository;
     private InventoryRepository inventoryRepository;
-    private MedicationRepository medicationRepository;
+    //private MedicationRepository medicationRepository;
     private InvoiceRepository invoiceRepository;
     private StaffRepository staffRepository;
     private ArrayList<IClientView> views;
@@ -54,7 +54,7 @@ public class ClientController {
         examRepository = new ExamRepository();
         treatmentRepository = new TreatmentRepository();
         inventoryRepository = new InventoryRepository();
-        medicationRepository = new MedicationRepository();
+        //medicationRepository = new MedicationRepository();
         invoiceRepository = new InvoiceRepository();
         staffRepository = new StaffRepository();
         appointmentRepository = new AppointmentRepository();
@@ -285,7 +285,7 @@ public class ClientController {
     }
 
     public Medication getMedication(int medicationID) {
-        return medicationRepository.getSpecificMedication(medicationID);
+        return inventoryRepository.getSpecificMedication(medicationID);
     }
 
     public Treatment[] getVaccinationsFromPetID(int petID) {
@@ -345,7 +345,7 @@ public class ClientController {
     }
 
     public Medication[] getInStockMedications(){
-        return medicationRepository.getAllInStock();
+        return inventoryRepository.getInStockMedications();
     }
 
     // Page navigation methods

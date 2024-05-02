@@ -2,10 +2,8 @@ package Repository;
 
 import DAL.ConnectionManager;
 import model.Appointment;
-import model.DataModel;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +23,17 @@ public class AppointmentRepository {
             get.setInt(1, petID);
             ResultSet rs = get.executeQuery();
             while (rs.next()) {
-                LocalDate appDate = rs.getDate("appointmentDate").toLocalDate();
-                String appTime = rs.getTimestamp("appointmentDate").toLocalDateTime().toLocalTime().toString();
-                ret.add(new Appointment(rs.getInt("appointmentID"), rs.getInt("clientID"),
-                        rs.getInt("petID"), rs.getInt("staffID"),
-                        appDate, appTime, rs.getString("description")));
+                Appointment add = new Appointment();
+                add.setAppointmentID(rs.getInt("apptNo"));
+                add.setClientID(rs.getInt("clientID"));
+                add.setPetID(rs.getInt("petID"));
+                add.setStaffID(rs.getInt("staffID"));
+                add.setAppointmentDate(rs.getTimestamp("start_time").toLocalDateTime());
+                add.setCheckInTime(rs.getTimestamp("checkin_time").toLocalDateTime());
+                add.setDescription(rs.getString("description"));
+
+                ret.add(add);
+
             }
         } catch (SQLException ex) {
             System.err.println("Error running Client Get statement");
@@ -44,11 +48,14 @@ public class AppointmentRepository {
         try (PreparedStatement get = conn.prepareStatement(sql)){
             ResultSet rs = get.executeQuery();
             while(rs.next()){
-                LocalDate appDate = rs.getDate("appointmentDate").toLocalDate();
-                String appTime = rs.getTimestamp("appointmentDate").toLocalDateTime().toLocalTime().toString();
-                ret.add (new Appointment(rs.getInt("appointmentID"), rs.getInt("clientID"),
-                        rs.getInt("petID"), rs.getInt("staffID"),
-                        appDate, appTime, rs.getString("description")));
+                Appointment add = new Appointment();
+                add.setAppointmentID(rs.getInt("apptNo"));
+                add.setClientID(rs.getInt("clientID"));
+                add.setPetID(rs.getInt("petID"));
+                add.setStaffID(rs.getInt("staffID"));
+                add.setAppointmentDate(rs.getTimestamp("start_time").toLocalDateTime());
+                add.setCheckInTime(rs.getTimestamp("checkin_time").toLocalDateTime());
+                add.setDescription(rs.getString("description"));
             }
         }catch (SQLException ex) {
             System.err.println("Error running Client Get statement");
@@ -68,13 +75,14 @@ public class AppointmentRepository {
             rs = stmt.executeQuery(sql);
             Appointment app = new Appointment();
             while(rs.next()){
-                app.setAppointmentID(rs.getInt("apptNo"));
-                app.setClientID(rs.getInt("clientID"));
-                app.setPetID(rs.getInt("petID"));
-                app.setStaffID(rs.getInt("staffID"));
-                app.setAppointmentDate(rs.getObject("appointmentDate",LocalDate.class)); 
-                app.setDescription(rs.getString("description"));
-                app.setAppointmentTime(rs.getString("Time"));
+                Appointment add = new Appointment();
+                add.setAppointmentID(rs.getInt("apptNo"));
+                add.setClientID(rs.getInt("clientID"));
+                add.setPetID(rs.getInt("petID"));
+                add.setStaffID(rs.getInt("staffID"));
+                add.setAppointmentDate(rs.getTimestamp("start_time").toLocalDateTime());
+                add.setCheckInTime(rs.getTimestamp("checkin_time").toLocalDateTime());
+                add.setDescription(rs.getString("description"));
                 ret.add(app);                    
             }
         }catch (SQLException ex) {
@@ -86,10 +94,70 @@ public class AppointmentRepository {
         return cli;
     }
 
-    public void deleteAppoitment(int id){
-        
+    public void deleteAppointment(int id){
+        //TODO: Imlement deleteAppointment
+        System.out.println("deleteAppointment not implemented");
     }
-    public void addAppoitment(Appointment appointment){
-        
+    public Appointment addAppointment(Appointment mod){
+        String sql
+                = "INSERT INTO APPOINTMENT (clientID, petID, staffID, start_time, description) " +
+                "VALUES(?,?,?,?,?)";
+
+        try(PreparedStatement create = conn.prepareStatement(sql)){
+            create.setInt(1, mod.getClientID());
+            create.setInt(2, mod.getPetID());
+            create.setInt(3, mod.getStaffID());
+            create.setTimestamp(4, java.sql.Timestamp.valueOf(mod.getAppointmentDate()));
+            create.setString(5, mod.getDescription());
+
+            create.executeUpdate();
+
+            ResultSet rs = create.getGeneratedKeys();
+            while(rs.next()){
+                mod.setAppointmentID(rs.getInt(1));
+            }
+            conn.commit();
+        }catch (SQLException ex) {
+            System.err.println("Error inserting Appointment entry");
+            ex.printStackTrace();
+            try {
+                System.err.println("Rolling back changes");
+                conn.rollback();
+            } catch (SQLException e) {
+                System.err.println("Error rolling back Appointment changes");
+                e.printStackTrace();
+            }
+        }
+        return mod;
+    }
+
+    public void updateAppointment(Appointment mod){
+        String sql =
+                "UPDATE APPOINTMENT SET clientID=?,petID=?,staffID=?,start_time=?,checkin_time=?,description=? " +
+                        "WHERE apptNo=?";
+
+        try(PreparedStatement update = conn.prepareStatement(sql)){
+
+            update.setInt(1,mod.getClientID());
+            update.setInt(2,mod.getPetID());
+            update.setInt(3,mod.getStaffID());
+            update.setTimestamp(4,java.sql.Timestamp.valueOf(mod.getAppointmentDate()));
+            update.setTimestamp(5,java.sql.Timestamp.valueOf(mod.getCheckInTime()));
+            update.setString(6,mod.getDescription());
+
+            update.executeUpdate();
+            conn.commit();
+
+        }catch (SQLException ex) {
+            System.err.println("Error updating Appointment entry");
+            ex.printStackTrace();
+            try {
+                System.err.println("Rolling back changes");
+                conn.rollback();
+            } catch (SQLException e) {
+                System.err.println("Error rolling back Appointment changes");
+                e.printStackTrace();
+            }
+        }
     }
 }

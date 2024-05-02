@@ -2,6 +2,7 @@ package Repository;
 
 import DAL.ConnectionManager;
 import model.Inventory;
+import model.Medication;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -132,6 +133,154 @@ public class InventoryRepository {
                 conn.rollback();
             } catch (SQLException e) {
                 System.err.println("Error rolling back Inventory changes");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Medication Methods
+
+    public Medication[] getMedications(){
+        String sql = "SELECT i.*, m.interactions, m.dosage FROM INVENTORY i JOIN MEDICATION m ON m.itemID = i.itemID";
+        List<Medication> ret = new ArrayList<>();
+
+        try(PreparedStatement get = conn.prepareStatement(sql)){
+            ResultSet rs = get.executeQuery();
+
+            while(rs.next()){
+                Medication add = new Medication();
+                add.setItemID(rs.getInt("itemID"));
+                add.setName(rs.getString("name"));
+                add.setManufacturer(rs.getString("manufacturer"));
+                add.setType(rs.getString("type"));
+                add.setQuantity(rs.getInt("quantity"));
+                add.setReorderLevel(rs.getInt("reorderLevel"));
+                add.setReorderQuantity(rs.getInt("reorderQuantity"));
+                add.setWholesaleCost(rs.getFloat("wholesaleCost"));
+                add.setRetailCost(rs.getFloat("retailCost"));
+                add.setInteractions(rs.getString("interactions"));
+                add.setDosage(rs.getString("dosage"));
+
+                ret.add(add);
+            }
+        }catch (SQLException ex) {
+            System.err.println("Error running Medication Get statement");
+            ex.printStackTrace();
+        }
+        return ret.toArray(new Medication[0]);
+    }
+
+    // Added setMedicationID to the Medication object (fixed error during saving) - KS
+    public Medication[] getInStockMedications(){
+        String sql = "SELECT i.*, m.interactions, m.dosage FROM INVENTORY i JOIN MEDICATION m ON m.itemID = i.itemID " +
+                "WHERE i.quantity > 0";
+        List<Medication> ret = new ArrayList<>();
+
+        try(PreparedStatement get = conn.prepareStatement(sql)){
+            ResultSet rs = get.executeQuery();
+
+            while(rs.next()){
+                Medication add = new Medication();
+                add.setItemID(rs.getInt("itemID"));
+                add.setName(rs.getString("name"));
+                add.setManufacturer(rs.getString("manufacturer"));
+                add.setType(rs.getString("type"));
+                add.setQuantity(rs.getInt("quantity"));
+                add.setReorderLevel(rs.getInt("reorderLevel"));
+                add.setReorderQuantity(rs.getInt("reorderQuantity"));
+                add.setWholesaleCost(rs.getFloat("wholesaleCost"));
+                add.setRetailCost(rs.getFloat("retailCost"));
+                add.setInteractions(rs.getString("interactions"));
+                add.setDosage(rs.getString("dosage"));
+
+                ret.add(add);
+            }
+        }catch (SQLException ex) {
+            System.err.println("Error running Medication Get statement");
+            ex.printStackTrace();
+        }
+        return ret.toArray(new Medication[0]);
+    }
+
+    public Medication getSpecificMedication(int medID){
+        String sql = "SELECT i.*, m.interactions, m.dosage FROM INVENTORY i JOIN MEDICATION m ON m.itemID = i.itemID " +
+                " WHERE m.itemID = ?";
+        Medication ret = null;
+
+        try(PreparedStatement get = conn.prepareStatement(sql)){
+            get.setInt(1, medID);
+            ResultSet rs = get.executeQuery();
+
+            while(rs.next()){
+                ret = new Medication();
+                ret.setItemID(rs.getInt("itemID"));
+                ret.setName(rs.getString("name"));
+                ret.setManufacturer(rs.getString("manufacturer"));
+                ret.setType(rs.getString("type"));
+                ret.setQuantity(rs.getInt("quantity"));
+                ret.setReorderLevel(rs.getInt("reorderLevel"));
+                ret.setReorderQuantity(rs.getInt("reorderQuantity"));
+                ret.setWholesaleCost(rs.getFloat("wholesaleCost"));
+                ret.setRetailCost(rs.getFloat("retailCost"));
+                ret.setInteractions(rs.getString("interactions"));
+                ret.setDosage(rs.getString("dosage"));
+
+            }
+        }catch (SQLException ex) {
+            System.err.println("Error running Medication Get statement");
+            ex.printStackTrace();
+        }
+        return ret;
+    }
+
+
+    public Medication addMedication(Medication mod){
+        Inventory newInventory = addInventory(mod);
+        mod.setItemID(newInventory.getItemID());
+        String sql =
+                "INSERT INTO MEDICATION VALUES(?,?,?)";
+
+        try(PreparedStatement create = conn.prepareStatement(sql)){
+            create.setInt(1, mod.getItemID());
+            create.setString(2, mod.getInteractions());
+            create.setString(3, mod.getDosage());
+
+            create.executeUpdate();
+            conn.commit();
+        }catch (SQLException ex) {
+            System.err.println("Error inserting Medication entry");
+            ex.printStackTrace();
+            try {
+                System.err.println("Rolling back changes");
+                conn.rollback();
+            } catch (SQLException e) {
+                System.err.println("Error rolling back medication changes");
+                e.printStackTrace();
+            }
+        }
+        return mod;
+    }
+
+    public void updateMedication(Medication mod){
+        updateInventory(mod);
+        String sql =
+                "UPDATE MEDICATION SET interactions = ?, dosage = ? WHERE itemID = ?";
+
+        try(PreparedStatement update = conn.prepareStatement(sql)){
+            update.setString(1, mod.getInteractions());
+            update.setString(2, mod.getDosage());
+            update.setInt(3, mod.getItemID());
+
+            update.executeUpdate();
+            conn.commit();
+        }catch (SQLException ex) {
+            System.err.println("Error inserting Medication entry");
+            ex.printStackTrace();
+            try {
+                System.err.println("Rolling back changes");
+                conn.rollback();
+            } catch (SQLException e) {
+                System.err.println("Error rolling back medication changes");
                 e.printStackTrace();
             }
         }

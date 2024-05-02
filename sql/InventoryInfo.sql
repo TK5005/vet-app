@@ -15,4 +15,4 @@ insert into INVENTORY (name, manufacturer, type, quantity,reorderLevel,reorderQu
 values('Vaccine E','MNO Pharma','MEDICATION',100,50,100,50.00,75.00);
 
 insert into INVENTORY (name, manufacturer, type, quantity,reorderLevel,reorderQuantity,wholesaleCost,retailCost)
-values('4x4 Gauze','CVS','MEDICAL',100,50,100,50.00,75.00)
+values('4x4 Gauze','CVS','MEDICAL',100,50,100,50.00,75.00);
