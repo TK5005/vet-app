@@ -18,7 +18,8 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import control.AppController;
-import view.clientPatient.ClientPageView;
+import control.ClientController;
+import view.clientPatient.ClientsView;
 import view.inventory.InventoryView;
 import view.invoice.InvoiceView;
 
@@ -92,7 +93,7 @@ public class UIPanel extends JPanel {
         dashboardPanel.setBackground(Color.WHITE);
         cards.add(dashboardPanel, "Dashboard");
 
-        ClientPageView clientsView = new ClientPageView();
+        ClientsView clientsView = new ClientsView();
         clientsView.setBackground(Color.WHITE);
         cards.add(clientsView, "Clients/Patients");
 
@@ -132,6 +133,7 @@ public class UIPanel extends JPanel {
         JButton pressedButton = (JButton) e.getSource();
         cardLayout.show(cards, pressedButton.getText());
         updateButtonSelection(pressedButton);
+        controller.refreshViews();
     }
 
     private void updateButtonSelection(JButton selectedButton) {

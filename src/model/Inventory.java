@@ -11,7 +11,7 @@ public class Inventory
     private int reorderQuantity;
     private float retailCost;
     private float wholesaleCost;
-    private String type;
+    private InventoryType type;
     private String manufacturer;
 
     public int getItemID() {
@@ -70,12 +70,24 @@ public class Inventory
         this.wholesaleCost = wholesaleCost;
     }
 
-    public String getType() {
+    public InventoryType getType() {
         return type;
     }
 
     public void setType(String type) {
-        this.type = type;
+        switch(type){
+            case "MEDICATION":
+                this.type = InventoryType.MEDICATION;
+                break;
+            case "MEDICAL":
+                this.type = InventoryType.MEDICAL;
+                break;
+            case "OFFICE":
+                this.type = InventoryType.OFFICE;
+                break;
+            default:
+                this.type = InventoryType.MEDICAL;
+        }
     }
 
     public String getManufacturer() {

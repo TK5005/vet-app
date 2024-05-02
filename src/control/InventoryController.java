@@ -1,24 +1,20 @@
 package control;
 
-import java.util.ArrayList;
-
 import Repository.InventoryRepository;
 import model.DataModel;
 import model.Inventory;
 import view.inventory.InventoryView;
 
-public class InventoryController {
+public class InventoryController extends ViewController{
     private static InventoryController instance;
     private DataModel dataModel;
     private InventoryRepository inventoryRepository;
-    private ArrayList<IInventoryView> views;
     private InventoryView inventoryView;
     private int currentInventoryID = -1;
 
     private InventoryController() {
         dataModel = DataModel.getInstance();
         inventoryRepository = new InventoryRepository();
-        views = new ArrayList<>();
     }
 
     public static InventoryController getInstance() {
@@ -34,16 +30,6 @@ public class InventoryController {
 
     public void setInventoryView(InventoryView inventoryView) {
         this.inventoryView = inventoryView;
-    }
-
-    public void registerView(IInventoryView view) {
-        views.add(view);
-    }
-
-    public void refreshViews() {
-        for (IInventoryView view : views) {
-            view.refresh();
-        }
     }
 
     public void addNewItem() {
@@ -63,20 +49,7 @@ public class InventoryController {
     }
 
     public Inventory[] getInventory() {
-        //return dataModel.getInventory();
         return inventoryRepository.getAll();
-    }
-
-    public void showInventoryDetails(int itemID) {
-        this.setCurrentInventoryID(itemID);
-        this.refreshViews();
-        inventoryView.showDetailView();
-    }
-
-    public void showInventoryList() {
-        this.setCurrentInventoryID(-1);
-        this.refreshViews();
-        inventoryView.showListView();
     }
 
     public void setCurrentInventoryID(int itemID) {
@@ -87,16 +60,49 @@ public class InventoryController {
         return this.currentInventoryID;
     }
 
-    public Inventory getCurrentInventoryItem() {
-        //return dataModel.getInventoryItem(currentInventoryID);
-        return inventoryRepository.getSpecificItem(currentInventoryID);
+    public Inventory getItem(int itemID)
+    {
+        return inventoryRepository.getSpecificItem(itemID);
     }
 
-    public void updateInventoryItem(Inventory item) {
-        //dataModel.updateInventoryItem(currentInventoryID, item);
-        item.setItemID(currentInventoryID);
+    public void updateInventoryItem(int itemID, String name, String manufacturer, String type,
+                                int quantity, int reorderLevel, int reorderQuantity, float wholesaleCost,
+                                float retailCost) {
+        Inventory item = new Inventory();
+        item.setItemID(itemID);
+        item.setName(name);
+        item.setManufacturer(manufacturer);
+        item.setType(type);
+        item.setQuantity(quantity);
+        item.setReorderLevel(reorderLevel);
+        item.setReorderQuantity(reorderQuantity);
+        item.setWholesaleCost(wholesaleCost);
+        item.setRetailCost(retailCost);
         inventoryRepository.updateInventory(item);
         refreshViews();
         showInventoryList();
+    }
+
+    public void deleteInventoryItem(int inventoryID) {
+        inventoryRepository.deleteInventoryItem(inventoryID);
+        refreshViews();
+        showInventoryList();
+    }
+
+
+    /*
+     * Page Navigation Methods
+     */
+
+     public void showInventoryList() {
+        this.setCurrentInventoryID(-1);
+        this.refreshViews();
+        inventoryView.showListView();
+    }
+
+    public void showInventoryDetails(int itemID) {
+        this.setCurrentInventoryID(itemID);
+        this.refreshViews();
+        inventoryView.showDetailView();
     }
 }

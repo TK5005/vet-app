@@ -1,23 +1,21 @@
 package view.treatment;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
-
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.Component;
 
 import com.github.lgooddatepicker.components.DatePicker;
 
@@ -33,7 +31,7 @@ public class TreatmentInfo extends JPanel {
     JTextField treatmentIDField;
     JTextField medicationField;
     JComboBox<Medication> medicationBox;
-    JComboBox treatTypeBox;
+    JComboBox<String> treatTypeBox;
     DatePicker treatmentStartDateField;
     JButton saveButton;
 
@@ -60,12 +58,8 @@ public class TreatmentInfo extends JPanel {
     private void saveTreatment()
     {
         Medication meds = (Medication) medicationBox.getSelectedItem();
-        treatment.setType((String) treatTypeBox.getSelectedItem());
-        treatment.setMedicationID(meds.getMedicationID());
-        treatment.setStartDate(treatmentStartDateField.getDate());
-        treatment.setEndDate(treatmentEndDateField.getDate());
-        treatment.setDirections(treatmentDirectionsField.getText());
-        clientController.updateTreatment(treatment);
+        clientController.updateTreatment(this.treatmentID, clientController.getCurrentExamID(), meds.getMedicationID(), (String) treatTypeBox.getSelectedItem(),
+                                        treatmentStartDateField.getDate(), treatmentEndDateField.getDate(), treatmentDirectionsField.getText());
     }
 
     private void createUI() {
@@ -106,7 +100,7 @@ public class TreatmentInfo extends JPanel {
         treatTypePanel.setLayout(new BoxLayout(treatTypePanel, BoxLayout.Y_AXIS));
         treatTypePanel.setBackground(Color.WHITE);
         JLabel treatTypeLabel = new JLabel("Type");
-        treatTypeBox = new JComboBox(Treatment.getTreatTypes());
+        treatTypeBox = new JComboBox<String>(Treatment.getTreatTypes());
         treatTypePanel.add(treatTypeLabel);
         treatTypePanel.add(treatTypeBox);
 

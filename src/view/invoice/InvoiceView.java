@@ -5,10 +5,10 @@ import java.awt.Color;
 
 import javax.swing.JPanel;
 
-import control.IInvoiceView;
+import control.IVetAppView;
 import control.InvoiceController;
 
-public class InvoiceView extends JPanel implements IInvoiceView {
+public class InvoiceView extends JPanel implements IVetAppView {
     private InvoiceController controller;
     private CardLayout layout;
 
@@ -24,9 +24,7 @@ public class InvoiceView extends JPanel implements IInvoiceView {
         setLayout(layout);
         setBackground(Color.WHITE);
         InvoiceListView listView = new InvoiceListView();
-        InvoiceDetailView detailView = new InvoiceDetailView();
         add(listView, "list");
-        add(detailView, "detail");
         layout.show(this, "list");
     }
 
@@ -36,9 +34,5 @@ public class InvoiceView extends JPanel implements IInvoiceView {
 
     public void showListView() {
         layout.show(this, "list");
-    }
-
-    public void showDetailView() {
-        layout.show(this, "detail");
     }
 }

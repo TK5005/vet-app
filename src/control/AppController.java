@@ -19,9 +19,23 @@ public class AppController {
     StaffRepository staffRepo;
     viewDetails details;
 
+    ClientController clientController;
+    InvoiceController invoiceController;
+    InventoryController inventoryController;
+
+
     public AppController() {
         model = DataModel.getInstance();
-       // details = new viewDetails(null);
+        clientController = ClientController.getInstance();
+        invoiceController = InvoiceController.getInstance();
+        inventoryController = InventoryController.getInstance();
+    }
+
+    public void refreshViews()
+    {
+        clientController.refreshViews();
+        invoiceController.refreshViews();
+        inventoryController.refreshViews();
     }
 
     public String[][] loadStaff() {

@@ -23,11 +23,11 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 import control.ClientController;
-import control.IClientView;
+import control.IVetAppView;
 import model.Client;
 import model.Pet;
 
-public class ClientInfoView extends JPanel implements IClientView {
+public class ClientDetailView extends JPanel implements IVetAppView {
     private ClientController clientController;
 
     private JButton saveButton;
@@ -46,7 +46,7 @@ public class ClientInfoView extends JPanel implements IClientView {
     private JTable petTable;
     private NumberFormat zipFormat;
 
-    public ClientInfoView() {
+    public ClientDetailView() {
         clientController = ClientController.getInstance();
         clientController.registerView(this);
         configureFormatters();
