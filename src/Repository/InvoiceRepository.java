@@ -212,4 +212,10 @@ public class InvoiceRepository {
             }
         }
     }
+
+    public void removeInvoice(int invoiceID)
+    {
+        //TODO: Implement removeInvoice
+        System.out.println("removeInvoice not implemented");
+    }
 }

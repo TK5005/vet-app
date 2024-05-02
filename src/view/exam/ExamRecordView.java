@@ -374,8 +374,14 @@ public class ExamRecordView extends JPanel implements IClientView {
 
     private void updateExam() {
         LocalDateTime date = dateField.getDateTimeStrict();
-        int vetID = ((Vet) examinerBox.getSelectedItem()).getEmpID();
-        int techID = ((Tech) techBox.getSelectedItem()).getEmpID();
+        Vet vet = (Vet) examinerBox.getSelectedItem();
+        Tech tech = (Tech) techBox.getSelectedItem();
+        int vetID = 1;
+        int techID = 2;
+        if(vet != null && tech != null){
+            vetID = vet.getEmpID();
+            techID = tech.getEmpID();
+        }
         String description = descriptionField.getText();
         String vitals = vitalsField.getText();
         int weight = Integer.parseInt(weightField.getText());
@@ -418,14 +424,14 @@ public class ExamRecordView extends JPanel implements IClientView {
     }
 
     private void refreshTreatment() {
-        Treatment treatment = clientController.getTreatmentFromExamID(clientController.getCurrentExamID());
+       /* Treatment treatment = clientController.getTreatmentFromExamID(clientController.getCurrentExamID());
         if (treatment != null) {
-            /*treatmentIDField.setText(Integer.toString(treatment.getTreatmentID()));
+            treatmentIDField.setText(Integer.toString(treatment.getTreatmentID()));
             //medicationField.setText(String.valueOf(treatment.getMedicationID()));
             medicationBox.setSelectedItem(clientController.getInventoryNameByID(treatment.getMedicationID()));
             treatmentStartDateField.setDate(treatment.getStartDate());
             treatmentEndDateField.setDate(treatment.getEndDate());
-            treatmentDirectionsField.setText(treatment.getDirections());*/
-        }
+            treatmentDirectionsField.setText(treatment.getDirections());
+        }*/
     }
 }

@@ -38,6 +38,7 @@ public class MedicationRepository {
         return ret.toArray(new Medication[0]);
     }
 
+    // Added setMedicationID to the Medication object (fixed error during saving) - KS
     public Medication[] getAllInStock(){
         String sql = "SELECT * FROM MEDICATION JOIN INVENTORY ON medID = itemID WHERE QUANTITY > 0";
         List<Medication> ret = new ArrayList<>();
@@ -49,6 +50,7 @@ public class MedicationRepository {
                 Medication add = new Medication();
                 add.setName(rs.getString("name"));
                 add.setItemID(rs.getInt("medID"));
+                add.setMedicationID(rs.getInt("medID"));
                 add.setInteractions(rs.getString("interactions"));
 
                 ret.add(add);

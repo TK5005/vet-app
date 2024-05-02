@@ -144,5 +144,19 @@ public class StaffRepository {
     }
     public void addStaff(Staff user){
     }
+
+    public Vet getVet(int vetID)
+    {
+        //TODO: Implement this method
+        System.out.println("Get Vet Not Implemented");
+        return null;
+    }
+
+    public Tech getTech(int techID)
+    {
+        //TODO: Implement this method
+        System.out.println("Get Tech Not Implemented");
+        return null;
+    }
 }
 

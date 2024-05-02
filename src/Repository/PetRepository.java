@@ -51,11 +51,17 @@ public class PetRepository {
         return ret;
     }
 
+    public void removePet(int petID)
+    {
+        //TODO: Implement removePet in PetRepository
+        System.out.println("TODO: Implement removePet in PetRepository");
+    }
+
     //Inserts a new pet into the pet table and returns the given pet model with the new petID
     public Pet addPet(Pet mod){
         String sql
          ="INSERT INTO PET (ownerID, name, sex, color, species, breed, birthdate, weight, microchipNumber, rabiesTag)"+
-                "VALUES(?,?,?,?,?,?,?,?,?,?)";
+                " VALUES(?,?,?,?,?,?,?,?,?,?)";
 
         try(PreparedStatement create = conn.prepareStatement(sql)){
             create.setInt(1,mod.getOwnerID());
@@ -69,11 +75,14 @@ public class PetRepository {
             create.setLong(9, mod.getMicrochipNumber());
             create.setLong(10,mod.getRabiesTag());
 
+            create.executeUpdate();
+            //TODO: Need to add this back in and fix the error, removed for now to ge tthe code to work.
+            /*
             ResultSet rs = create.getGeneratedKeys();
             while(rs.next()){
                 mod.setPetID(rs.getInt(1));
             }
-
+            */
             conn.commit();
         }catch (SQLException ex) {
             System.err.println("Error inserting Pet entry");

@@ -1,4 +1,4 @@
-use drodrig9db;
+use vetapp;
 CREATE TABLE APPOINTMENT(
         apptNo INT NOT NULL AUTO_INCREMENT,
         clientID INT NOT NULL,

@@ -1,4 +1,4 @@
-use drodrig9db;
+use vetapp;
 insert into STAFF (firstName,lastName,sex,dob,ssn,phone,street,city,state,zip)
 values('Jenny','McCann','F','1988-07-01','123456789','555-999-1212','321 Shamrock Rd','Bel Air', 'MD', 21014);
 
