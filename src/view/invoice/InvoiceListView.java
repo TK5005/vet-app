@@ -4,9 +4,16 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -23,6 +30,8 @@ public class InvoiceListView extends JPanel implements IVetAppView {
     private JTable invoiceTable;
     private DefaultTableModel tableModel;
     private int actionColumnIndex = 6;
+
+    private InvoiceInfo invoiceInfo;
 
     public InvoiceListView() {
         this.controller = InvoiceController.getInstance();
@@ -45,6 +54,16 @@ public class InvoiceListView extends JPanel implements IVetAppView {
         addInvoiceButton.addActionListener(e -> {
             controller.addInvoice();
         });
+    }
+
+    private void showInvoiceDetails(int invoiceID)
+    {
+        invoiceInfo = new InvoiceInfo(invoiceID);
+        JDialog invoiceDialog = new JDialog();
+        invoiceDialog.add(invoiceInfo);
+        invoiceDialog.pack();
+        invoiceDialog.setLocationRelativeTo(null);
+        invoiceDialog.setVisible(true);
     }
 
     private void createUI() {
@@ -103,6 +122,43 @@ public class InvoiceListView extends JPanel implements IVetAppView {
         return scrollPane;
     }
 
+    private void ConfirmDeletion(int id){
+        JFrame frame = new JFrame("Confirm");
+        final JOptionPane optionPane = new JOptionPane(
+                "Are you sure to delete?",
+                JOptionPane.QUESTION_MESSAGE,
+                JOptionPane.YES_NO_OPTION);
+
+        final JDialog dialog = new JDialog(frame, "Confirm",
+                                true);
+        dialog.setContentPane(optionPane);
+        dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+        dialog.addWindowListener(new WindowAdapter(){
+            public void windowClosing(WindowEvent we) {
+                //setLabel("user attempt to close window.");
+            }
+        });
+        optionPane.addPropertyChangeListener(new PropertyChangeListener() {
+            public void propertyChange(PropertyChangeEvent e) {
+                String prop = e.getPropertyName();
+
+                if (dialog.isVisible() && (e.getSource() == optionPane) && (prop.equals(JOptionPane.VALUE_PROPERTY))) {
+                    dialog.setVisible(false);
+                }
+            }
+        });
+        dialog.pack();
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+
+        int value = ((Integer)optionPane.getValue()).intValue();
+        if (value == JOptionPane.YES_OPTION) {
+            controller.removeInvoice(id);
+        } else if (value == JOptionPane.NO_OPTION) {
+           //no - close window
+        }
+    }
+
     // Custom renderer
     class ButtonRenderer extends JPanel implements TableCellRenderer {
         private JButton viewButton;
@@ -146,13 +202,13 @@ public class InvoiceListView extends JPanel implements IVetAppView {
             // Add action listener for the View button
             viewButton.addActionListener(e -> {
                 int invoiceID = (int) tableModel.getValueAt(currentRow, 0);
-                controller.showInvoiceDetail(invoiceID);
+                showInvoiceDetails(invoiceID);
             });
 
             // Add action listener for the Remove button
             removeButton.addActionListener(e -> {
                 int invoiceID = (int) tableModel.getValueAt(currentRow, 0);
-                controller.removeInvoice(invoiceID);
+                ConfirmDeletion(invoiceID);
             });
         }
 

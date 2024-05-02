@@ -49,20 +49,7 @@ public class InventoryController extends ViewController{
     }
 
     public Inventory[] getInventory() {
-        //return dataModel.getInventory();
         return inventoryRepository.getAll();
-    }
-
-    public void showInventoryDetails(int itemID) {
-        this.setCurrentInventoryID(itemID);
-        this.refreshViews();
-        inventoryView.showDetailView();
-    }
-
-    public void showInventoryList() {
-        this.setCurrentInventoryID(-1);
-        this.refreshViews();
-        inventoryView.showListView();
     }
 
     public void setCurrentInventoryID(int itemID) {
@@ -73,16 +60,49 @@ public class InventoryController extends ViewController{
         return this.currentInventoryID;
     }
 
-    public Inventory getCurrentInventoryItem() {
-        //return dataModel.getInventoryItem(currentInventoryID);
-        return inventoryRepository.getSpecificItem(currentInventoryID);
+    public Inventory getItem(int itemID)
+    {
+        return inventoryRepository.getSpecificItem(itemID);
     }
 
-    public void updateInventoryItem(Inventory item) {
-        //dataModel.updateInventoryItem(currentInventoryID, item);
-        item.setItemID(currentInventoryID);
+    public void updateInventoryItem(int itemID, String name, String manufacturer, String type,
+                                int quantity, int reorderLevel, int reorderQuantity, float wholesaleCost,
+                                float retailCost) {
+        Inventory item = new Inventory();
+        item.setItemID(itemID);
+        item.setName(name);
+        item.setManufacturer(manufacturer);
+        item.setType(type);
+        item.setQuantity(quantity);
+        item.setReorderLevel(reorderLevel);
+        item.setReorderQuantity(reorderQuantity);
+        item.setWholesaleCost(wholesaleCost);
+        item.setRetailCost(retailCost);
         inventoryRepository.updateInventory(item);
         refreshViews();
         showInventoryList();
+    }
+
+    public void deleteInventoryItem(int inventoryID) {
+        inventoryRepository.deleteInventoryItem(inventoryID);
+        refreshViews();
+        showInventoryList();
+    }
+
+
+    /*
+     * Page Navigation Methods
+     */
+
+     public void showInventoryList() {
+        this.setCurrentInventoryID(-1);
+        this.refreshViews();
+        inventoryView.showListView();
+    }
+
+    public void showInventoryDetails(int itemID) {
+        this.setCurrentInventoryID(itemID);
+        this.refreshViews();
+        inventoryView.showDetailView();
     }
 }

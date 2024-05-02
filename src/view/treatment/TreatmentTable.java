@@ -57,7 +57,7 @@ public class TreatmentTable extends JPanel implements IVetAppView {
 
     public void createEventListeners() {
         addTreatmentButton.addActionListener(e -> {
-            clientController.addTreatment();
+            clientController.addTreatment(clientController.getCurrentExamID());
         });
     }
 

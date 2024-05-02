@@ -243,10 +243,32 @@ public class ExamRepository {
         System.out.println("deleteExam not implemented");
     }
 
-    public Exam[] getAllExams()
+    public Exam[] getAllBasicExamData()
     {
-        //TODO: Implement getAllExams
-        System.out.println("getAllExams not implemented");
-        return null;
+        String sql =
+            "SELECT * FROM EXAMINATION";
+
+        List<Exam> ret = new ArrayList<>();
+
+        try(PreparedStatement get = conn.prepareStatement(sql)){
+            ResultSet rs = get.executeQuery();
+
+            while(rs.next()){
+                Exam add = new Exam();
+                add.setExamID(rs.getInt("examID"));
+                add.setPetID(rs.getInt("petID"));
+                add.setDate(rs.getTimestamp("exam_datetime").toLocalDateTime());
+                add.setDescription(rs.getString("description"));
+                add.setWeight(rs.getInt("weight"));
+                add.setLocation(rs.getString("location"));
+                add.setVitals(rs.getString("vitals"));
+
+                ret.add(add);
+            }
+        }catch (SQLException ex) {
+            System.err.println("Error running Exam Get statement");
+            ex.printStackTrace();
+        }
+        return ret.toArray(new Exam[0]);
     }
 }

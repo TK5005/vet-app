@@ -62,6 +62,10 @@ public class InvoiceController extends ViewController{
         return clientRepository.getSpecificClient(clientID);
     }
 
+    public Client[] getClients() {
+        return clientRepository.getAll();
+    }
+
     public Pet getPet(int petID) {
         return petRepository.getSpecificPet(petID);
     }
@@ -72,12 +76,6 @@ public class InvoiceController extends ViewController{
 
     public void showInvoiceList() {
         invoiceView.showListView();
-        refreshViews();
-    }
-
-    public void showInvoiceDetail(int invoiceID) {
-        currentInvoiceID = invoiceID;
-        invoiceView.showDetailView();
         refreshViews();
     }
 
@@ -97,7 +95,7 @@ public class InvoiceController extends ViewController{
         refreshViews();
     }
 
-    public void updateInvoice(int invoiceID, int examID, String status, LocalDate invoiceDate, String amtDue) {
+    public void updateInvoice(int invoiceID, int examID, String status, LocalDate invoiceDate, float amtDue) {
         Invoice invoice = invoiceRepository.getSpecificInvoice(invoiceID);
         invoice.setExamID(examID);
         Exam exam = examRepository.getSpecificExam(examID);
@@ -109,12 +107,22 @@ public class InvoiceController extends ViewController{
                 invoice.setStatus(s);
             }
         }
+        invoice.setAmtDue(amtDue);
         invoice.setInvoiceDate(invoiceDate);
+        invoiceRepository.updateInvoice(invoice);
         refreshViews();
     }
 
+    public String getClientName(int invoiceID) {
+        Invoice invoice = invoiceRepository.getSpecificInvoice(invoiceID);
+        Exam exam = examRepository.getSpecificExam(invoice.getExamID());
+        Pet pet = petRepository.getSpecificPet(exam.getPetID());
+        Client client = clientRepository.getSpecificClient(pet.getOwnerID());
+        return client.getName();
+    }
+
     public int[] getExamIDs() {
-        Exam[] exams = examRepository.getAllExams();
+        Exam[] exams = examRepository.getAllBasicExamData();
         int[] examIDs = new int[exams.length];
         for (int i = 0; i < exams.length; i++) {
             examIDs[i] = exams[i].getExamID();

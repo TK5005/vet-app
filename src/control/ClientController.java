@@ -27,11 +27,6 @@ public class ClientController extends ViewController {
 
     private static ClientController instance;
 
-    /**
-     * Get the instance of the client controller
-     * 
-     * @return The instance of the client controller
-     */
     public static ClientController getInstance() {
         if (instance == null) {
             synchronized (ClientController.class) {
@@ -43,7 +38,6 @@ public class ClientController extends ViewController {
         return instance;
     }
 
-    //private DataModel dataModel;
     private ClientRepository clientRepository;
     private PetRepository petRepository;
     private ExamRepository examRepository;
@@ -57,12 +51,8 @@ public class ClientController extends ViewController {
     private ClientsView clientPage;
     private int currentPetID = -1;
     private int currentClientID = -1;
-    private int currentVaccintaionID = -1;
     private int currentExamID = -1;
 
-    /**
-     * Constructor for the client controller
-     */
     private ClientController() {
         super();
         clientRepository = new ClientRepository();
@@ -100,13 +90,10 @@ public class ClientController extends ViewController {
         return currentExamID;
     }
 
-    public void setCurrentVaccinationID(int currentVaccinationID) {
-        this.currentVaccintaionID = currentVaccinationID;
-    }
 
-    public int getCurrentVaccinationID() {
-        return currentVaccintaionID;
-    }
+    /*
+     * Client Methods
+     */
 
     public Client[] getClients() {
         return clientRepository.getAll();
@@ -126,9 +113,6 @@ public class ClientController extends ViewController {
         refreshViews();
     }
 
-    /**
-     * Update a client
-     */
     public void updateClient(int clientID, String fName, String lName,
                                 String phone, String email, String street,
                                 String city, String state, int zip) {
@@ -155,18 +139,10 @@ public class ClientController extends ViewController {
         return clientRepository.getSpecificClient(clientID);
     }
 
-    /**
-     * Get all pets for a client
-     * 
-     * @param clientID The client ID
-     * @return An array of pets
-     */
-    public Pet[] getPets(int clientID) {
-        //return dataModel.getPets(clientID);
-        return petRepository.getPetsByClientID(clientID);
-    }
 
-    // Pet methods
+    /*
+     * Pet Methods
+     */
 
     public void addPet() {
         Pet pet = new Pet();
@@ -200,54 +176,32 @@ public class ClientController extends ViewController {
         refreshViews();
     }
 
-    /**
-     * Delete a pet
-     * 
-     * @param petID The pet ID
-     */
-    public void deletePet(int petID) {
-        petRepository.removePet(petID);
-        refreshViews();
+    public Pet[] getPets(int clientID) {
+        return petRepository.getPetsByClientID(clientID);
     }
 
-    /**
-     * Get a pet
-     * 
-     * @param petID The pet ID
-     * @return The pet object
-     */
     public Pet getPet(int petID) {
         return petRepository.getSpecificPet(petID);
     }
 
-    /**
-     * Get all exams for a pet
-     * 
-     * @param petID The pet ID
-     * @return An array of exams
-     */
-    public Exam[] getExams(int petID) {
-        return examRepository.getExamsByPetID(petID);
-    }
-
-    // Exam methods
-
-    public void addExam() {
-        Exam exam = new Exam();
-        exam.setPetID(this.getCurrentPetID());
-        exam.setDate(LocalDateTime.now());
-        exam.setDescription("New Exam");
-        exam.setVitals("Enter Vitals Here...");
-        exam.setWeight(0);
-        exam.setLocation("Location");
-        examRepository.addExam(exam);
+    public void deletePet(int petID) {
+        petRepository.removePet(petID);
         refreshViews();
     }
+    
 
-    public void addTreatment()
-    {
-        addTreatment(this.getCurrentExamID());
+    /*
+     * Medication Methods
+     */
+
+     public Medication getMedication(int medicationID) {
+        return medicationRepository.getSpecificMedication(medicationID);
     }
+
+
+    /*
+     * Treatment Methods
+     */
 
     public void addTreatment(int examID) {
         Treatment treatment = new Treatment();
@@ -261,10 +215,25 @@ public class ClientController extends ViewController {
         refreshViews();
     }
 
-    public void removeTreatment(int treatmentID)
-    {
-        treatmentRepository.removeTreatment(treatmentID);
+    public void updateTreatment(int treatmentID, int examID, int medicationID, String type,
+                                LocalDate startDate, LocalDate endDate, String directions) {
+        Treatment treatment = treatmentRepository.getSpecificTreatment(treatmentID);
+        treatment.setExamID(examID);
+        treatment.setMedicationID(medicationID);
+        treatment.setType(Treatment.TreatType.valueOf(type));
+        treatment.setStartDate(startDate);
+        treatment.setEndDate(endDate);
+        treatment.setDirections(directions);
+        treatmentRepository.updateTreatment(treatment);
         refreshViews();
+    }
+
+     public Treatment[] getVaccinationsFromPetID(int petID) {
+        return treatmentRepository.getVaccinationsByPetID(petID);
+    }
+
+    public Treatment getTreatment(int treatmentID) {
+        return treatmentRepository.getSpecificTreatment(treatmentID);
     }
 
     public Treatment[] getTreatments() {
@@ -272,8 +241,27 @@ public class ClientController extends ViewController {
         return treatmentRepository.getTreatmentsByExamID(examID);
     }
 
-    public Treatment getTreatment(int treatmentID) {
-        return treatmentRepository.getSpecificTreatment(treatmentID);
+    public void removeTreatment(int treatmentID)
+    {
+        treatmentRepository.removeTreatment(treatmentID);
+        refreshViews();
+    }
+
+
+    /*
+     * Exam Methods
+     */
+
+    public void addExam() {
+        Exam exam = new Exam();
+        exam.setPetID(this.getCurrentPetID());
+        exam.setDate(LocalDateTime.now());
+        exam.setDescription("New Exam");
+        exam.setVitals("Enter Vitals Here...");
+        exam.setWeight(0);
+        exam.setLocation("Location");
+        examRepository.addExam(exam);
+        refreshViews();
     }
 
     public void updateExam(int examID, LocalDateTime date, int vetID, int techID, String description,
@@ -290,17 +278,8 @@ public class ClientController extends ViewController {
         examRepository.updateExam(exam);
     }
 
-    public void updateTreatment(Treatment treatment) {
-        treatmentRepository.updateTreatment(treatment);
-        refreshViews();
-    }
-
-    public Medication getMedication(int medicationID) {
-        return medicationRepository.getSpecificMedication(medicationID);
-    }
-
-    public Treatment[] getVaccinationsFromPetID(int petID) {
-        return treatmentRepository.getVaccinationsByPetID(petID);
+    public Exam[] getExams(int petID) {
+        return examRepository.getExamsByPetID(petID);
     }
 
     public Exam getExam(int examID) {
@@ -312,11 +291,11 @@ public class ClientController extends ViewController {
         refreshViews();
     }
 
-    public Tech[] getTechs() {
-        return staffRepository.getTechs();
-    }
 
-    // Vet and Tech Methods
+    /*
+     * Vet and Tech Methods
+     */
+
     public Vet getVet(int vetID) {
         return staffRepository.getVet(vetID);
     }
@@ -332,6 +311,16 @@ public class ClientController extends ViewController {
     public Vet[] getVets() {
         return staffRepository.getVets();
     }
+
+    public Tech[] getTechs() {
+        return staffRepository.getTechs();
+    }
+
+
+    /*
+     * Appointment Methods
+     * 
+     */
 
     public Appointment[] getAppointments(int petID) {
         return appointmentRepository.getAppointmentsByPetID(petID);
@@ -359,7 +348,10 @@ public class ClientController extends ViewController {
         return medicationRepository.getAllInStock();
     }
 
-    // Page navigation methods
+
+    /*
+     * Page Navigation Methods
+     */
 
     public void setClientPage(ClientsView clientPage) {
         this.clientPage = clientPage;

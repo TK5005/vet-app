@@ -24,9 +24,7 @@ public class InvoiceView extends JPanel implements IVetAppView {
         setLayout(layout);
         setBackground(Color.WHITE);
         InvoiceListView listView = new InvoiceListView();
-        InvoiceDetailView detailView = new InvoiceDetailView();
         add(listView, "list");
-        add(detailView, "detail");
         layout.show(this, "list");
     }
 
@@ -36,9 +34,5 @@ public class InvoiceView extends JPanel implements IVetAppView {
 
     public void showListView() {
         layout.show(this, "list");
-    }
-
-    public void showDetailView() {
-        layout.show(this, "detail");
     }
 }

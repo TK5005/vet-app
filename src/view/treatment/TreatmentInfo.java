@@ -58,12 +58,8 @@ public class TreatmentInfo extends JPanel {
     private void saveTreatment()
     {
         Medication meds = (Medication) medicationBox.getSelectedItem();
-        treatment.setType((String) treatTypeBox.getSelectedItem());
-        treatment.setMedicationID(meds.getMedicationID());
-        treatment.setStartDate(treatmentStartDateField.getDate());
-        treatment.setEndDate(treatmentEndDateField.getDate());
-        treatment.setDirections(treatmentDirectionsField.getText());
-        clientController.updateTreatment(treatment);
+        clientController.updateTreatment(this.treatmentID, clientController.getCurrentExamID(), meds.getMedicationID(), (String) treatTypeBox.getSelectedItem(),
+                                        treatmentStartDateField.getDate(), treatmentEndDateField.getDate(), treatmentDirectionsField.getText());
     }
 
     private void createUI() {

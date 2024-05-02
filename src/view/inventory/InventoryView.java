@@ -28,9 +28,7 @@ public class InventoryView extends JPanel implements IVetAppView{
         setLayout(layout);
         setBackground(Color.WHITE);
         InventoryListView listView = new InventoryListView();
-        InventoryDetailView detailView = new InventoryDetailView();
         add(listView, "list");
-        add(detailView, "detail");
         layout.show(this, "list");
     }
 
