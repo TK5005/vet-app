@@ -9,14 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TreatmentRepository {
-    private final Connection conn;
-
-    public TreatmentRepository(){this.conn = ConnectionManager.getConnection();}
+//    private final Connection conn;
+//
+//    public TreatmentRepository(){this.conn = ConnectionManager.getConnection();}
 
     public Treatment[] getTreatmentsByExamID(int examID){
         String sql = "SELECT * FROM TREATMENT WHERE examID = ?";
         List<Treatment> ret = new ArrayList<>();
-        try(PreparedStatement get = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql)){
             get.setInt(1,examID);
             ResultSet rs = get.executeQuery();
 
@@ -45,7 +46,8 @@ public class TreatmentRepository {
         String sql = "SELECT * FROM TREATMENT WHERE trmntID = ?";
         Treatment ret = null;
 
-        try (PreparedStatement get = conn.prepareStatement(sql)) {
+        try (Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql)) {
             get.setInt(1, treatmentID);
             ResultSet rs = get.executeQuery();
             while (rs.next()) {
@@ -71,7 +73,8 @@ public class TreatmentRepository {
         String sql
                 = "INSERT INTO TREATMENT (examID, medID, type, startDate, endDate, directions) " +
                 "VALUES(?, ?, ?, ?, ?, ?)";
-        try(PreparedStatement create = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement create = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
             create.setInt(1,mod.getExamID());
             if (mod.getMedicationID() == null) create.setNull(2, Types.INTEGER); else  create.setInt(2,mod.getMedicationID());
             create.setString(3,mod.getTreatmentTypeString());
@@ -90,13 +93,6 @@ public class TreatmentRepository {
         }catch (SQLException ex) {
             System.err.println("Error inserting Pet entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back pet changes");
-                e.printStackTrace();
-            }
         }
         return mod;
     }
@@ -107,7 +103,8 @@ public class TreatmentRepository {
                 = "UPDATE TREATMENT SET medID = ?, type = ?, startDate = ?, endDate = ?, directions = ? " +
                 "WHERE trmntID = ?";
 
-        try (PreparedStatement update = conn.prepareStatement(sql)){
+        try (Connection conn = ConnectionManager.getConnection();
+                PreparedStatement update = conn.prepareStatement(sql)){
             if (mod.getMedicationID() == null) update.setNull(1, Types.INTEGER); else  update.setInt(1,mod.getMedicationID());
             update.setString(2, mod.getTreatmentTypeString());
             update.setDate(3, java.sql.Date.valueOf(mod.getStartDate()));
@@ -119,13 +116,6 @@ public class TreatmentRepository {
         }catch (SQLException ex) {
             System.err.println("Error updating Treatment entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back Treatment changes");
-                e.printStackTrace();
-            }
         }
     }
 
@@ -135,7 +125,8 @@ public class TreatmentRepository {
                 " t.examID in (SELECT examID FROM EXAMINATION WHERE petID = ?)";
 
         List<Treatment> ret = new ArrayList<>();
-        try(PreparedStatement get = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql)){
 
             get.setInt(1,petID);
             ResultSet rs = get.executeQuery();

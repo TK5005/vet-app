@@ -9,9 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ExamRepository {
-    private final Connection conn;
-
-    public ExamRepository(){this.conn = ConnectionManager.getConnection();}
 
     public Exam[] getExamsByPetID(int petID){
         String sql =
@@ -23,7 +20,8 @@ public class ExamRepository {
 
         List<Exam> ret = new ArrayList<>();
 
-        try(PreparedStatement get = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql);){
             get.setInt(1,petID);
             ResultSet rs = get.executeQuery();
 
@@ -55,7 +53,8 @@ public class ExamRepository {
                         "left join VET_EXAMS v on e.examID = v.examID " +
                         "left join TECH_EXAMS t on e.examID = v.examID WHERE e.examID = ?";
         Exam ret = null;
-        try(PreparedStatement get = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql);){
             get.setInt(1,examID);
             ResultSet rs = get.executeQuery();
 
@@ -83,7 +82,8 @@ public class ExamRepository {
                 = "INSERT INTO EXAMINATION (petID, exam_datetime, description, vitals, weight, location) " +
                 "VALUES(?,?,?,?,?,?)";
 
-        try (PreparedStatement create = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection conn = ConnectionManager.getConnection();
+                PreparedStatement create = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)) {
             create.setInt(1, mod.getPetID());
             create.setTimestamp(2, java.sql.Timestamp.valueOf(mod.getDate()));
             create.setString(3, mod.getDescription());
@@ -102,13 +102,6 @@ public class ExamRepository {
         } catch (SQLException ex) {
             System.err.println("Error inserting exam entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back exam changes");
-                e.printStackTrace();
-            }
         }
         return mod;
     }
@@ -119,7 +112,8 @@ public class ExamRepository {
                 = "UPDATE EXAMINATION SET exam_datetime = ?, description = ?, vitals = ?, weight = ?, location = ? " +
                 "WHERE examID = ?";
 
-        try(PreparedStatement update = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement update = conn.prepareStatement(sql)){
             update.setTimestamp(1, java.sql.Timestamp.valueOf(mod.getDate()));
             update.setString(2, mod.getDescription());
             update.setString(3, mod.getVitals());
@@ -137,20 +131,14 @@ public class ExamRepository {
         }catch (SQLException ex) {
             System.err.println("Error updating Exam entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back Exam changes");
-                e.printStackTrace();
-            }
         }
     }
 
     private void addVetExam(int examID, int vetID){
         String sql = "INSERT INTO VET_EXAMS VALUES (?, ?)";
 
-        try (PreparedStatement create = conn.prepareStatement(sql)){
+        try (Connection conn = ConnectionManager.getConnection();
+                PreparedStatement create = conn.prepareStatement(sql)){
             create.setInt(1,vetID);
             create.setInt(2,examID);
 
@@ -159,13 +147,6 @@ public class ExamRepository {
         }catch (SQLException ex) {
             System.err.println("Error inserting vet_exams entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back vet_exams changes");
-                e.printStackTrace();
-            }
         }
     }
 
@@ -174,7 +155,8 @@ public class ExamRepository {
     private void updateVetExam(int examID, int vetID) {
         String sql = "UPDATE VET_EXAMS SET empID = ? WHERE examID = ?";
 
-        try (PreparedStatement update = conn.prepareStatement(sql)) {
+        try (Connection conn = ConnectionManager.getConnection();
+                PreparedStatement update = conn.prepareStatement(sql)) {
             update.setInt(1, vetID);
             update.setInt(2, examID);
 
@@ -183,13 +165,6 @@ public class ExamRepository {
         } catch (SQLException ex) {
             System.err.println("Error inserting vet_exams entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back vet_exams changes");
-                e.printStackTrace();
-            }
         }
     }
 
@@ -197,7 +172,8 @@ public class ExamRepository {
     private void addTechExam(int examID, int techID){
         String sql = "INSERT INTO TECH_EXAMS VALUES (?, ?)";
 
-        try (PreparedStatement create = conn.prepareStatement(sql)){
+        try (Connection conn = ConnectionManager.getConnection();
+                PreparedStatement create = conn.prepareStatement(sql)){
             create.setInt(1,techID);
             create.setInt(2,examID);
 
@@ -206,13 +182,6 @@ public class ExamRepository {
         }catch (SQLException ex) {
             System.err.println("Error inserting tech_exams entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back tech_exams changes");
-                e.printStackTrace();
-            }
         }
     }
 
@@ -220,7 +189,8 @@ public class ExamRepository {
     private void updateTechExam(int examID, int techID){
         String sql = "UPDATE TECH_EXAMS SET empID = ? WHERE examID = ?";;
 
-        try (PreparedStatement update = conn.prepareStatement(sql)){
+        try (Connection conn = ConnectionManager.getConnection();
+                PreparedStatement update = conn.prepareStatement(sql)){
             update.setInt(1,techID);
             update.setInt(2,examID);
 
@@ -229,13 +199,6 @@ public class ExamRepository {
         }catch (SQLException ex) {
             System.err.println("Error updating tech_exams entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back tech_exams changes");
-                e.printStackTrace();
-            }
         }
     }
 
@@ -243,7 +206,8 @@ public class ExamRepository {
         String sql
                 = "SELECT * FROM VET_EXAMS WHERE empID = ? AND examID = ?";
 
-        try(PreparedStatement get = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql)){
             get.setInt(1, vetID);
             get.setInt(2, examID);
             ResultSet rs = get.executeQuery();
@@ -267,7 +231,8 @@ public class ExamRepository {
         String sql
                 = "SELECT * FROM TECH_EXAMS WHERE empID = ? AND examID = ?";
 
-        try(PreparedStatement get = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql)){
             get.setInt(1, techID);
             get.setInt(2, examID);
             ResultSet rs = get.executeQuery();
@@ -300,7 +265,8 @@ public class ExamRepository {
 
         List<Exam> ret = new ArrayList<>();
 
-        try(PreparedStatement get = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql)){
             ResultSet rs = get.executeQuery();
 
             while(rs.next()){

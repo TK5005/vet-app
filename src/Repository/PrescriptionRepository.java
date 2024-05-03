@@ -11,15 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PrescriptionRepository {
-    private final Connection conn;
-
-    public PrescriptionRepository(){conn = ConnectionManager.getConnection();}
+//    private final Connection conn;
+//
+//    public PrescriptionRepository(){conn = ConnectionManager.getConnection();}
 
     public Prescription[] getAll(){
         String sql = "SELECT * FROM PRESCRIPTION";
         List<Prescription> ret = new ArrayList<>();
 
-        try(PreparedStatement get = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql)){
             ResultSet rs = get.executeQuery();
 
             while(rs.next()){
@@ -42,7 +43,8 @@ public class PrescriptionRepository {
         String sql = "SELECT * FROM PRESCRIPTION WHERE empID = ?";
         List<Prescription> ret = new ArrayList<>();
 
-        try(PreparedStatement get = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql)){
             get.setInt(1,vetID);
             ResultSet rs = get.executeQuery();
 
@@ -65,7 +67,8 @@ public class PrescriptionRepository {
         String sql
                 = "INSERT INTO PRESCRIPTION (empID, medID, trmntID) " +
                 "VALUES(?, ?, ?)";
-        try(PreparedStatement create = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement create = conn.prepareStatement(sql)){
             create.setInt(1,vetID);
             create.setInt(2,medID);
             create.setInt(3,treatmentID);
@@ -75,13 +78,6 @@ public class PrescriptionRepository {
         }catch (SQLException ex) {
             System.err.println("Error inserting prescription entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back prescription changes");
-                e.printStackTrace();
-            }
         }
     }
 
@@ -92,7 +88,8 @@ public class PrescriptionRepository {
         String sql
                 = "SELECT * FROM PRESCRIPTION WHERE trmntID = ?";
 
-        try(PreparedStatement get = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql)){
             get.setInt(1,treatmentID);
             ResultSet rs = get.executeQuery();
 

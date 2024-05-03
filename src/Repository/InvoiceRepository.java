@@ -8,16 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InvoiceRepository {
-    private final Connection conn;
-
-    public InvoiceRepository(){conn = ConnectionManager.getConnection();}
+//    private final Connection conn;
+//
+//    public InvoiceRepository(){conn = ConnectionManager.getConnection();}
 
     public Invoice[] getAll(){
         String sql =
                 "SELECT * FROM INVOICE";
         List<Invoice> ret = new ArrayList<>();
 
-        try(PreparedStatement get = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql)){
             ResultSet rs = get.executeQuery();
 
             while(rs.next()){
@@ -44,7 +45,8 @@ public class InvoiceRepository {
                 "SELECT * FROM INVOICE WHERE invoiceNo = ?";
         Invoice ret = new Invoice();
 
-        try(PreparedStatement get = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql)){
             get.setInt(1,invoiceNo);
             ResultSet rs = get.executeQuery();
 
@@ -71,7 +73,8 @@ public class InvoiceRepository {
                 "SELECT * FROM INVOICE WHERE custID = ?";
         List<Invoice> ret = new ArrayList<>();
 
-        try(PreparedStatement get = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql)){
             get.setInt(1,clientID);
             ResultSet rs = get.executeQuery();
 
@@ -99,7 +102,8 @@ public class InvoiceRepository {
                 "SELECT * FROM INVOICE WHERE examID = ? ";
         List<Invoice> ret = new ArrayList<>();
 
-        try(PreparedStatement get = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql)){
             get.setInt(1,examID);
             ResultSet rs = get.executeQuery();
 
@@ -128,7 +132,8 @@ public class InvoiceRepository {
                         " (SELECT examID FROM EXAMINATION WHERE petID = ?)";
         List<Invoice> ret = new ArrayList<>();
 
-        try(PreparedStatement get = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql)){
             get.setInt(1,petID);
             ResultSet rs = get.executeQuery();
 
@@ -156,7 +161,8 @@ public class InvoiceRepository {
                 = "INSERT INTO INVOICE (examID,custID,amtDue,status,invoiceDate)" +
                 " VALUES(?,?,?,?,?)";
 
-        try(PreparedStatement create = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement create = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)){
             create.setInt(1, mod.getExamID());
             create.setInt(2, mod.getClientID());
             create.setFloat(3, mod.getAmtDue());
@@ -173,13 +179,6 @@ public class InvoiceRepository {
         }catch (SQLException ex) {
             System.err.println("Error inserting Invoice entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back Invoice changes");
-                e.printStackTrace();
-            }
         }
         return mod;
 
@@ -190,7 +189,8 @@ public class InvoiceRepository {
                 ="UPDATE INVOICE SET examID=?,custID=?,amtDue=?,status=?,invoiceDate=? " +
                 "WHERE invoiceNo = ?";
 
-        try(PreparedStatement update = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement update = conn.prepareStatement(sql)){
             update.setInt(1, mod.getExamID());
             update.setInt(2, mod.getClientID());
             update.setFloat(3, mod.getAmtDue());
@@ -203,13 +203,6 @@ public class InvoiceRepository {
         }catch (SQLException ex) {
             System.err.println("Error updating Invoice entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back Invoice changes");
-                e.printStackTrace();
-            }
         }
     }
 

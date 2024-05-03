@@ -11,15 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SpecialtyRepository {
-    private final Connection conn;
-
-    public SpecialtyRepository(){conn = ConnectionManager.getConnection();}
+//    private final Connection conn;
+//
+//    public SpecialtyRepository(){conn = ConnectionManager.getConnection();}
 
     public Specialty[] getSpecialtiesByVetID(int vetID){
         String sql
                 = "SELECT * FROM SPECIALTIES WHERE empID = ?";
         List<Specialty> ret = new ArrayList<>();
-        try(PreparedStatement get = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql)){
             get.setInt(1,vetID);
 
             ResultSet rs = get.executeQuery();
@@ -42,7 +43,8 @@ public class SpecialtyRepository {
         String sql =
                 "INSERT INTO SPECIALTIES VALUES(?,?)";
 
-        try(PreparedStatement create = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement create = conn.prepareStatement(sql)){
             create.setInt(1, mod.getEmpID());
             create.setString(2,mod.getSpecialty());
 
@@ -51,20 +53,14 @@ public class SpecialtyRepository {
         }catch (SQLException ex) {
             System.err.println("Error inserting Specialty entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back Specialty changes");
-                e.printStackTrace();
-            }
         }
     }
     public void deleteSpecialty(Specialty mod){
         String sql
                 = "DELETE FROM SPECIALTIES WHERE empID = ? AND name = ?";
 
-        try(PreparedStatement delete = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement delete = conn.prepareStatement(sql)){
             delete.setInt(1,mod.getEmpID());
             delete.setString(2,mod.getSpecialty());
 
@@ -73,13 +69,6 @@ public class SpecialtyRepository {
         }catch (SQLException ex) {
             System.err.println("Error deleting Specialty entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back Specialty changes");
-                e.printStackTrace();
-            }
         }
     }
 }
