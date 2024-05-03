@@ -7,14 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PetRepository {
-    private final Connection conn;
-
-    public PetRepository(){this.conn = ConnectionManager.getConnection();}
+//    private final Connection conn;
+//
+//    public PetRepository(){this.conn = ConnectionManager.getConnection();}
 
     public Pet[] getPetsByClientID(int clientID){
         String sql = "SELECT * FROM PET WHERE ownerID = ?";
         List<Pet> ret = new ArrayList<>();
-        try(PreparedStatement get = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql)){
             get.setInt(1,clientID);
             ResultSet rs = get.executeQuery();
 
@@ -35,7 +36,8 @@ public class PetRepository {
         String sql = "SELECT * FROM PET WHERE petID = ?";
         Pet ret = null;
 
-        try (PreparedStatement get = conn.prepareStatement(sql)) {
+        try (Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql)) {
             get.setInt(1, petID);
             ResultSet rs = get.executeQuery();
             while (rs.next()) {
@@ -77,7 +79,8 @@ public class PetRepository {
          ="INSERT INTO PET (ownerID, name, sex, color, species, breed, birthdate, weight, microchipNumber, rabiesTag)"+
                 " VALUES(?,?,?,?,?,?,?,?,?,?)";
 
-        try(PreparedStatement create = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement create = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
             create.setInt(1,mod.getOwnerID());
             create.setString(2,mod.getName());
             create.setString(3,mod.getSex());
@@ -99,13 +102,6 @@ public class PetRepository {
         }catch (SQLException ex) {
             System.err.println("Error inserting Pet entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back pet changes");
-                e.printStackTrace();
-            }
         }
         return mod;
     }
@@ -114,7 +110,8 @@ public class PetRepository {
         String updateSQL
                 = "UPDATE PET SET name = ? , sex = ? , color = ? , species = ? , breed = ? , birthdate = ? , " +
                 "weight = ? , microchipNumber = ? , rabiesTag = ? WHERE petID = ?";
-        try (PreparedStatement update = conn.prepareStatement(updateSQL)) {
+        try (Connection conn = ConnectionManager.getConnection();
+                PreparedStatement update = conn.prepareStatement(updateSQL)) {
             update.setString(1, mod.getName());
             update.setString(2, mod.getSex());
             update.setString(3, mod.getColor());
@@ -131,13 +128,6 @@ public class PetRepository {
         } catch (SQLException ex) {
             System.err.println("Error updating Pet entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back Pet changes");
-                e.printStackTrace();
-            }
         }
     }
 }

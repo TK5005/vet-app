@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClientRepository {
-    private final Connection conn;
-
-    public ClientRepository() {
-        this.conn = ConnectionManager.getConnection();
-    }
+//    private final Connection conn;
+//
+//    public ClientRepository() {
+//        this.conn = ConnectionManager.getConnection();
+//    }
 
     public void removeClient(int clientID)
     {
@@ -38,7 +38,8 @@ public class ClientRepository {
     public Client[] getAll() {
         String sql = "SELECT * FROM CLIENT";
         List<Client> ret = new ArrayList<>();
-        try (PreparedStatement get = conn.prepareStatement(sql)) {
+        try (Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql)) {
 
             ResultSet rs = get.executeQuery();
             while (rs.next()) {
@@ -57,7 +58,8 @@ public class ClientRepository {
         String sql = "SELECT * FROM CLIENT WHERE clientID = ?";
         Client ret = new Client();
 
-        try(PreparedStatement get = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql)){
             get.setInt(1,clientID);
             ResultSet rs = get.executeQuery();
             while(rs.next()){
@@ -83,7 +85,8 @@ public class ClientRepository {
         String createSQL
                 = "INSERT INTO CLIENT (firstName, lastName, email, phone, street, city, state, zip)" +
                 "VALUES(? , ? , ? , ? , ? , ? , ? , ? )";
-        try (PreparedStatement create = conn.prepareStatement(createSQL,Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection conn = ConnectionManager.getConnection();
+                PreparedStatement create = conn.prepareStatement(createSQL,Statement.RETURN_GENERATED_KEYS)) {
             create.setString(1,mod.getFirstName());
             create.setString(2,mod.getLastName());
             create.setString(3,mod.getEmail());
@@ -103,13 +106,6 @@ public class ClientRepository {
         } catch (SQLException ex) {
             System.err.println("Error inserting Client entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back client changes");
-                e.printStackTrace();
-            }
         }
         return mod;
     }
@@ -118,7 +114,8 @@ public class ClientRepository {
         String updateSQL
                 = "UPDATE CLIENT SET firstName = ? , lastName = ? , email = ? , phone = ? , street = ? , city = ? , " +
                 "state = ? , zip = ?  WHERE clientID = ?";
-        try (PreparedStatement update = conn.prepareStatement(updateSQL)) {
+        try (Connection conn = ConnectionManager.getConnection();
+                PreparedStatement update = conn.prepareStatement(updateSQL)) {
             update.setString(1, mod.getFirstName());
             update.setString(2, mod.getLastName());
             update.setString(3, mod.getEmail());
@@ -134,13 +131,6 @@ public class ClientRepository {
         } catch (SQLException ex) {
             System.err.println("Error updating Client entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back client changes");
-                e.printStackTrace();
-            }
         }
     }
 }

@@ -11,15 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CertificationRepository {
-    private final Connection conn;
-
-    public CertificationRepository(){conn = ConnectionManager.getConnection();}
+//    private final Connection conn;
+//
+//    public CertificationRepository(){conn = ConnectionManager.getConnection();}
 
     public Certification[] getCertsByTechID(int techID){
         String sql
                 = "SELECT * FROM CERTIFICATIONS WHERE empID = ?";
         List<Certification> ret = new ArrayList<>();
-        try(PreparedStatement get = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql)){
             get.setInt(1,techID);
 
             ResultSet rs = get.executeQuery();
@@ -42,7 +43,8 @@ public class CertificationRepository {
         String sql =
                 "INSERT INTO CERTIFICATIONS VALUES(?,?)";
 
-        try(PreparedStatement create = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement create = conn.prepareStatement(sql)){
             create.setInt(1, mod.getEmpID());
             create.setString(2,mod.getCertification());
 
@@ -51,20 +53,14 @@ public class CertificationRepository {
         }catch (SQLException ex) {
             System.err.println("Error inserting Certification entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back Certification changes");
-                e.printStackTrace();
-            }
         }
     }
     public void deleteCertification(Certification mod){
         String sql
                 = "DELETE FROM CERTIFICATIONS WHERE empID = ? AND name = ?";
 
-        try(PreparedStatement delete = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement delete = conn.prepareStatement(sql)){
             delete.setInt(1,mod.getEmpID());
             delete.setString(2,mod.getCertification());
 
@@ -73,13 +69,6 @@ public class CertificationRepository {
         }catch (SQLException ex) {
             System.err.println("Error deleting Certification entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back Certification changes");
-                e.printStackTrace();
-            }
         }
     }
 }

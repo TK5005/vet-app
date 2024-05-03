@@ -13,22 +13,21 @@ import java.util.List;
 
 public class StaffRepository {
 
-    private DataModel model;
-    private Connection conn;
-    public StaffRepository(DataModel model) {
-        this.model = model;
-    }
-    public StaffRepository(){
-        this.conn = ConnectionManager.getConnection();
-    }
+//    private DataModel model;
+//    private Connection conn;
+//    public StaffRepository(DataModel model) {
+//        this.model = model;
+//    }
+//    public StaffRepository(){
+//        this.conn = ConnectionManager.getConnection();
+//    }
     public Staff[] Get(){
-        Statement stmt = null;
-        ResultSet rs = null;
+        String sql = "SELECT * FROM STAFF";
         List<Staff> ret = new ArrayList<>();
-        try {
-            String sql = "SELECT * FROM STAFF";
-            stmt = conn.createStatement();
-            rs = stmt.executeQuery(sql);
+        try(Connection conn = ConnectionManager.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+           ResultSet rs = stmt.executeQuery(sql);
             Staff staff = new Staff();
             while(rs.next()){
                 staff.setEmpID(rs.getInt("empID")); 
@@ -48,18 +47,16 @@ public class StaffRepository {
             System.out.println("Error running Staff Get statement");
             ex.printStackTrace();
         }
-        Staff[] cli = new Staff[ret.size()];
-        cli = ret.toArray(new Staff[ret.size()]);
-        return cli;
+        return ret.toArray(new Staff[0]);
     }
     public Staff[] GetStaff(int empID){
-        Statement stmt = null;
-        ResultSet rs = null;
+        String sql = "SELECT * FROM STAFF WHERE empID=?";
         List<Staff> ret = new ArrayList<>();
-        try {
-            String sql = "SELECT * FROM STAFF WHERE empID="+empID;
-            stmt = conn.createStatement();
-            rs = stmt.executeQuery(sql);
+        try (Connection conn = ConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)){
+
+            stmt.setInt(1,empID);
+            ResultSet rs = stmt.executeQuery(sql);
             Staff staff = new Staff();
             while(rs.next()){
                 staff.setEmpID(rs.getInt("empID")); 
@@ -79,15 +76,15 @@ public class StaffRepository {
             System.out.println("Error running Staff Get statement");
             ex.printStackTrace();
         }
-        Staff[] cli = new Staff[ret.size()];
-        cli = ret.toArray(new Staff[ret.size()]);
-        return cli;
+        return ret.toArray(new Staff[0]);
+
     }
     public Vet[] getVets(){
         String sql
                 = "SELECT s.*, v.licenseNo FROM STAFF s JOIN VET v ON v.empID = s.empID";
         List<Vet> ret = new ArrayList<>();
-        try(PreparedStatement get = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql)){
             ResultSet rs = get.executeQuery();
             while(rs.next()){
                 Vet add = new Vet();
@@ -118,7 +115,8 @@ public class StaffRepository {
                 = "SELECT s.*, v.licenseNo FROM STAFF s JOIN VET v ON v.empID = s.empID " +
                 "WHERE s.empID = ?";
         Vet ret = null;
-        try(PreparedStatement get = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql)){
             get.setInt(1,vetID);
 
             ResultSet rs = get.executeQuery();
@@ -151,7 +149,8 @@ public class StaffRepository {
         String sql
                 = "SELECT s.*, t.certNumber FROM STAFF s JOIN TECH t ON t.empID = s.empID";
         List<Tech> ret = new ArrayList<>();
-        try(PreparedStatement get = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql)){
             ResultSet rs = get.executeQuery();
             while(rs.next()){
                 Tech add = new Tech();
@@ -183,7 +182,8 @@ public class StaffRepository {
                 = "SELECT s.*, t.certNumber FROM STAFF s JOIN TECH t ON t.empID = s.empID " +
                 "WHERE s.empID = ?";
         Tech ret = null;
-        try(PreparedStatement get = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+            PreparedStatement get = conn.prepareStatement(sql)){
             get.setInt(1,techID);
 
             ResultSet rs = get.executeQuery();
@@ -220,7 +220,8 @@ public class StaffRepository {
                 = "INSERT INTO STAFF (firstName,lastName,sex,dob,ssn,phone,street,city,state,zip) " +
                 "VALUES(?,?,?,?,?,?,?,?,?,?)";
 
-        try(PreparedStatement create = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement create = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)){
             create.setString(1,mod.getFirstName());
             create.setString(2,mod.getLastName());
             create.setString(3,mod.getSex());
@@ -241,13 +242,6 @@ public class StaffRepository {
         }catch (SQLException ex) {
             System.err.println("Error updating Staff entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back Staff changes");
-                e.printStackTrace();
-            }
         }
         return mod;
     }
@@ -257,7 +251,8 @@ public class StaffRepository {
                 = "UPDATE STAFF SET firstName = ?, lastName=?,sex=?,dob=?,ssn=?,phone=?,street=?,city=?,state=?,zip=? " +
                 "WHERE empID=?";
 
-        try(PreparedStatement update = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement update = conn.prepareStatement(sql)){
             update.setString(1, mod.getFirstName());
             update.setString(2, mod.getLastName());
             update.setString(3, mod.getSex());
@@ -274,13 +269,6 @@ public class StaffRepository {
         }catch (SQLException ex) {
             System.err.println("Error updating Staff entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back Staff changes");
-                e.printStackTrace();
-            }
         }
     }
 
@@ -289,7 +277,8 @@ public class StaffRepository {
         mod.setEmpID(newStaff.getEmpID());
         String sql =
                 "INSERT INTO VET VALUES(?,?)";
-        try(PreparedStatement create = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement create = conn.prepareStatement(sql)){
             create.setInt(1, mod.getEmpID());
             create.setString(2,mod.getLicenseNumber());
 
@@ -298,13 +287,6 @@ public class StaffRepository {
         }catch (SQLException ex) {
             System.err.println("Error updating Vet entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back Vet changes");
-                e.printStackTrace();
-            }
         }
         return mod;
     }
@@ -314,7 +296,8 @@ public class StaffRepository {
         String sql
                 ="UPDATE VET SET licenseNo=? WHERE empID=?";
 
-        try(PreparedStatement update = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement update = conn.prepareStatement(sql)){
             update.setString(1, mod.getLicenseNumber());
             update.setInt(2,mod.getEmpID());
 
@@ -323,13 +306,6 @@ public class StaffRepository {
         }catch (SQLException ex) {
             System.err.println("Error updating Vet entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back Vet changes");
-                e.printStackTrace();
-            }
         }
     }
 
@@ -338,7 +314,8 @@ public class StaffRepository {
         mod.setEmpID(newStaff.getEmpID());
         String sql =
                 "INSERT INTO TECH VALUES(?,?)";
-        try(PreparedStatement create = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement create = conn.prepareStatement(sql)){
             create.setInt(1, mod.getEmpID());
             create.setString(2,mod.getCertNumber());
 
@@ -347,13 +324,6 @@ public class StaffRepository {
         }catch (SQLException ex) {
             System.err.println("Error updating Tech entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back Tech changes");
-                e.printStackTrace();
-            }
         }
         return mod;
     }
@@ -363,7 +333,8 @@ public class StaffRepository {
         String sql
                 = "UPDATE TECH SET certNumber=? WHERE empID=?";
 
-        try (PreparedStatement update = conn.prepareStatement(sql)) {
+        try (Connection conn = ConnectionManager.getConnection();
+                PreparedStatement update = conn.prepareStatement(sql)) {
             update.setString(1, mod.getCertNumber());
             update.setInt(2, mod.getEmpID());
 
@@ -372,13 +343,7 @@ public class StaffRepository {
         } catch (SQLException ex) {
             System.err.println("Error updating Tech entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back Tech changes");
-                e.printStackTrace();
-            }
+
         }
     }
 }

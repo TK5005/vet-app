@@ -10,16 +10,17 @@ import java.util.List;
 
 public class AppointmentRepository {
 
-    private final Connection conn;
-    public AppointmentRepository(){
-        this.conn = ConnectionManager.getConnection();
-    }
+//    private final Connection conn;
+//    public AppointmentRepository(){
+//        this.conn = ConnectionManager.getConnection();
+//    }
 
     public Appointment[] getAppointmentsByPetID(int petID)
     {
         String sql = "SELECT * FROM APPOINTMENT WHERE petID = ?";
         List<Appointment> ret = new ArrayList<>();
-        try (PreparedStatement get = conn.prepareStatement(sql)) {
+        try (Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql)) {
             get.setInt(1, petID);
             ResultSet rs = get.executeQuery();
             while (rs.next()) {
@@ -45,7 +46,8 @@ public class AppointmentRepository {
     public Appointment[] getAll(){
         String sql = "SELECT * FROM APPOINTMENT";
         List<Appointment> ret = new ArrayList<>();
-        try (PreparedStatement get = conn.prepareStatement(sql)){
+        try (Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql)){
             ResultSet rs = get.executeQuery();
             while(rs.next()){
                 Appointment add = new Appointment();
@@ -66,13 +68,13 @@ public class AppointmentRepository {
     }
 
     public Appointment[] GetApp(int appID){
-        Statement stmt = null;
-        ResultSet rs = null;
+        String sql = "SELECT * FROM APPOINTMENT WHERE appID=?";
         List<Appointment> ret = new ArrayList<>();
-        try {
-            String sql = "SELECT * FROM APPOINTMENT WHERE appID="+appID;
-            stmt = conn.createStatement();
-            rs = stmt.executeQuery(sql);
+        try (Connection conn = ConnectionManager.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)){
+
+            stmt.setInt(1, appID);
+            ResultSet rs = stmt.executeQuery(sql);
             Appointment app = new Appointment();
             while(rs.next()){
                 Appointment add = new Appointment();
@@ -103,7 +105,8 @@ public class AppointmentRepository {
                 = "INSERT INTO APPOINTMENT (clientID, petID, staffID, start_time, description) " +
                 "VALUES(?,?,?,?,?)";
 
-        try(PreparedStatement create = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement create = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)){
             create.setInt(1, mod.getClientID());
             create.setInt(2, mod.getPetID());
             create.setInt(3, mod.getStaffID());
@@ -120,13 +123,6 @@ public class AppointmentRepository {
         }catch (SQLException ex) {
             System.err.println("Error inserting Appointment entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back Appointment changes");
-                e.printStackTrace();
-            }
         }
         return mod;
     }
@@ -136,7 +132,8 @@ public class AppointmentRepository {
                 "UPDATE APPOINTMENT SET clientID=?,petID=?,staffID=?,start_time=?,checkin_time=?,description=? " +
                         "WHERE apptNo=?";
 
-        try(PreparedStatement update = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement update = conn.prepareStatement(sql)){
 
             update.setInt(1,mod.getClientID());
             update.setInt(2,mod.getPetID());
@@ -151,13 +148,6 @@ public class AppointmentRepository {
         }catch (SQLException ex) {
             System.err.println("Error updating Appointment entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back Appointment changes");
-                e.printStackTrace();
-            }
         }
     }
 }
