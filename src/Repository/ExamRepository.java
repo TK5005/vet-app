@@ -254,24 +254,8 @@ public class ExamRepository {
 
     public void deleteExam(int examID)
     {
-        String sql
-                = "DELETE FROM EXAMINATION WHERE examID = ?";
-        
-        try(PreparedStatement delete = conn.prepareStatement(sql)){
-            delete.setInt(1,examID);
-            delete.executeUpdate();
-            conn.commit();
-        }catch (SQLException ex) {
-            System.err.println("Error deleting Exam entry");
-            ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back Exam changes");
-                e.printStackTrace();
-            }
-        }
+        //TODO: Implement deleteExam
+        System.out.println("deleteExam not implemented");
     }
 
     public Exam[] getAllBasicExamData()
@@ -280,6 +264,9 @@ public class ExamRepository {
             "SELECT * FROM EXAMINATION";
 
         List<Exam> ret = new ArrayList<>();
+
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql)){
             ResultSet rs = get.executeQuery();
 
             while(rs.next()){
@@ -299,49 +286,5 @@ public class ExamRepository {
             ex.printStackTrace();
         }
         return ret.toArray(new Exam[0]);
-    }
-
-    public void deleteTechExam(int examID)
-    {
-        String sql
-                = "DELETE FROM TECH_EXAMS WHERE examID = ?";
-
-        try(PreparedStatement delete = conn.prepareStatement(sql)){
-            delete.setInt(1,examID);
-            delete.executeUpdate();
-            conn.commit();
-        }catch (SQLException ex) {
-            System.err.println("Error deleting Tech Exam entry");
-            ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back Tech Exam changes");
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void deleteVetExam(int examID)
-    {
-        String sql
-                = "DELETE FROM VET_EXAMS WHERE examID = ?";
-
-        try(PreparedStatement delete = conn.prepareStatement(sql)){
-            delete.setInt(1,examID);
-            delete.executeUpdate();
-            conn.commit();
-        }catch (SQLException ex) {
-            System.err.println("Error deleting Vet Exam entry");
-            ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back Vet Exam changes");
-                e.printStackTrace();
-            }
-        }
     }
 }

@@ -127,21 +127,6 @@ public class ClientController extends ViewController {
     }
 
     public void deleteClient(int clientID) {
-        invoiceRepository.removeInvoicesByClientID(clientID);
-        Pet[] pets = petRepository.getPetsByClientID(clientID);
-        for (Pet pet : pets) {
-            Exam[] exams = examRepository.getExamsByPetID(pet.getPetID());
-            for (Exam exam : exams) {
-                examRepository.deleteTechExam(exam.getExamID());
-                examRepository.deleteVetExam(exam.getExamID());
-                Treatment[] treatments = treatmentRepository.getTreatmentsByExamID(exam.getExamID());
-                for (Treatment treatment : treatments) {
-                    treatmentRepository.removeTreatment(treatment.getTreatmentID());
-                }
-                examRepository.deleteExam(exam.getExamID());
-            }
-            petRepository.removePet(pet.getPetID());
-        }
         clientRepository.removeClient(clientID);
         refreshViews();
     }
