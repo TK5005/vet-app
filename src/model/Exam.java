@@ -6,8 +6,8 @@ public class Exam {
     private int examID;
     private int petID;
     private LocalDateTime date;
-    private int vetID;
-    private int techID;
+    private Integer vetID;
+    private Integer techID;
     private String description;
     private int weight;
     private String location;
@@ -43,19 +43,19 @@ public class Exam {
         this.date=date;
     }
 
-    public int getVetID() {
+    public Integer getVetID() {
         return vetID;
     }
 
-    public void setVetID(int vetID) {
+    public void setVetID(Integer vetID) {
         this.vetID = vetID;
     }
 
-    public int getTechID() {
+    public Integer getTechID() {
         return techID;
     }
 
-    public void setTechID(int techID) {
+    public void setTechID(Integer techID) {
         this.techID = techID;
     }
 

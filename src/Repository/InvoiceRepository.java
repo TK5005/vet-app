@@ -156,7 +156,7 @@ public class InvoiceRepository {
                 = "INSERT INTO INVOICE (examID,custID,amtDue,status,invoiceDate)" +
                 " VALUES(?,?,?,?,?)";
 
-        try(PreparedStatement create = conn.prepareStatement(sql)){
+        try(PreparedStatement create = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)){
             create.setInt(1, mod.getExamID());
             create.setInt(2, mod.getClientID());
             create.setFloat(3, mod.getAmtDue());

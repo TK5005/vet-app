@@ -4,10 +4,7 @@ import DAL.ConnectionManager;
 import model.Pet;
 import model.Treatment;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,9 +71,9 @@ public class TreatmentRepository {
         String sql
                 = "INSERT INTO TREATMENT (examID, medID, type, startDate, endDate, directions) " +
                 "VALUES(?, ?, ?, ?, ?, ?)";
-        try(PreparedStatement create = conn.prepareStatement(sql)){
+        try(PreparedStatement create = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
             create.setInt(1,mod.getExamID());
-            create.setInt(2,mod.getMedicationID());
+            if (mod.getMedicationID() == null) create.setNull(2, Types.INTEGER); else  create.setInt(2,mod.getMedicationID());
             create.setString(3,mod.getTreatmentTypeString());
             create.setDate(4,java.sql.Date.valueOf(mod.getStartDate()));
             create.setDate(5,java.sql.Date.valueOf(mod.getEndDate()));
@@ -111,7 +108,7 @@ public class TreatmentRepository {
                 "WHERE trmntID = ?";
 
         try (PreparedStatement update = conn.prepareStatement(sql)){
-            update.setInt(1,mod.getMedicationID());
+            if (mod.getMedicationID() == null) update.setNull(1, Types.INTEGER); else  update.setInt(1,mod.getMedicationID());
             update.setString(2, mod.getTreatmentTypeString());
             update.setDate(3, java.sql.Date.valueOf(mod.getStartDate()));
             update.setDate(4, java.sql.Date.valueOf(mod.getEndDate()));

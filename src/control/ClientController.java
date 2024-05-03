@@ -201,7 +201,8 @@ public class ClientController extends ViewController {
     public void addTreatment(int examID) {
         Treatment treatment = new Treatment();
         treatment.setExamID(examID);
-        treatment.setMedicationID(0);
+        //Needs to be null on insertion for foreign key constraint
+        //treatment.setMedicationID(0);
         treatment.setType(Treatment.TreatType.LIFESTYLE);
         treatment.setStartDate(LocalDate.now());
         treatment.setEndDate(LocalDate.now());
@@ -210,7 +211,7 @@ public class ClientController extends ViewController {
         refreshViews();
     }
 
-    public void updateTreatment(int treatmentID, int examID, int medicationID, String type,
+    public void updateTreatment(int treatmentID, int examID, Integer medicationID, String type,
                                 LocalDate startDate, LocalDate endDate, String directions) {
         Treatment treatment = treatmentRepository.getSpecificTreatment(treatmentID);
         treatment.setExamID(examID);
@@ -255,7 +256,7 @@ public class ClientController extends ViewController {
         refreshViews();
     }
 
-    public void updateExam(int examID, LocalDateTime date, int vetID, int techID, String description,
+    public void updateExam(int examID, LocalDateTime date, Integer vetID, Integer techID, String description,
                            String vitals,
                            int weight, String location) {
         Exam exam = examRepository.getSpecificExam(examID);

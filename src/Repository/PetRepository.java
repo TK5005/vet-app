@@ -63,7 +63,7 @@ public class PetRepository {
          ="INSERT INTO PET (ownerID, name, sex, color, species, breed, birthdate, weight, microchipNumber, rabiesTag)"+
                 " VALUES(?,?,?,?,?,?,?,?,?,?)";
 
-        try(PreparedStatement create = conn.prepareStatement(sql)){
+        try(PreparedStatement create = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
             create.setInt(1,mod.getOwnerID());
             create.setString(2,mod.getName());
             create.setString(3,mod.getSex());
@@ -76,13 +76,11 @@ public class PetRepository {
             create.setLong(10,mod.getRabiesTag());
 
             create.executeUpdate();
-            //TODO: Need to add this back in and fix the error, removed for now to ge tthe code to work.
-            /*
+
             ResultSet rs = create.getGeneratedKeys();
             while(rs.next()){
                 mod.setPetID(rs.getInt(1));
             }
-            */
             conn.commit();
         }catch (SQLException ex) {
             System.err.println("Error inserting Pet entry");

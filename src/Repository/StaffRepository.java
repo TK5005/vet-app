@@ -220,7 +220,7 @@ public class StaffRepository {
                 = "INSERT INTO STAFF (firstName,lastName,sex,dob,ssn,phone,street,city,state,zip) " +
                 "VALUES(?,?,?,?,?,?,?,?,?,?)";
 
-        try(PreparedStatement create = conn.prepareStatement(sql)){
+        try(PreparedStatement create = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)){
             create.setString(1,mod.getFirstName());
             create.setString(2,mod.getLastName());
             create.setString(3,mod.getSex());

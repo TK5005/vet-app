@@ -8,7 +8,7 @@ public class Treatment {
     private int treatmentID;
     private TreatType type;
     //private String medication;
-    private int medicationID = -1;
+    private Integer medicationID = null;
     private LocalDate startDate;
     private LocalDate endDate;
     private String directions;
@@ -76,9 +76,9 @@ public class Treatment {
         this.directions = directions;
     }
 
-    public int getMedicationID(){return medicationID;}
+    public Integer getMedicationID(){return medicationID;}
 
-    public void setMedicationID(int medicationID){this.medicationID = medicationID;}
+    public void setMedicationID(Integer medicationID){this.medicationID = medicationID;}
 
     public String getTreatmentTypeString() {
         if (this.type != null) {

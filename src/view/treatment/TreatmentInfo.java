@@ -25,6 +25,7 @@ import model.Treatment;
 
 
 public class TreatmentInfo extends JPanel {
+
     int treatmentID;
     ClientController clientController;
     Treatment treatment;
@@ -58,7 +59,7 @@ public class TreatmentInfo extends JPanel {
     private void saveTreatment()
     {
         Medication meds = (Medication) medicationBox.getSelectedItem();
-        clientController.updateTreatment(this.treatmentID, clientController.getCurrentExamID(), meds.getItemID(), (String) treatTypeBox.getSelectedItem(),
+        clientController.updateTreatment(this.treatmentID, clientController.getCurrentExamID(), meds == null ? null : meds.getItemID() , (String) treatTypeBox.getSelectedItem(),
                                         treatmentStartDateField.getDate(), treatmentEndDateField.getDate(), treatmentDirectionsField.getText());
     }
 
@@ -73,7 +74,7 @@ public class TreatmentInfo extends JPanel {
     private void loadData()
     {
         treatmentIDField.setText(Integer.toString(treatment.getTreatmentID()));
-        treatTypeBox.setSelectedItem(treatment.getType());
+        treatTypeBox.setSelectedItem(treatment.getTreatmentTypeString());
         medicationBox.setSelectedItem(clientController.getMedication(treatment.getMedicationID()));
         treatmentStartDateField.setDate(treatment.getStartDate());
         treatmentEndDateField.setDate(treatment.getEndDate());
@@ -112,6 +113,8 @@ public class TreatmentInfo extends JPanel {
         //TODO: Make this a ComboBox that calls MedicationRepository.getAllInStock() to get the list of medications in stock
         //medicationField = new JTextField(10);
         medicationBox = new JComboBox<Medication>(clientController.getInStockMedications());
+        //We want this to be nullable because not all treatments require medications
+        medicationBox.insertItemAt(null,0);
         medicationBox.setRenderer(new MedicationComboBoxRenderer());
         medicationPanel.add(medicationLabel);
         //medicationPanel.add(medicationField);
@@ -159,6 +162,8 @@ public class TreatmentInfo extends JPanel {
                                                       boolean isSelected, boolean cellHasFocus){
             if(value != null){
                 setText(value.getName());
+            }else{
+                setText(" ");
             }
             return this;
         }

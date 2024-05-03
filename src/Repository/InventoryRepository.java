@@ -76,7 +76,7 @@ public class InventoryRepository {
                 "reorderQuantity,wholesaleCost,retailcost " +
                 "VALUES(?,?,?,?,?,?,?,?)";
 
-        try(PreparedStatement create = conn.prepareStatement(sql)){
+        try(PreparedStatement create = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)){
             create.setString(1, mod.getName());
             create.setString(2, mod.getManufacturer());
             create.setString(3, mod.getType().toString());

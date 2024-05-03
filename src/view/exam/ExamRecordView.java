@@ -38,7 +38,8 @@ public class ExamRecordView extends JPanel implements IVetAppView {
                 boolean isSelected, boolean cellHasFocus) {
             if (value != null) {
                 setText(value.getName());
-            }
+            }else
+                setText(" ");
             return this;
         }
     }
@@ -49,7 +50,8 @@ public class ExamRecordView extends JPanel implements IVetAppView {
                 boolean isSelected, boolean cellHasFocus) {
             if (value != null) {
                 setText(value.getName());
-            }
+            }else
+                setText(" ");
             return this;
         }
     }
@@ -380,18 +382,13 @@ public class ExamRecordView extends JPanel implements IVetAppView {
         LocalDateTime date = dateField.getDateTimeStrict();
         Vet vet = (Vet) examinerBox.getSelectedItem();
         Tech tech = (Tech) techBox.getSelectedItem();
-        int vetID = 1;
-        int techID = 2;
-        if(vet != null && tech != null){
-            vetID = vet.getEmpID();
-            techID = tech.getEmpID();
-        }
         String description = descriptionField.getText();
         String vitals = vitalsField.getText();
         int weight = Integer.parseInt(weightField.getText());
         String location = locationField.getText();
         //LocalTime time = timeField.getTime();
-        clientController.updateExam(clientController.getCurrentExamID(), date, vetID, techID, description, vitals,
+        clientController.updateExam(clientController.getCurrentExamID(), date,
+                vet == null ? null : vet.getEmpID(), tech == null ? null : tech.getEmpID(), description, vitals,
                 weight, location);
     }
 

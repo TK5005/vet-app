@@ -103,7 +103,7 @@ public class AppointmentRepository {
                 = "INSERT INTO APPOINTMENT (clientID, petID, staffID, start_time, description) " +
                 "VALUES(?,?,?,?,?)";
 
-        try(PreparedStatement create = conn.prepareStatement(sql)){
+        try(PreparedStatement create = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)){
             create.setInt(1, mod.getClientID());
             create.setInt(2, mod.getPetID());
             create.setInt(3, mod.getStaffID());

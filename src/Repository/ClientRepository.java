@@ -69,7 +69,7 @@ public class ClientRepository {
         String createSQL
                 = "INSERT INTO CLIENT (firstName, lastName, email, phone, street, city, state, zip)" +
                 "VALUES(? , ? , ? , ? , ? , ? , ? , ? )";
-        try (PreparedStatement create = conn.prepareStatement(createSQL)) {
+        try (PreparedStatement create = conn.prepareStatement(createSQL,Statement.RETURN_GENERATED_KEYS)) {
             create.setString(1,mod.getFirstName());
             create.setString(2,mod.getLastName());
             create.setString(3,mod.getEmail());
@@ -80,12 +80,11 @@ public class ClientRepository {
             create.setInt(8,mod.getZip());
 
             create.executeUpdate();
-            //TODO: Need to add this back in and fix the error, removed for now to ge tthe code to work.
-            /*
+
             ResultSet rs = create.getGeneratedKeys();
             while(rs.next()){
                 mod.setClientID(rs.getInt(1));
-            }*/
+            }
             conn.commit();
         } catch (SQLException ex) {
             System.err.println("Error inserting Client entry");

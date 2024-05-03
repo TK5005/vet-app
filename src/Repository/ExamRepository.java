@@ -17,8 +17,8 @@ public class ExamRepository {
         String sql =
             "SELECT e.examID, e.petID, e.exam_datetime, e.description, e.weight, e.location, t.empID as techID, " +
                 "v.empID as vetID, e.vitals from EXAMINATION e " +
-                    "join VET_EXAMS v on e.examID = v.examID " +
-                    "join TECH_EXAMS t on e.examID = v.examID " +
+                    "left join VET_EXAMS v on e.examID = v.examID " +
+                    "left join TECH_EXAMS t on e.examID = t.examID " +
                     "WHERE petID = ?";
 
         List<Exam> ret = new ArrayList<>();
@@ -52,8 +52,8 @@ public class ExamRepository {
         String sql =
                 "SELECT e.examID, e.petID, e.exam_datetime, e.description, e.weight, e.location, t.empID as techID, " +
                         "v.empID as vetID, e.vitals from EXAMINATION e " +
-                        "join VET_EXAMS v on e.examID = v.examID " +
-                        "join TECH_EXAMS t on e.examID = v.examID WHERE e.examID = ?";
+                        "left join VET_EXAMS v on e.examID = v.examID " +
+                        "left join TECH_EXAMS t on e.examID = v.examID WHERE e.examID = ?";
         Exam ret = null;
         try(PreparedStatement get = conn.prepareStatement(sql)){
             get.setInt(1,examID);
@@ -83,7 +83,7 @@ public class ExamRepository {
                 = "INSERT INTO EXAMINATION (petID, exam_datetime, description, vitals, weight, location) " +
                 "VALUES(?,?,?,?,?,?)";
 
-        try (PreparedStatement create = conn.prepareStatement(sql)) {
+        try (PreparedStatement create = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)) {
             create.setInt(1, mod.getPetID());
             create.setTimestamp(2, java.sql.Timestamp.valueOf(mod.getDate()));
             create.setString(3, mod.getDescription());
@@ -91,13 +91,11 @@ public class ExamRepository {
             create.setInt(5, mod.getWeight());
             create.setString(6, mod.getLocation());
 
-            create.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+            create.executeUpdate();
             ResultSet rs = create.getGeneratedKeys();
 
             while(rs.next()){
                 mod.setExamID(rs.getInt(1));
-                addVetExam(mod.getExamID(),mod.getVetID());
-                addTechExam(mod.getExamID(), mod.getTechID());
             }
 
             conn.commit();
@@ -129,8 +127,12 @@ public class ExamRepository {
             update.setString(5, mod.getLocation());
             update.setInt(6, mod.getExamID());
             update.executeUpdate();
-            updateVetExam(mod.getExamID(), mod.getVetID());
-            updateTechExam(mod.getExamID(), mod.getTechID());
+            if(mod.getVetID() != null)
+                addOrUpdateVetExam(mod.getExamID(), mod.getVetID());
+            if(mod.getTechID() != null)
+                addOrUpdateTechExam(mod.getExamID(), mod.getTechID());
+
+            conn.commit();
 
         }catch (SQLException ex) {
             System.err.println("Error updating Exam entry");
@@ -234,6 +236,54 @@ public class ExamRepository {
                 System.err.println("Error rolling back tech_exams changes");
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void addOrUpdateVetExam (int examID, int vetID){
+        String sql
+                = "SELECT * FROM VET_EXAMS WHERE empID = ? AND examID = ?";
+
+        try(PreparedStatement get = conn.prepareStatement(sql)){
+            get.setInt(1, vetID);
+            get.setInt(2, examID);
+            ResultSet rs = get.executeQuery();
+
+            boolean exists = false;
+            while(rs.next()){
+                exists = true;
+            }
+            if(exists)
+                updateVetExam(examID,vetID);
+            else
+                addVetExam(examID,vetID);
+
+        }catch (SQLException ex) {
+            System.err.println("Error running Exam Vet Get statement");
+            ex.printStackTrace();
+        }
+    }
+
+    private void addOrUpdateTechExam (int examID, int techID){
+        String sql
+                = "SELECT * FROM TECH_EXAMS WHERE empID = ? AND examID = ?";
+
+        try(PreparedStatement get = conn.prepareStatement(sql)){
+            get.setInt(1, techID);
+            get.setInt(2, examID);
+            ResultSet rs = get.executeQuery();
+
+            boolean exists = false;
+            while(rs.next()){
+                exists = true;
+            }
+            if(exists)
+                updateTechExam(examID,techID);
+            else
+                addTechExam(examID,techID);
+
+        }catch (SQLException ex) {
+            System.err.println("Error running Exam Tech Get statement");
+            ex.printStackTrace();
         }
     }
 
