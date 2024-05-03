@@ -160,7 +160,21 @@ public class TreatmentRepository {
     }
 
     public void removeTreatment(int treatmentID){
-        //TODO: Implement removeTreatment in TreatmentRepository
-        System.out.println("TODO: Implement removeTreatment in TreatmentRepository");
+        String deleteSQL = "DELETE FROM TREATMENT WHERE trmntID = ?";
+        try (PreparedStatement delete = conn.prepareStatement(deleteSQL)) {
+            delete.setInt(1, treatmentID);
+            delete.executeUpdate();
+            conn.commit();
+        } catch (SQLException ex) {
+            System.err.println("Error deleting Treatment entry");
+            ex.printStackTrace();
+            try {
+                System.err.println("Rolling back changes");
+                conn.rollback();
+            } catch (SQLException e) {
+                System.err.println("Error rolling back Treatment changes");
+                e.printStackTrace();
+            }
+        }
     }
 }

@@ -215,7 +215,45 @@ public class InvoiceRepository {
 
     public void removeInvoice(int invoiceID)
     {
-        //TODO: Implement removeInvoice
-        System.out.println("removeInvoice not implemented");
+        String sql
+                = "DELETE FROM INVOICE WHERE invoiceNo = ?";
+
+        try(PreparedStatement delete = conn.prepareStatement(sql)){
+            delete.setInt(1,invoiceID);
+            delete.executeUpdate();
+            conn.commit();
+        }catch (SQLException ex) {
+            System.err.println("Error deleting Invoice entry");
+            ex.printStackTrace();
+            try {
+                System.err.println("Rolling back changes");
+                conn.rollback();
+            } catch (SQLException e) {
+                System.err.println("Error rolling back Invoice changes");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void removeInvoicesByClientID(int clientID)
+    {
+        String sql
+                = "DELETE FROM INVOICE WHERE custID = ?";
+
+        try(PreparedStatement delete = conn.prepareStatement(sql)){
+            delete.setInt(1,clientID);
+            delete.executeUpdate();
+            conn.commit();
+        }catch (SQLException ex) {
+            System.err.println("Error deleting Invoice entry");
+            ex.printStackTrace();
+            try {
+                System.err.println("Rolling back changes");
+                conn.rollback();
+            } catch (SQLException e) {
+                System.err.println("Error rolling back Invoice changes");
+                e.printStackTrace();
+            }
+        }
     }
 }

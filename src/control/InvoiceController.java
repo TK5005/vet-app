@@ -81,8 +81,8 @@ public class InvoiceController extends ViewController{
 
     public void addInvoice() {
         Invoice invoice = new Invoice();
-        invoice.setExamID(0);
-        invoice.setClientID(0);
+        invoice.setExamID(1);
+        invoice.setClientID(1);
         invoice.setAmtDue(0.0f);
         invoice.setStatus(Status.UNPAID);
         invoice.setInvoiceDate(LocalDate.now());
