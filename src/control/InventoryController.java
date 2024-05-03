@@ -3,6 +3,7 @@ package control;
 import Repository.InventoryRepository;
 import model.DataModel;
 import model.Inventory;
+import model.Medication;
 import view.inventory.InventoryView;
 
 public class InventoryController extends ViewController{
@@ -33,18 +34,26 @@ public class InventoryController extends ViewController{
     }
 
     public void addNewItem() {
-        //TODO: Conditionally Check for Type = MEDICATION and insert into Medication table accordingly
         Inventory item = new Inventory();
-        item.setItemID(0);
         item.setName("New Item");
+        item.setManufacturer("Manufacturer");
+        item.setType(Inventory.InventoryType.OFFICE);
         item.setQuantity(0);
         item.setReorderLevel(0);
         item.setReorderQuantity(0);
-        item.setRetailCost(0);
         item.setWholesaleCost(0);
-        item.setType("Item Type");
-        item.setManufacturer("Manufacturer");
-        dataModel.addInventoryItem(item);
+        item.setRetailCost(0);
+        inventoryRepository.addInventory(item);
+
+        if(item.getType() == Inventory.InventoryType.MEDICATION)
+        {
+            Medication med = new Medication();
+            med.setItemID(item.getItemID());
+            med.setInteractions("Interactions");
+            med.setDosage("Dosage");
+            inventoryRepository.addMedication(med);
+        }
+
         refreshViews();
     }
 
@@ -80,29 +89,10 @@ public class InventoryController extends ViewController{
         item.setRetailCost(retailCost);
         inventoryRepository.updateInventory(item);
         refreshViews();
-        showInventoryList();
     }
 
     public void deleteInventoryItem(int inventoryID) {
         inventoryRepository.deleteInventoryItem(inventoryID);
         refreshViews();
-        showInventoryList();
-    }
-
-
-    /*
-     * Page Navigation Methods
-     */
-
-     public void showInventoryList() {
-        this.setCurrentInventoryID(-1);
-        this.refreshViews();
-        inventoryView.showListView();
-    }
-
-    public void showInventoryDetails(int itemID) {
-        this.setCurrentInventoryID(itemID);
-        this.refreshViews();
-        inventoryView.showDetailView();
     }
 }

@@ -4,7 +4,6 @@ public class Medication extends Inventory {
     private String interactions;
     private String dosage;
 
-
     public Medication () {super();}
 
     public String getInteractions() {
