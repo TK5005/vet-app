@@ -90,6 +90,10 @@ public class Inventory
         }
     }
 
+    public void setType(InventoryType type) {
+        this.type = type;
+    }
+
     public String getManufacturer() {
         return manufacturer;
     }

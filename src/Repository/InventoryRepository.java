@@ -73,7 +73,7 @@ public class InventoryRepository {
     public Inventory addInventory(Inventory mod){
         String sql
                 = "INSERT INTO INVENTORY(name,manufacturer,type,quantity,reorderLevel, " +
-                "reorderQuantity,wholesaleCost,retailcost " +
+                "reorderQuantity,wholesaleCost,retailcost) " +
                 "VALUES(?,?,?,?,?,?,?,?)";
 
         try(PreparedStatement create = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)){
@@ -138,10 +138,24 @@ public class InventoryRepository {
         }
     }
 
-    //TODO: Impement Inventory Deletion
     public void deleteInventoryItem(int inventoryID)
     {
-        System.out.println("TODO: Implement Invetory Deletion");
+        String sql = "DELETE FROM INVENTORY WHERE itemID = ?";
+        try(PreparedStatement delete = conn.prepareStatement(sql)){
+            delete.setInt(1, inventoryID);
+            delete.executeUpdate();
+            conn.commit();
+        }catch (SQLException ex) {
+            System.err.println("Error deleting Inventory entry");
+            ex.printStackTrace();
+            try {
+                System.err.println("Rolling back changes");
+                conn.rollback();
+            } catch (SQLException e) {
+                System.err.println("Error rolling back Inventory changes");
+                e.printStackTrace();
+            }
+        }
     }
 
     // Medication Methods

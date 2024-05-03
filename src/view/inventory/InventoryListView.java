@@ -24,7 +24,6 @@ import javax.swing.table.TableCellRenderer;
 import control.IVetAppView;
 import control.InventoryController;
 import model.Inventory;
-import view.treatment.TreatmentInfo;
 
 public class InventoryListView extends JPanel implements IVetAppView{
     private InventoryController controller;
