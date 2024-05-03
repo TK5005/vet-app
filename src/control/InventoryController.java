@@ -14,7 +14,6 @@ public class InventoryController extends ViewController{
     private int currentInventoryID = -1;
 
     private InventoryController() {
-        dataModel = DataModel.getInstance();
         inventoryRepository = new InventoryRepository();
     }
 
