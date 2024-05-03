@@ -16,8 +16,22 @@ public class ClientRepository {
 
     public void removeClient(int clientID)
     {
-        // TODO: Implement removeClient in ClientRepository
-        System.out.println("TODO: Implement removeClient in ClientRepository");
+        String deleteSQL = "DELETE FROM CLIENT WHERE clientID = ?";
+        try (PreparedStatement delete = conn.prepareStatement(deleteSQL)) {
+            delete.setInt(1, clientID);
+            delete.executeUpdate();
+            conn.commit();
+        } catch (SQLException ex) {
+            System.err.println("Error deleting Client entry");
+            ex.printStackTrace();
+            try {
+                System.err.println("Rolling back changes");
+                conn.rollback();
+            } catch (SQLException e) {
+                System.err.println("Error rolling back client changes");
+                e.printStackTrace();
+            }
+        }
     }
 
     //Get statement to retrieve all clients

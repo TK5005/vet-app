@@ -4,10 +4,17 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -19,6 +26,7 @@ import javax.swing.table.TableCellRenderer;
 import control.ClientController;
 import control.IVetAppView;
 import model.Client;
+
 
 public class ClientsListView extends JPanel implements IVetAppView {
     private JButton addButton;
@@ -118,6 +126,43 @@ public class ClientsListView extends JPanel implements IVetAppView {
         }
     }
 
+    private void ConfirmDeletion(int id){
+        JFrame frame = new JFrame("Confirm");
+        final JOptionPane optionPane = new JOptionPane(
+                "Are you sure to delete?",
+                JOptionPane.QUESTION_MESSAGE,
+                JOptionPane.YES_NO_OPTION);
+
+        final JDialog dialog = new JDialog(frame, "Confirm",
+                                true);
+        dialog.setContentPane(optionPane);
+        dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+        dialog.addWindowListener(new WindowAdapter(){
+            public void windowClosing(WindowEvent we) {
+                //setLabel("user attempt to close window.");
+            }
+        });
+        optionPane.addPropertyChangeListener(new PropertyChangeListener() {
+            public void propertyChange(PropertyChangeEvent e) {
+                String prop = e.getPropertyName();
+
+                if (dialog.isVisible() && (e.getSource() == optionPane) && (prop.equals(JOptionPane.VALUE_PROPERTY))) {
+                    dialog.setVisible(false);
+                }
+            }
+        });
+        dialog.pack();
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+
+        int value = ((Integer)optionPane.getValue()).intValue();
+        if (value == JOptionPane.YES_OPTION) {
+            clientController.deleteClient(id);
+        } else if (value == JOptionPane.NO_OPTION) {
+           //no - close window
+        }
+    }
+
     // Custom renderer
     class ButtonRenderer extends JPanel implements TableCellRenderer {
         private JButton viewButton;
@@ -163,7 +208,7 @@ public class ClientsListView extends JPanel implements IVetAppView {
             // Add action listener for the Remove button
             removeButton.addActionListener(e -> {
                 Client client = (Client) table.getModel().getValueAt(currentRow, 0);
-                clientController.deleteClient(client.getClientID());
+                ConfirmDeletion(client.getClientID());
             });
 
             // Add action listener for the View button
