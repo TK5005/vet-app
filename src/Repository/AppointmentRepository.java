@@ -29,7 +29,7 @@ public class AppointmentRepository {
                 add.setClientID(rs.getInt("clientID"));
                 add.setPetID(rs.getInt("petID"));
                 add.setStaffID(rs.getInt("staffID"));
-                add.setAppointmentDate(rs.getTimestamp("start_time").toLocalDateTime());
+                add.setAppointmentDate(rs.getTimestamp("start_time").toLocalDateTime().toLocalDate());
                 add.setCheckInTime(rs.getTimestamp("checkin_time").toLocalDateTime());
                 add.setDescription(rs.getString("description"));
 
@@ -55,7 +55,7 @@ public class AppointmentRepository {
                 add.setClientID(rs.getInt("clientID"));
                 add.setPetID(rs.getInt("petID"));
                 add.setStaffID(rs.getInt("staffID"));
-                add.setAppointmentDate(rs.getTimestamp("start_time").toLocalDateTime());
+                add.setAppointmentDate(rs.getTimestamp("start_time").toLocalDateTime().toLocalDate());
                 add.setCheckInTime(rs.getTimestamp("checkin_time").toLocalDateTime());
                 add.setDescription(rs.getString("description"));
             }
@@ -82,7 +82,7 @@ public class AppointmentRepository {
                 add.setClientID(rs.getInt("clientID"));
                 add.setPetID(rs.getInt("petID"));
                 add.setStaffID(rs.getInt("staffID"));
-                add.setAppointmentDate(rs.getTimestamp("start_time").toLocalDateTime());
+                add.setAppointmentDate(rs.getTimestamp("start_time").toLocalDateTime().toLocalDate());
                 add.setCheckInTime(rs.getTimestamp("checkin_time").toLocalDateTime());
                 add.setDescription(rs.getString("description"));
                 ret.add(app);                    
@@ -110,7 +110,7 @@ public class AppointmentRepository {
             create.setInt(1, mod.getClientID());
             create.setInt(2, mod.getPetID());
             create.setInt(3, mod.getStaffID());
-            create.setTimestamp(4, java.sql.Timestamp.valueOf(mod.getAppointmentDate()));
+            create.setTimestamp(4, java.sql.Timestamp.valueOf(mod.getAppointmentTime()));
             create.setString(5, mod.getDescription());
 
             create.executeUpdate();
@@ -138,7 +138,7 @@ public class AppointmentRepository {
             update.setInt(1,mod.getClientID());
             update.setInt(2,mod.getPetID());
             update.setInt(3,mod.getStaffID());
-            update.setTimestamp(4,java.sql.Timestamp.valueOf(mod.getAppointmentDate()));
+            update.setTimestamp(4,java.sql.Timestamp.valueOf(mod.getAppointmentTime()));
             update.setTimestamp(5,java.sql.Timestamp.valueOf(mod.getCheckInTime()));
             update.setString(6,mod.getDescription());
 

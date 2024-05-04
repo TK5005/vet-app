@@ -6,14 +6,17 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
+import java.util.List;
 
 import control.AppController;
+import model.Staff;
 
 /**
  * AdminPanel
@@ -26,6 +29,8 @@ public class AdminPanel extends JPanel {
     private DefaultTableModel tableModel;
     AdminViewDetails admin;
     AdminNewUser user;
+    NewVet vet;
+    NewTech tech;
 
     public AdminPanel(AppController controller) {
         this.controller = controller;
@@ -33,19 +38,81 @@ public class AdminPanel extends JPanel {
     }
 
     private void createUI() {
+
         setLayout(new BorderLayout());
+        JButton loadDataButton = new JButton("View All");
         Object[] columns = { "ID","User ID", "User Name", "User Role", "Action"};
         Object[][] returnedData = controller.loadStaff();
-        JButton newButton = new JButton("+ New User");
+        topPanel.add(loadDataButton);
+        loadDataButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                setTable(returnedData, columns);  
+                cardLayout.show(bottomJPanel, "View All");              
+            }
+        });
+        JButton newButton = new JButton("+ New Staff");
         newButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
               user = new AdminNewUser(controller);
-                
+           
+            }
+        });
+        JButton newVet = new JButton("+ New Vet");
+        newVet.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+              vet = new NewVet(controller);
+            }
+        });
+        JButton newTech = new JButton("+ New Tech");
+        newTech.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+              tech = new NewTech(controller);
             }
         });
         topPanel.add(newButton);
-        setTable(returnedData, columns);
+        topPanel.add(newVet);
+        topPanel.add(newTech);
+        loadStaffDetails("Staff Details");
+        loadVetDetails("Vet Details");
+        loadTechDetails("Tech Details");
         add(topPanel, BorderLayout.NORTH);
+    }
+    private void loadStaffDetails(String name) {
+        Object[] columns = { "ID","First Name", "Last Name", "Sex", "DOB", "SSN","Phone","Street","City","State","Zip" };
+        Object[][] returnedData = controller.loadStaffDetails();
+        JButton loadDataButton = new JButton(name);
+        topPanel.add(loadDataButton);
+        loadDataButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                viewStaffDetails(returnedData, columns,name);
+                cardLayout.show(bottomJPanel, name);
+            }
+        });
+        
+    }
+    private void loadVetDetails(String name) {
+        Object[] columns = { "ID","First Name", "Last Name", "License Number","Specialty" };
+        Object[][] returnedData = {{"1","test","test","123456","Surgery, Test"},};//controller.showVet();
+        JButton loadDataButton = new JButton(name);
+        topPanel.add(loadDataButton);
+        loadDataButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                viewStaffDetails(returnedData, columns,name);
+                cardLayout.show(bottomJPanel, name);
+            }
+        });
+    }
+    private void loadTechDetails(String name) {
+        Object[] columns = { "ID","First Name", "Last Name", "Certification" };
+        Object[][] returnedData = {{"1","test","test","123456","Test"},};//controller.showTech();
+        JButton loadDataButton = new JButton(name);
+        topPanel.add(loadDataButton);
+        loadDataButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                viewStaffDetails(returnedData, columns,name);
+                cardLayout.show(bottomJPanel, name);
+            }
+        });
     }
     private void setTable(Object[][] data, Object[] col) {
         tableModel = new DefaultTableModel(data, col);
@@ -65,11 +132,31 @@ public class AdminPanel extends JPanel {
 
         JScrollPane panel = new JScrollPane(table);
         panel.getViewport().setBackground(Color.WHITE);
-        bottomJPanel.add(panel);
+        bottomJPanel.add(panel,"View All");
         add(bottomJPanel, BorderLayout.CENTER);
         repaint();
         revalidate();
     }
+    private void viewStaffDetails(Object[][] data, Object[] col,String name) {
+
+        JTable table = new JTable(data, col);
+        setCellsAlignment(table, SwingConstants.CENTER);
+        Dimension d = table.getPreferredSize();
+        table.setPreferredScrollableViewportSize(d);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        table.setRowHeight(50);
+        table.getTableHeader().setOpaque(false);
+        table.getTableHeader().setBackground(new Color(173, 216, 230));
+        table.setVisible(true);
+
+        JScrollPane panel = new JScrollPane(table);
+        panel.getViewport().setBackground(Color.WHITE);
+        bottomJPanel.add(panel, name);
+        add(bottomJPanel, BorderLayout.CENTER);
+        repaint();
+        revalidate();
+    }
+
     // center text class
     private void setCellsAlignment(JTable table, int alignment) {
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
@@ -94,10 +181,7 @@ public class AdminPanel extends JPanel {
              table.setRowHeight(row, rowHeight);
         }
     }
-    private void navButtonPressed(ActionEvent e) {
-        JButton pressedButton = (JButton) e.getSource();
-        cardLayout.show(bottomJPanel, pressedButton.getText());
-    }
+   
     public void ConfirmDeletion(int id){
         JFrame frame = new JFrame("Confirm");
         final JOptionPane optionPane = new JOptionPane(

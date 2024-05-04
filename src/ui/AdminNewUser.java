@@ -31,7 +31,7 @@ public class AdminNewUser {
         createUI();
     }
     private void createUI(){
-        int selection = JOptionPane.showConfirmDialog(null, getPanel(), "New User : "
+        int selection = JOptionPane.showConfirmDialog(null, getPanel(), "New Staff : "
                                 , JOptionPane.OK_CANCEL_OPTION
                                 , JOptionPane.PLAIN_MESSAGE);
         if (selection == JOptionPane.OK_OPTION) 
@@ -48,7 +48,7 @@ public class AdminNewUser {
             user.setStreet(street.getText());
             user.setCity(city.getText());
             user.setState(state.getText());
-            user.setZip(zip.getText());
+            user.setZip(Integer.parseInt(zip.getText()));
             controller.addStaff(user);
         }
     }
@@ -70,6 +70,7 @@ public class AdminNewUser {
 
         JLabel idLabel = new JLabel("ID : ");
         id = new JTextField();
+        id.setEnabled(false);
 
         JLabel fNameLabel = new JLabel("First Name : ");
         fName = new JTextField();

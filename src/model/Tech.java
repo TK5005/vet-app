@@ -1,16 +1,15 @@
 package model;
 
 public class Tech extends Staff {
-    private String certNumber;
+    String certNumber;
     public Tech() {
         super();
     }
-
-    public String getCertNumber() {
+    public String getCertification() {
         return certNumber;
     }
 
-    public void setCertNumber(String certNumber) {
+    public void setCertification(String certNumber) {
         this.certNumber = certNumber;
     }
 }

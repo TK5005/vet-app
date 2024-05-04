@@ -73,7 +73,7 @@ public class DashboardPanel extends JPanel {
     }
 
     private void loadAppointments(String name) {
-        Object[] columns = { "Owner Name", "Pet Name", "Phone Numer", "Appointment", "Action" };
+        Object[] columns = { "ID","Owner Name", "Pet Name", "Phone Numer", "Appointment", "Action" };
         Object[][] returnedData = controller.loadAppointments();
         JButton loadAppButton = new JButton(name);
         navigationButtons.add(loadAppButton);

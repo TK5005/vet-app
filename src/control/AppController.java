@@ -42,6 +42,10 @@ public class AppController {
         String[][] data = model.loadStaff();
         return data;
     }
+    public String[][] loadStaffDetails() {
+        String[][] data = model.loadStaffDetails();
+        return data;
+    }
     public String[][] loadActivePatient() {
         String[][] data = model.loadActivePatient();
         return data;
@@ -82,4 +86,24 @@ public class AppController {
     public void addAppointment(Appointment appointment) {
         appRepo.addAppointment(appointment);
     }
+        
+    public void removeVet(int empID) {
+        //staffRepo.deleteVet(empID);
+    }
+    public void addVet(Staff user) {
+        //staffRepo.addStaff(user);
+    }
+    public Staff[] showVet() {
+        return staffRepo.getVets();
+    }
+    public void removeTech(int empID) {
+        //staffRepo.deleteVet(empID);
+    }
+    public void addTech(Staff user) {
+        //staffRepo.addStaff(user);
+    }
+    public Staff[] showTech() {
+        return staffRepo.getTechs();
+    }
+
 }

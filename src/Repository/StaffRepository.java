@@ -40,7 +40,7 @@ public class StaffRepository {
                 staff.setStreet(rs.getString("street"));
                 staff.setCity(rs.getString("city"));
                 staff.setState(rs.getString("state"));
-                staff.setZip(rs.getString("zip"));
+                staff.setZip(Integer.parseInt(rs.getString("zip")));
                 ret.add(staff);                        
             }
         }catch (SQLException ex) {
@@ -69,7 +69,7 @@ public class StaffRepository {
                 staff.setStreet(rs.getString("street"));
                 staff.setCity(rs.getString("city"));
                 staff.setState(rs.getString("state"));
-                staff.setZip(rs.getString("zip"));
+                staff.setZip(Integer.parseInt(rs.getString("zip")));
                 ret.add(staff);                        
             }
         }catch (SQLException ex) {
@@ -98,9 +98,8 @@ public class StaffRepository {
                 add.setState(rs.getString("street"));
                 add.setCity(rs.getString("city"));
                 add.setState(rs.getString("state"));
-                add.setZip(rs.getString("zip"));
+                add.setZip(Integer.parseInt(rs.getString("zip")));
                 add.setLicenseNumber(rs.getString("licenseNo"));
-
                 ret.add(add);
             }
         }catch (SQLException ex) {
@@ -133,7 +132,7 @@ public class StaffRepository {
                 ret.setState(rs.getString("street"));
                 ret.setCity(rs.getString("city"));
                 ret.setState(rs.getString("state"));
-                ret.setZip(rs.getString("zip"));
+                ret.setZip(Integer.parseInt(rs.getString("zip")));
                 ret.setLicenseNumber(rs.getString("licenseNo"));
             }
 
@@ -164,8 +163,8 @@ public class StaffRepository {
                 add.setState(rs.getString("street"));
                 add.setCity(rs.getString("city"));
                 add.setState(rs.getString("state"));
-                add.setZip(rs.getString("zip"));
-                add.setCertNumber(rs.getString("certNumber"));
+                add.setZip(Integer.parseInt(rs.getString("zip")));
+                add.setCertification(rs.getString("certNumber"));
 
                 ret.add(add);
             }
@@ -200,8 +199,8 @@ public class StaffRepository {
                 ret.setState(rs.getString("street"));
                 ret.setCity(rs.getString("city"));
                 ret.setState(rs.getString("state"));
-                ret.setZip(rs.getString("zip"));
-                ret.setCertNumber(rs.getString("certNumber"));
+                ret.setZip(Integer.parseInt(rs.getString("zip")));
+                ret.setCertification(rs.getString("certNumber"));
             }
 
         }catch (SQLException ex) {
@@ -231,7 +230,7 @@ public class StaffRepository {
             create.setString(7,mod.getStreet());
             create.setString(8,mod.getCity());
             create.setString(9,mod.getState());
-            create.setString(10,mod.getZip());
+            create.setString(10,Integer.toString(mod.getZip()));
 
             create.executeUpdate();
             ResultSet rs = create.getGeneratedKeys();
@@ -262,7 +261,7 @@ public class StaffRepository {
             update.setString(7, mod.getStreet());
             update.setString(8, mod.getCity());
             update.setString(9, mod.getState());
-            update.setString(10, mod.getZip());
+            update.setString(10, Integer.toString(mod.getZip()));
 
             update.executeUpdate();
             conn.commit();
@@ -280,7 +279,7 @@ public class StaffRepository {
         try(Connection conn = ConnectionManager.getConnection();
                 PreparedStatement create = conn.prepareStatement(sql)){
             create.setInt(1, mod.getEmpID());
-            create.setString(2,mod.getLicenseNumber());
+            create.setString(2, mod.getLicenseNumber());
 
             create.executeUpdate();
             conn.commit();
@@ -317,7 +316,7 @@ public class StaffRepository {
         try(Connection conn = ConnectionManager.getConnection();
                 PreparedStatement create = conn.prepareStatement(sql)){
             create.setInt(1, mod.getEmpID());
-            create.setString(2,mod.getCertNumber());
+            create.setString(2, mod.getCertification());
 
             create.executeUpdate();
             conn.commit();
@@ -335,7 +334,7 @@ public class StaffRepository {
 
         try (Connection conn = ConnectionManager.getConnection();
                 PreparedStatement update = conn.prepareStatement(sql)) {
-            update.setString(1, mod.getCertNumber());
+            update.setString(1, mod.getCertification());
             update.setInt(2, mod.getEmpID());
 
             update.executeUpdate();

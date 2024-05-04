@@ -1,25 +1,16 @@
 package view.appointmentView;
 
 import java.awt.*;
-import java.awt.Color;
-import java.awt.GridLayout;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
 
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
+import javax.swing.*;
 import com.github.lgooddatepicker.components.DatePicker;
 
-import com.github.lgooddatepicker.components.DateTimePicker;
 import model.Appointment;
 import control.AppController;
-import model.Appointment;
 
 public class NewAppointment {
     Appointment appt;
@@ -27,14 +18,16 @@ public class NewAppointment {
     JTextField clientID;
     JTextField petID;
     JTextField staffID;
-    DateTimePicker datePicker;
-    DateTimePicker checkinPicker;
+    DatePicker datePicker;
+    JTextField time;
     JTextField description;
 
     private final Color selectedColor = new Color(173, 216, 230);
+    private AppController controller;
 
     public NewAppointment(AppController controller){
         appt = new Appointment();
+        this.controller = controller;
         createUI();
     }
     private void createUI(){
@@ -47,17 +40,14 @@ public class NewAppointment {
             appt.setClientID(Integer.parseInt(clientID.getText()));
             appt.setStaffID(Integer.parseInt(staffID.getText()));
             appt.setPetID(Integer.parseInt(petID.getText()));
-
-            //Switched Separate Date and Time fields to be 1 DateTime field to line up with the DB  - Dan;
-            LocalDateTime startTime = datePicker.getDateTimeStrict();
-            appt.setAppointmentDate(startTime);
-            LocalDateTime checkIn = checkinPicker.getDateTimeStrict();
-            appt.setCheckInTime(checkIn);
+            java.util.Date date = java.sql.Date.valueOf(datePicker.getText());
+            LocalDate date2 = convertToLocalDate(date);
+            appt.setAppointmentDate(date2);
+            appt.setAppointmentTime(time.getText());
             appt.setDescription(description.getText());
         }
     
     }
-
     public LocalDate convertToLocalDate(java.util.Date date) {
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
@@ -86,13 +76,13 @@ public class NewAppointment {
         JLabel staffIDLabel = new JLabel("Staff ID : ");
         staffID = new JTextField();
 
-        JLabel dateLabel = new JLabel("Start Time : ");
-        datePicker = new DateTimePicker();
+        JLabel dateLabel = new JLabel("Date : ");
+        datePicker = new DatePicker();
 
-        JLabel checkinLabel = new JLabel("Check-in Time :");
-        checkinPicker = new DateTimePicker();
+        JLabel timeLabel = new JLabel("Time : ");
+        time = new JTextField();
 
-        JLabel descriptionLabel = new JLabel("Description :");
+        JLabel discriptionLabel = new JLabel("Discription :");
         description = new JTextField();
 
         centerPanel.add(appIDLabel);
@@ -110,10 +100,10 @@ public class NewAppointment {
         centerPanel.add(dateLabel);
         centerPanel.add(datePicker);
 
-        centerPanel.add(checkinLabel);
-        centerPanel.add(checkinPicker);
+        centerPanel.add(timeLabel);
+        centerPanel.add(time);
 
-        centerPanel.add(descriptionLabel);
+        centerPanel.add(discriptionLabel);
         centerPanel.add(description);
 
         basePanel.add(centerPanel);

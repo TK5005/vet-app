@@ -27,6 +27,5 @@ public class AdminViewDetails extends JFrame {
        add(new JScrollPane(table));
        setSize(640, 150);
        setLocationRelativeTo(null);
-       //setVisible(true);
     }
 }
