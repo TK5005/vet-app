@@ -9,6 +9,7 @@ import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import javax.swing.CellEditor;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -140,6 +141,10 @@ public class TreatmentTable extends JPanel implements IVetAppView {
 
         int value = ((Integer)optionPane.getValue()).intValue();
         if (value == JOptionPane.YES_OPTION) {
+            CellEditor editor = treatmentTable.getCellEditor();
+            if (editor != null) {
+                editor.stopCellEditing();
+            }
             clientController.removeTreatment(id);
         } else if (value == JOptionPane.NO_OPTION) {
            //no - close window
