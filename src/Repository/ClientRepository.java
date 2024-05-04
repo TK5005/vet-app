@@ -14,10 +14,18 @@ public class ClientRepository {
 //        this.conn = ConnectionManager.getConnection();
 //    }
 
-    public void removeClient(int clientID)
+    public void deleteClient(int clientID)
     {
-        // TODO: Implement removeClient in ClientRepository
-        System.out.println("TODO: Implement removeClient in ClientRepository");
+        String sql = "DELETE FROM CLIENT WHERE clientID = ?";
+        try (Connection conn = ConnectionManager.getConnection();
+                PreparedStatement delete = conn.prepareStatement(sql)) {
+            delete.setInt(1, clientID);
+            delete.executeUpdate();
+            conn.commit();
+        } catch (SQLException ex) {
+            System.err.println("Error running Client Delete statement");
+            ex.printStackTrace();
+        }
     }
 
     //Get statement to retrieve all clients

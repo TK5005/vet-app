@@ -206,9 +206,18 @@ public class InvoiceRepository {
         }
     }
 
-    public void removeInvoice(int invoiceID)
+    public void deleteInvoice(int invoiceID)
     {
-        //TODO: Implement removeInvoice
-        System.out.println("removeInvoice not implemented");
+        String sql = "DELETE FROM INVOICE WHERE invoiceNo = ?";
+
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement delete = conn.prepareStatement(sql)){
+            delete.setInt(1,invoiceID);
+            delete.executeUpdate();
+            conn.commit();
+        }catch (SQLException ex) {
+            System.err.println("Error deleting Invoice entry");
+            ex.printStackTrace();
+        }
     }
 }

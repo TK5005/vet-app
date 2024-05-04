@@ -254,8 +254,44 @@ public class ExamRepository {
 
     public void deleteExam(int examID)
     {
-        //TODO: Implement deleteExam
-        System.out.println("deleteExam not implemented");
+        String sql = "DELETE FROM EXAMINATION WHERE examID = ?";
+        try (Connection conn = ConnectionManager.getConnection();
+                PreparedStatement delete = conn.prepareStatement(sql)) {
+            delete.setInt(1, examID);
+            delete.executeUpdate();
+            conn.commit();
+        } catch (SQLException ex) {
+            System.err.println("Error deleting Exam entry");
+            ex.printStackTrace();
+        }
+    }
+
+    public void deleteVetExam(int examID)
+    {
+        String sql = "DELETE FROM VET_EXAMS WHERE examID = ?";
+        try (Connection conn = ConnectionManager.getConnection();
+                PreparedStatement delete = conn.prepareStatement(sql)) {
+            delete.setInt(1, examID);
+            delete.executeUpdate();
+            conn.commit();
+        } catch (SQLException ex) {
+            System.err.println("Error deleting Vet Exam entry");
+            ex.printStackTrace();
+        }
+    }
+
+    public void deleteTechExam(int examID)
+    {
+        String sql = "DELETE FROM TECH_EXAMS WHERE examID = ?";
+        try (Connection conn = ConnectionManager.getConnection();
+                PreparedStatement delete = conn.prepareStatement(sql)) {
+            delete.setInt(1, examID);
+            delete.executeUpdate();
+            conn.commit();
+        } catch (SQLException ex) {
+            System.err.println("Error deleting Tech Exam entry");
+            ex.printStackTrace();
+        }
     }
 
     public Exam[] getAllBasicExamData()
