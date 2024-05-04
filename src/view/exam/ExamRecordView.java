@@ -206,80 +206,6 @@ public class ExamRecordView extends JPanel implements IVetAppView {
         return examDetails;
     }
 
-    /*private JPanel createTreatmentDetails() {
-        JPanel treatmentDetails = new JPanel();
-        treatmentDetails.setLayout(new BorderLayout());
-        treatmentDetails.setBackground(Color.WHITE);
-        JPanel treatmentHeader = new JPanel();
-        treatmentHeader.setLayout(new FlowLayout(FlowLayout.LEFT));
-        treatmentHeader.setBackground(Color.WHITE);
-        JPanel treatmentIDPanel = new JPanel();
-        treatmentIDPanel.setLayout(new BoxLayout(treatmentIDPanel, BoxLayout.Y_AXIS));
-        treatmentIDPanel.setBackground(Color.WHITE);
-        JLabel treatmentIDLabel = new JLabel("Treatment ID");
-        treatmentIDField = new JTextField(10);
-        treatmentIDField.setEditable(false);
-        treatmentIDPanel.add(treatmentIDLabel);
-        treatmentIDPanel.add(treatmentIDField);
-
-        JPanel treatTypePanel = new JPanel();
-        treatTypePanel.setLayout(new BoxLayout(treatTypePanel, BoxLayout.Y_AXIS));
-        treatTypePanel.setBackground(Color.WHITE);
-        JLabel treatTypeLabel = new JLabel("Type");
-        treatTypeBox = new JComboBox(Treatment.getTreatTypes());
-        treatTypePanel.add(treatTypeLabel);
-        treatTypePanel.add(treatTypeBox);
-
-        JPanel medicationPanel = new JPanel();
-        medicationPanel.setLayout(new BoxLayout(medicationPanel, BoxLayout.Y_AXIS));
-        medicationPanel.setBackground(Color.WHITE);
-        JLabel medicationLabel = new JLabel("Medication");
-
-        //TODO: Make this a ComboBox that calls MedicationRepository.getAllInStock() to get the list of medications in stock
-        //medicationField = new JTextField(10);
-        medicationBox = new JComboBox<Medication>(clientController.getInStockMedications());
-        medicationBox.insertItemAt(null, 0);
-        medicationBox.setRenderer(new MedicationComboBoxRenderer());
-        medicationPanel.add(medicationLabel);
-        //medicationPanel.add(medicationField);
-        medicationPanel.add(medicationBox);
-
-        JPanel treatmentStartDatePanel = new JPanel();
-        treatmentStartDatePanel.setLayout(new BoxLayout(treatmentStartDatePanel, BoxLayout.Y_AXIS));
-        treatmentStartDatePanel.setBackground(Color.WHITE);
-        JLabel treatmentStartDateLabel = new JLabel("Start Date");
-        treatmentStartDateField = new DatePicker();
-        treatmentStartDatePanel.add(treatmentStartDateLabel);
-        treatmentStartDatePanel.add(treatmentStartDateField);
-
-        JPanel treatmentEndDatePanel = new JPanel();
-        treatmentEndDatePanel.setLayout(new BoxLayout(treatmentEndDatePanel, BoxLayout.Y_AXIS));
-        treatmentEndDatePanel.setBackground(Color.WHITE);
-        JLabel treatmentEndDateLabel = new JLabel("End Date");
-        treatmentEndDateField = new DatePicker();
-        treatmentEndDatePanel.add(treatmentEndDateLabel);
-        treatmentEndDatePanel.add(treatmentEndDateField);
-
-        treatmentHeader.add(treatmentIDPanel);
-        treatmentHeader.add(treatTypePanel);
-        treatmentHeader.add(medicationPanel);
-        treatmentHeader.add(treatmentStartDatePanel);
-        treatmentHeader.add(treatmentEndDatePanel);
-
-        JPanel directionsPanel = new JPanel();
-        directionsPanel.setLayout(new BoxLayout(directionsPanel, BoxLayout.Y_AXIS));
-        directionsPanel.setBackground(Color.WHITE);
-        JLabel directionsLabel = new JLabel("Directions");
-        treatmentDirectionsField = new JTextArea(10, 50);
-        directionsPanel.add(directionsLabel);
-        directionsPanel.add(treatmentDirectionsField);
-
-        treatmentDetails.add(treatmentHeader, BorderLayout.NORTH);
-        treatmentDetails.add(directionsPanel, BorderLayout.CENTER);
-
-        return treatmentDetails;
-    }*/
-
     private JPanel createExamDataFields() {
         JPanel examDataFields = new JPanel();
         examDataFields.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -331,14 +257,6 @@ public class ExamRecordView extends JPanel implements IVetAppView {
         datePanel.add(dateTimeLabel);
         datePanel.add(dateField);
 
-        //JPanel timePanel = new JPanel();
-        //timePanel.setLayout(new BoxLayout(timePanel, BoxLayout.Y_AXIS));
-        //timePanel.setBackground(Color.WHITE);
-        //JLabel timeLabel = new JLabel("Time");
-        //timeField = new TimePicker();
-        //timePanel.add(timeLabel);
-        //timePanel.add(timeField);
-
         JPanel weightPanel = new JPanel();
         weightPanel.setLayout(new BoxLayout(weightPanel, BoxLayout.Y_AXIS));
         weightPanel.setBackground(Color.WHITE);
@@ -352,7 +270,6 @@ public class ExamRecordView extends JPanel implements IVetAppView {
         examDataFields.add(techPanel);
         examDataFields.add(locationPanel);
         examDataFields.add(datePanel);
-        //examDataFields.add(timePanel);
         examDataFields.add(weightPanel);
 
         return examDataFields;
@@ -361,7 +278,6 @@ public class ExamRecordView extends JPanel implements IVetAppView {
     private void addActionListeners() {
         saveButton.addActionListener(e -> {
             updateExam();
-            updateTreatment();
         });
 
         closeButton.addActionListener(e -> {
@@ -390,22 +306,6 @@ public class ExamRecordView extends JPanel implements IVetAppView {
         clientController.updateExam(clientController.getCurrentExamID(), date,
                 vet == null ? null : vet.getEmpID(), tech == null ? null : tech.getEmpID(), description, vitals,
                 weight, location);
-    }
-
-    private void updateTreatment() {
-
-        /*TODO: if medication is selected here, make sure we perform an addOrUpdatePrescription call to update
-            Prescription table
-        */
-        /*
-        Treatment treatment = clientController.getTreatmentFromExamID(clientController.getCurrentExamID());
-        LocalDate startDate = treatmentStartDateField.getDate();
-        LocalDate endDate = treatmentEndDateField.getDate();
-        treatment.setMedicationID(medicationBox.getSelectedItem() != null ? ((Medication) medicationBox.getSelectedItem()).getItemID() : -1);
-        treatment.setDirections(treatmentDirectionsField.getText());
-        treatment.setStartDate(startDate);
-        treatment.setEndDate(endDate);
-        clientController.updateTreatment(treatment.getTreatmentID(), ((Vet) examinerBox.getSelectedItem()).getEmpID(), treatment);*/
     }
 
     private void refreshExam() {

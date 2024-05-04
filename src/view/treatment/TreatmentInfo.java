@@ -75,7 +75,15 @@ public class TreatmentInfo extends JPanel {
     {
         treatmentIDField.setText(Integer.toString(treatment.getTreatmentID()));
         treatTypeBox.setSelectedItem(treatment.getTreatmentTypeString());
-        medicationBox.setSelectedItem(clientController.getMedication(treatment.getMedicationID()));
+        Medication[] meds = clientController.getInStockMedications();
+        medicationBox.removeAllItems();
+        medicationBox.addItem(null);
+        for(Medication med : meds){
+            medicationBox.addItem(med);
+            if(med.getItemID() == treatment.getMedicationID()){
+                medicationBox.setSelectedItem(med);
+            }
+        }
         treatmentStartDateField.setDate(treatment.getStartDate());
         treatmentEndDateField.setDate(treatment.getEndDate());
         treatmentDirectionsField.setText(treatment.getDirections());
@@ -109,15 +117,10 @@ public class TreatmentInfo extends JPanel {
         medicationPanel.setLayout(new BoxLayout(medicationPanel, BoxLayout.Y_AXIS));
         medicationPanel.setBackground(Color.WHITE);
         JLabel medicationLabel = new JLabel("Medication");
-
-        //TODO: Make this a ComboBox that calls MedicationRepository.getAllInStock() to get the list of medications in stock
-        //medicationField = new JTextField(10);
         medicationBox = new JComboBox<Medication>(clientController.getInStockMedications());
-        //We want this to be nullable because not all treatments require medications
         medicationBox.insertItemAt(null,0);
         medicationBox.setRenderer(new MedicationComboBoxRenderer());
         medicationPanel.add(medicationLabel);
-        //medicationPanel.add(medicationField);
         medicationPanel.add(medicationBox);
 
         JPanel treatmentStartDatePanel = new JPanel();
