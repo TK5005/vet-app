@@ -9,6 +9,7 @@ import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import javax.swing.CellEditor;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -31,6 +32,7 @@ public class InventoryListView extends JPanel implements IVetAppView{
     private JButton newItemButton;
     private DefaultTableModel tableModel;
     private InventoryInfo inventoryInfo;
+    private JTable inventoryTable;
 
     public InventoryListView() {
         controller = InventoryController.getInstance();
@@ -91,7 +93,7 @@ public class InventoryListView extends JPanel implements IVetAppView{
         tableModel.addColumn("Item Quantity");
         tableModel.addColumn("Actions");
 
-        JTable inventoryTable = new JTable(tableModel);
+        inventoryTable = new JTable(tableModel);
         inventoryTable.setBackground(Color.WHITE);
         inventoryTable.setRowHeight(50);
         inventoryTable.getTableHeader().setOpaque(false);
@@ -152,6 +154,10 @@ public class InventoryListView extends JPanel implements IVetAppView{
 
         int value = ((Integer)optionPane.getValue()).intValue();
         if (value == JOptionPane.YES_OPTION) {
+            CellEditor editor = inventoryTable.getCellEditor();
+            if (editor != null) {
+                editor.stopCellEditing();
+            }
             controller.deleteInventoryItem(id);
         } else if (value == JOptionPane.NO_OPTION) {
            //no - close window

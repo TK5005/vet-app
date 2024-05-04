@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 
 import javax.swing.BoxLayout;
+import javax.swing.CellEditor;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
@@ -340,6 +341,10 @@ public class ClientDetailView extends JPanel implements IVetAppView {
             // Add action listener for the Remove button
             removeButton.addActionListener(e -> {
                 Pet pet = (Pet) table.getModel().getValueAt(currentRow, 0);
+                CellEditor editor = table.getCellEditor();
+                if (editor != null) {
+                    editor.stopCellEditing();
+                }
                 clientController.deletePet(pet.getPetID());
             });
 
