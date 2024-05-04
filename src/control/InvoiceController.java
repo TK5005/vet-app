@@ -91,7 +91,7 @@ public class InvoiceController extends ViewController{
     }
 
     public void removeInvoice(int invoiceID) {
-        invoiceRepository.removeInvoice(invoiceID);
+        invoiceRepository.deleteInvoice(invoiceID);
         refreshViews();
     }
 

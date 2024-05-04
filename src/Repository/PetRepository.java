@@ -55,8 +55,16 @@ public class PetRepository {
 
     public void removePet(int petID)
     {
-        //TODO: Implement removePet in PetRepository
-        System.out.println("TODO: Implement removePet in PetRepository");
+        String sql = "DELETE FROM PET WHERE petID = ?";
+        try (Connection conn = ConnectionManager.getConnection();
+                PreparedStatement delete = conn.prepareStatement(sql)) {
+            delete.setInt(1, petID);
+            delete.executeUpdate();
+            conn.commit();
+        } catch (SQLException ex) {
+            System.err.println("Error deleting Pet entry");
+            ex.printStackTrace();
+        }
     }
 
     //Inserts a new pet into the pet table and returns the given pet model with the new petID

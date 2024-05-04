@@ -151,7 +151,15 @@ public class TreatmentRepository {
     }
 
     public void removeTreatment(int treatmentID){
-        //TODO: Implement removeTreatment in TreatmentRepository
-        System.out.println("TODO: Implement removeTreatment in TreatmentRepository");
+        String sql = "DELETE FROM TREATMENT WHERE trmntID = ?";
+        try (Connection conn = ConnectionManager.getConnection();
+                PreparedStatement delete = conn.prepareStatement(sql)) {
+            delete.setInt(1, treatmentID);
+            delete.executeUpdate();
+            conn.commit();
+        } catch (SQLException ex) {
+            System.err.println("Error deleting Treatment entry");
+            ex.printStackTrace();
+        }
     }
 }
