@@ -359,7 +359,7 @@ public class ClientController extends ViewController {
     public void generateInvoice(Exam inExam){
         //Calculate amount due
         Treatment[] treats = treatmentRepository.getTreatmentsByExamID(inExam.getExamID());
-        float amtDue = 0.0F;
+        float amtDue = 75.0F;
         for(Treatment t : treats ){
             if(t.getTreatmentTypeString().equals("TEST")){
                 amtDue += 40F;
