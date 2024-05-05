@@ -67,7 +67,7 @@ public class InvoiceInfo extends JPanel{
             examIDField.addItem(id);
         }
 
-        clientNameField.setText(controller.getClientName(invoiceID));
+        clientNameField.setText(controller.getClientName(invoice.getExamID()));
 
         String[] statusOptions = controller.getStatusOptions();
         for (String status : statusOptions)

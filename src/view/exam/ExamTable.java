@@ -5,14 +5,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 
-import javax.swing.DefaultCellEditor;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
@@ -109,12 +102,15 @@ public class ExamTable extends JPanel implements IVetAppView {
     // Custom renderer
     class ButtonRenderer extends JPanel implements TableCellRenderer {
         private JButton viewButton;
+        private JButton invoiceButton;
 
         public ButtonRenderer() {
             setLayout(new FlowLayout(FlowLayout.CENTER));
             setBackground(Color.WHITE);
             viewButton = new JButton("View Exam Record");
+            invoiceButton = new JButton("Generate Invoice");
             add(viewButton);
+            add(invoiceButton);
         }
 
         @Override
@@ -130,6 +126,7 @@ public class ExamTable extends JPanel implements IVetAppView {
     class ButtonEditor extends DefaultCellEditor {
         protected JPanel panel;
         protected JButton viewButton;
+        protected JButton invoiceButton;
         private int currentRow;
 
         public ButtonEditor() {
@@ -138,13 +135,22 @@ public class ExamTable extends JPanel implements IVetAppView {
             panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
             panel.setBackground(Color.WHITE);
             viewButton = new JButton("View Exam Record");
+            invoiceButton = new JButton("Generate Invoice");
 
             panel.add(viewButton);
+            panel.add(invoiceButton);
 
             // Add action listener for the View button
             viewButton.addActionListener(e -> {
                 Exam exam = (Exam) tableModel.getValueAt(currentRow, 0);
                 clientController.showExamInfo(exam.getExamID());
+            });
+
+            //Add action listener for Invoice Button
+            invoiceButton.addActionListener(e -> {
+                Exam exam = (Exam) tableModel.getValueAt(currentRow,0);
+                clientController.generateInvoice(exam);
+                JOptionPane.showMessageDialog(null, "Invoice has been created");
             });
         }
 

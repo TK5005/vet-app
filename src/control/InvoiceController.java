@@ -113,9 +113,10 @@ public class InvoiceController extends ViewController{
         refreshViews();
     }
 
-    public String getClientName(int invoiceID) {
-        Invoice invoice = invoiceRepository.getSpecificInvoice(invoiceID);
-        Exam exam = examRepository.getSpecificExam(invoice.getExamID());
+    public String getClientName(int examID) {
+        //Don't need to grab the invoice here, just need the exam info for the invoice - Dan
+        //Invoice invoice = invoiceRepository.getSpecificInvoice(invoiceID);
+        Exam exam = examRepository.getSpecificExam(examID);
         Pet pet = petRepository.getSpecificPet(exam.getPetID());
         Client client = clientRepository.getSpecificClient(pet.getOwnerID());
         return client.getName();

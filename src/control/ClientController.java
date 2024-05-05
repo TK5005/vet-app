@@ -11,15 +11,7 @@ import Repository.InvoiceRepository;
 import Repository.PetRepository;
 import Repository.StaffRepository;
 import Repository.TreatmentRepository;
-import model.Appointment;
-import model.Client;
-import model.Exam;
-import model.Invoice;
-import model.Medication;
-import model.Pet;
-import model.Tech;
-import model.Treatment;
-import model.Vet;
+import model.*;
 import view.clientPatient.ClientsView;
 
 public class ClientController extends ViewController {
@@ -362,6 +354,30 @@ public class ClientController extends ViewController {
 
     public Medication[] getInStockMedications(){
         return inventoryRepository.getInStockMedications();
+    }
+
+    public void generateInvoice(Exam inExam){
+        //Calculate amount due
+        Treatment[] treats = treatmentRepository.getTreatmentsByExamID(inExam.getExamID());
+        float amtDue = 0.0F;
+        for(Treatment t : treats ){
+            if(t.getTreatmentTypeString().equals("TEST")){
+                amtDue += 40F;
+            }else if(t.getTreatmentTypeString().equals("VACCINE") ||
+                    t.getTreatmentTypeString().equals("MEDICATION")){
+                amtDue += inventoryRepository.getSpecificItem(t.getMedicationID()).getRetailCost();
+
+            }
+        }
+
+        Invoice newIn = new Invoice();
+        newIn.setInvoiceDate(LocalDate.now());
+        newIn.setExamID(inExam.getExamID());
+        newIn.setStatus(Invoice.Status.UNPAID);
+        newIn.setClientID(currentClientID);
+        newIn.setAmtDue(amtDue);
+        invoiceRepository.addInvoice(newIn);
+        refreshViews();
     }
 
 
