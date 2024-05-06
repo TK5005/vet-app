@@ -15,6 +15,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import java.util.List;
 
+import control.AdminController;
 import control.AppController;
 import model.Staff;
 
@@ -23,6 +24,8 @@ import model.Staff;
  */
 public class AdminPanel extends JPanel {
     private AppController controller;
+
+    private AdminController adminController;
     private final JPanel topPanel = new JPanel();
     private final CardLayout cardLayout = new CardLayout();
     private final JPanel bottomJPanel = new JPanel(cardLayout);
@@ -42,14 +45,16 @@ public class AdminPanel extends JPanel {
         setLayout(new BorderLayout());
         JButton loadDataButton = new JButton("View All");
         Object[] columns = { "ID","User ID", "User Name", "User Role", "Action"};
-        Object[][] returnedData = controller.loadStaff();
-        topPanel.add(loadDataButton);
-        loadDataButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setTable(returnedData, columns);  
-                cardLayout.show(bottomJPanel, "View All");              
-            }
-        });
+        Staff[] returnedData = adminController.getStaff();
+        //topPanel.add(loadDataButton);
+//        loadDataButton.addActionListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent e) {
+//                setTable(returnedData, columns);
+//                cardLayout.show(bottomJPanel, "View All");
+//            }
+//        });
+        setTable(returnedData, columns);
+        cardLayout.show(bottomJPanel, "View All");
         JButton newButton = new JButton("+ New Staff");
         newButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -72,9 +77,9 @@ public class AdminPanel extends JPanel {
         topPanel.add(newButton);
         topPanel.add(newVet);
         topPanel.add(newTech);
-        loadStaffDetails("Staff Details");
-        loadVetDetails("Vet Details");
-        loadTechDetails("Tech Details");
+//        loadStaffDetails("Staff Details");
+//        loadVetDetails("Vet Details");
+//        loadTechDetails("Tech Details");
         add(topPanel, BorderLayout.NORTH);
     }
     private void loadStaffDetails(String name) {
@@ -114,8 +119,8 @@ public class AdminPanel extends JPanel {
             }
         });
     }
-    private void setTable(Object[][] data, Object[] col) {
-        tableModel = new DefaultTableModel(data, col);
+    private void setTable(Staff[] data, Object[] col) {
+        tableModel = new DefaultTableModel();
         JTable table = new JTable(tableModel);
         setCellsAlignment(table, SwingConstants.CENTER);
         Dimension d = table.getPreferredSize();
