@@ -65,17 +65,6 @@ public class AppController {
         String[][] data = model.loadMedication();
         return data;
     }
-
-    public Staff[] showStaffDetail(int empID) {
-        return staffRepo.GetStaff(empID);
-    }
-    
-    public void removeStaff(int empID) {
-        staffRepo.deleteStaff(empID);
-    }
-    public void addStaff(Staff user) {
-        staffRepo.addStaff(user);
-    }
     public Appointment[] showAppointmentDetail(int appID) {
         return appRepo.GetApp(appID);
     }

@@ -49,34 +49,32 @@ public class StaffRepository {
         }
         return ret.toArray(new Staff[0]);
     }
-    public Staff[] GetStaff(int empID){
+    public Staff getStaff(int empID){
         String sql = "SELECT * FROM STAFF WHERE empID=?";
-        List<Staff> ret = new ArrayList<>();
+        Staff ret = new Staff();
         try (Connection conn = ConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)){
 
             stmt.setInt(1,empID);
             ResultSet rs = stmt.executeQuery(sql);
-            Staff staff = new Staff();
             while(rs.next()){
-                staff.setEmpID(rs.getInt("empID")); 
-                staff.setFirstName(rs.getString("firstName"));
-                staff.setLastName(rs.getString("lastName"));
-                staff.setSex(rs.getString("sex")); 
-                staff.setDob(rs.getObject("date",LocalDate.class)); 
-                staff.setSsn(rs.getString("ssn"));
-                staff.setPhone(rs.getString("phone"));
-                staff.setStreet(rs.getString("street"));
-                staff.setCity(rs.getString("city"));
-                staff.setState(rs.getString("state"));
-                staff.setZip(Integer.parseInt(rs.getString("zip")));
-                ret.add(staff);                        
+                ret.setEmpID(rs.getInt("empID"));
+                ret.setFirstName(rs.getString("firstName"));
+                ret.setLastName(rs.getString("lastName"));
+                ret.setSex(rs.getString("sex"));
+                ret.setDob(rs.getObject("date",LocalDate.class));
+                ret.setSsn(rs.getString("ssn"));
+                ret.setPhone(rs.getString("phone"));
+                ret.setStreet(rs.getString("street"));
+                ret.setCity(rs.getString("city"));
+                ret.setState(rs.getString("state"));
+                ret.setZip(Integer.parseInt(rs.getString("zip")));
             }
         }catch (SQLException ex) {
             System.out.println("Error running Staff Get statement");
             ex.printStackTrace();
         }
-        return ret.toArray(new Staff[0]);
+        return ret;
 
     }
     public Vet[] getVets(){
@@ -344,6 +342,12 @@ public class StaffRepository {
             ex.printStackTrace();
 
         }
+    }
+    public void updateSpecialties(int vetID, String[] specialties){
+        System.out.println("addSpecialties needs to be implemented");
+    }
+    public void updateCertifications(int techID, String[] certs){
+        System.out.println("addCertifications needs to be implemented");
     }
 }
 
