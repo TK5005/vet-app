@@ -9,15 +9,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InventoryRepository {
-    private final Connection conn;
-
-    public InventoryRepository(){this.conn = ConnectionManager.getConnection();}
+//    private final Connection conn;
+//
+//    public InventoryRepository(){this.conn = ConnectionManager.getConnection();}
 
     public Inventory[] getAll(){
         String sql = "SELECT * FROM INVENTORY";
         List<Inventory> ret = new ArrayList<>();
 
-        try(PreparedStatement get = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql)){
             ResultSet rs = get.executeQuery();
 
             while(rs.next()){
@@ -45,7 +46,8 @@ public class InventoryRepository {
         String sql = "SELECT * FROM INVENTORY WHERE itemID = ?";
         Inventory ret = new Inventory();
 
-        try(PreparedStatement get = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+            PreparedStatement get = conn.prepareStatement(sql)){
 
             get.setInt(1,itemID);
             ResultSet rs = get.executeQuery();
@@ -76,7 +78,8 @@ public class InventoryRepository {
                 "reorderQuantity,wholesaleCost,retailcost) " +
                 "VALUES(?,?,?,?,?,?,?,?)";
 
-        try(PreparedStatement create = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement create = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)){
             create.setString(1, mod.getName());
             create.setString(2, mod.getManufacturer());
             create.setString(3, mod.getType().toString());
@@ -95,13 +98,6 @@ public class InventoryRepository {
         }catch (SQLException ex) {
             System.err.println("Error inserting Inventory entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back Inventory changes");
-                e.printStackTrace();
-            }
         }
         return mod;
 
@@ -112,7 +108,8 @@ public class InventoryRepository {
                 = "UPDATE INVENTORY SET name = ?, manufacturer = ?, type = ?, quantity = ?, reorderLevel = ?, " +
                 "reorderQuantity = ?, wholesaleCost = ?, retailCost = ? WHERE itemID = ?";
 
-        try(PreparedStatement update = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement update = conn.prepareStatement(sql)){
             update.setString(1, mod.getName());
             update.setString(2, mod.getManufacturer());
             update.setString(3, mod.getType().toString());
@@ -128,33 +125,20 @@ public class InventoryRepository {
         }catch (SQLException ex) {
             System.err.println("Error updating Inventory entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back Inventory changes");
-                e.printStackTrace();
-            }
         }
     }
 
     public void deleteInventoryItem(int inventoryID)
     {
         String sql = "DELETE FROM INVENTORY WHERE itemID = ?";
-        try(PreparedStatement delete = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement delete = conn.prepareStatement(sql)){
             delete.setInt(1, inventoryID);
             delete.executeUpdate();
             conn.commit();
         }catch (SQLException ex) {
             System.err.println("Error deleting Inventory entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back Inventory changes");
-                e.printStackTrace();
-            }
         }
     }
 
@@ -164,7 +148,8 @@ public class InventoryRepository {
         String sql = "SELECT i.*, m.interactions, m.dosage FROM INVENTORY i JOIN MEDICATION m ON m.itemID = i.itemID";
         List<Medication> ret = new ArrayList<>();
 
-        try(PreparedStatement get = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql)){
             ResultSet rs = get.executeQuery();
 
             while(rs.next()){
@@ -196,7 +181,8 @@ public class InventoryRepository {
                 "WHERE i.quantity > 0";
         List<Medication> ret = new ArrayList<>();
 
-        try(PreparedStatement get = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql)){
             ResultSet rs = get.executeQuery();
 
             while(rs.next()){
@@ -227,7 +213,8 @@ public class InventoryRepository {
                 " WHERE m.itemID = ?";
         Medication ret = null;
 
-        try(PreparedStatement get = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement get = conn.prepareStatement(sql)){
             get.setInt(1, medID);
             ResultSet rs = get.executeQuery();
 
@@ -254,13 +241,13 @@ public class InventoryRepository {
     }
 
 
-    public Medication addMedication(Medication mod){
-        Inventory newInventory = addInventory(mod);
-        mod.setItemID(newInventory.getItemID());
+    private Medication addMedication(Medication mod){
+        updateInventory(mod);
         String sql =
                 "INSERT INTO MEDICATION VALUES(?,?,?)";
 
-        try(PreparedStatement create = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement create = conn.prepareStatement(sql)){
             create.setInt(1, mod.getItemID());
             create.setString(2, mod.getInteractions());
             create.setString(3, mod.getDosage());
@@ -270,23 +257,17 @@ public class InventoryRepository {
         }catch (SQLException ex) {
             System.err.println("Error inserting Medication entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back medication changes");
-                e.printStackTrace();
-            }
         }
         return mod;
     }
 
-    public void updateMedication(Medication mod){
+    private void updateMedication(Medication mod){
         updateInventory(mod);
         String sql =
                 "UPDATE MEDICATION SET interactions = ?, dosage = ? WHERE itemID = ?";
 
-        try(PreparedStatement update = conn.prepareStatement(sql)){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement update = conn.prepareStatement(sql)){
             update.setString(1, mod.getInteractions());
             update.setString(2, mod.getDosage());
             update.setInt(3, mod.getItemID());
@@ -296,13 +277,46 @@ public class InventoryRepository {
         }catch (SQLException ex) {
             System.err.println("Error inserting Medication entry");
             ex.printStackTrace();
-            try {
-                System.err.println("Rolling back changes");
-                conn.rollback();
-            } catch (SQLException e) {
-                System.err.println("Error rolling back medication changes");
-                e.printStackTrace();
-            }
+        }
+    }
+
+    public void addOrUpdateMedication(Medication mod){
+        String sql
+                = "SELECT * FROM MEDICATION WHERE itemID = ?";
+
+        try(Connection conn = ConnectionManager.getConnection();
+            PreparedStatement get = conn.prepareStatement(sql)){
+
+            get.setInt(1,mod.getItemID());
+
+            ResultSet rs = get.executeQuery();
+
+            boolean exists = false;
+            while(rs.next())
+                exists = true;
+
+            if(exists)
+                updateMedication(mod);
+            else
+                addMedication(mod);
+
+        }catch (SQLException ex) {
+            System.err.println("Error running Medication Get statement");
+            ex.printStackTrace();
+        }
+    }
+
+    public void deleteMedicationEntry(int itemID){
+        String sql
+                = "DELETE FROM MEDICATION WHERE itemID = ?";
+        try(Connection conn = ConnectionManager.getConnection();
+            PreparedStatement del = conn.prepareStatement(sql)){
+            del.setInt(1, itemID);
+            del.executeUpdate();
+            conn.commit();
+        }catch (SQLException ex) {
+            System.err.println("Error deleting Medication entry");
+            ex.printStackTrace();
         }
     }
 }

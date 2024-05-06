@@ -91,7 +91,7 @@ public class TreatmentRepository {
 
             conn.commit();
         }catch (SQLException ex) {
-            System.err.println("Error inserting Pet entry");
+            System.err.println("Error inserting Treatment entry");
             ex.printStackTrace();
         }
         return mod;
