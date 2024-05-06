@@ -44,15 +44,6 @@ public class InventoryController extends ViewController{
         item.setRetailCost(0);
         inventoryRepository.addInventory(item);
 
-        if(item.getType() == Inventory.InventoryType.MEDICATION)
-        {
-            Medication med = new Medication();
-            med.setItemID(item.getItemID());
-            med.setInteractions("Interactions");
-            med.setDosage("Dosage");
-            inventoryRepository.addMedication(med);
-        }
-
         refreshViews();
     }
 
@@ -73,6 +64,8 @@ public class InventoryController extends ViewController{
         return inventoryRepository.getSpecificItem(itemID);
     }
 
+    public Medication getMedItem(int itemID){return inventoryRepository.getSpecificMedication(itemID);}
+
     public void updateInventoryItem(int itemID, String name, String manufacturer, String type,
                                 int quantity, int reorderLevel, int reorderQuantity, float wholesaleCost,
                                 float retailCost) {
@@ -90,8 +83,33 @@ public class InventoryController extends ViewController{
         refreshViews();
     }
 
+    public void updateMedicationItem(int itemID, String name, String manufacturer, String type,
+                                     int quantity, int reorderLevel, int reorderQuantity, float wholesaleCost,
+                                     float retailCost, String dosage, String interactions){
+
+        Medication item = new Medication();
+        item.setItemID(itemID);
+        item.setName(name);
+        item.setManufacturer(manufacturer);
+        item.setType(type);
+        item.setQuantity(quantity);
+        item.setReorderLevel(reorderLevel);
+        item.setReorderQuantity(reorderQuantity);
+        item.setWholesaleCost(wholesaleCost);
+        item.setRetailCost(retailCost);
+        item.setDosage(dosage);
+        item.setInteractions(interactions);
+        inventoryRepository.addOrUpdateMedication(item);
+        refreshViews();
+    }
+
     public void deleteInventoryItem(int inventoryID) {
+        deleteMedicationEntry(inventoryID);
         inventoryRepository.deleteInventoryItem(inventoryID);
+        refreshViews();
+    }
+    public void deleteMedicationEntry(int itemID){
+        inventoryRepository.deleteMedicationEntry(itemID);
         refreshViews();
     }
 }

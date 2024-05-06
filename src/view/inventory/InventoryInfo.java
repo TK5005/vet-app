@@ -7,35 +7,35 @@ import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.text.ParseException;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.text.NumberFormatter;
 
 import control.InventoryController;
 import model.Inventory;
+import model.Medication;
 
 
 public class InventoryInfo extends JPanel {
     InventoryController controller;
     int itemID;
     Inventory item;
+    Medication medItem;
 
     JButton saveButton;
 
     private JFormattedTextField idField;
     private JTextField nameField;
     private JTextField manufacturerField;
-    private JComboBox<String> typeBox;
+    private JComboBox<Inventory.InventoryType> typeBox;
     private JFormattedTextField quantityField;
     private JFormattedTextField reoderLevelField;
     private JFormattedTextField reorderQuantityField;
     private JFormattedTextField wholesaleCostField;
     private JFormattedTextField retailCostField;
+    private JTextField dosageField;
+    private JTextArea interactionsField;
+    private JLabel dosageLabel, interactionsLabel;
+    private JPanel interactionsPanel, dosagePanel;
 
     NumberFormat integerFormat = NumberFormat.getIntegerInstance();
     NumberFormatter numberFormatter = new NumberFormatter(integerFormat) {
@@ -50,6 +50,11 @@ public class InventoryInfo extends JPanel {
         controller = InventoryController.getInstance();
         this.itemID = itemID;
         item = controller.getItem(itemID);
+        if(item.getType() == Inventory.InventoryType.MEDICATION){
+            medItem = controller.getMedItem(itemID);
+            if(medItem == null)
+                medItem = new Medication();
+        }
         createUI();
         createEventListeners();
     }
@@ -59,19 +64,23 @@ public class InventoryInfo extends JPanel {
         idField.setValue(item.getItemID());
         nameField.setText(item.getName());
         manufacturerField.setText(item.getManufacturer());
-        typeBox.setSelectedItem(item.getType().toString());
+        typeBox.setSelectedItem(item.getType());
         quantityField.setValue(item.getQuantity());
         reoderLevelField.setValue(item.getReorderLevel());
         reorderQuantityField.setValue(item.getReorderQuantity());
         retailCostField.setValue(item.getRetailCost());
         wholesaleCostField.setValue(item.getWholesaleCost());
+        if(medItem != null) {
+            dosageField.setText(medItem.getDosage());
+            interactionsField.setText(medItem.getInteractions());
+        }
     }
 
     public void saveItem() {
         int id = (Integer) idField.getValue();
         String name = nameField.getText();
         String manufacturer = manufacturerField.getText();
-        String type = (String) typeBox.getSelectedItem();
+        String type = typeBox.getSelectedItem().toString();
         int quantity = (Integer) quantityField.getValue();
         int reorderLevel = (Integer) reoderLevelField.getValue();
         int reorderQuantity = (Integer) reorderQuantityField.getValue();
@@ -83,7 +92,19 @@ public class InventoryInfo extends JPanel {
         } catch (Exception e) {
             System.out.println("Error parsing float");
         }
-        controller.updateInventoryItem(id, name, manufacturer, type, quantity, reorderLevel, reorderQuantity, wholesaleCost, retailCost);
+        if(!type.equals("MEDICATION")) {
+            //Check if this was Medication to begin with, Delete if it was
+            if(medItem != null)
+                controller.deleteMedicationEntry(id);
+
+            controller.updateInventoryItem(id, name, manufacturer, type, quantity, reorderLevel,
+                    reorderQuantity, wholesaleCost, retailCost);
+        }else {
+            String dosage = dosageField.getText();
+            String interactions = interactionsField.getText();
+            controller.updateMedicationItem(id, name, manufacturer, type, quantity, reorderLevel,
+                    reorderQuantity, wholesaleCost, retailCost, dosage, interactions);
+        }
     }
 
     private void createEventListeners() {
@@ -91,6 +112,24 @@ public class InventoryInfo extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 saveItem();
+            }
+        });
+
+        typeBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(typeBox.getSelectedItem() ==Inventory.InventoryType.MEDICATION){
+                    interactionsLabel.setVisible(true);
+                    interactionsField.setVisible(true);
+                    dosageField.setVisible(true);
+                    dosageLabel.setVisible(true);
+                }
+                else{
+                    interactionsLabel.setVisible(false);
+                    interactionsField.setVisible(false);
+                    dosageField.setVisible(false);
+                    dosageLabel.setVisible(false);
+                }
             }
         });
     }
@@ -138,7 +177,7 @@ public class InventoryInfo extends JPanel {
         typePanel.setLayout(new BoxLayout(typePanel, BoxLayout.Y_AXIS));
         typePanel.setBackground(Color.WHITE);
         JLabel typeLabel = new JLabel("Type");
-        typeBox = new JComboBox<String>(Inventory.getInventoryTypes());
+        typeBox = new JComboBox<Inventory.InventoryType>(Inventory.InventoryType.values());
         typePanel.add(typeLabel);
         typePanel.add(typeBox);
 
@@ -182,6 +221,32 @@ public class InventoryInfo extends JPanel {
         wholesaleCostPanel.add(wholesaleCostLabel);
         wholesaleCostPanel.add(wholesaleCostField);
 
+        dosagePanel = new JPanel();
+        dosagePanel.setLayout(new BoxLayout(dosagePanel, BoxLayout.Y_AXIS));
+        dosagePanel.setBackground(Color.WHITE);
+        dosageLabel = new JLabel("Dosage");
+        dosageField = new JTextField(20);
+        dosagePanel.add(dosageLabel);
+        dosagePanel.add(dosageField);
+
+        interactionsPanel = new JPanel();
+        interactionsPanel.setLayout(new BoxLayout(interactionsPanel, BoxLayout.Y_AXIS));
+        interactionsPanel.setBackground(Color.WHITE);
+        interactionsLabel = new JLabel("Interactions");
+        interactionsField = new JTextArea(5,20);
+        JScrollPane scrollPane = new JScrollPane(interactionsField);
+        interactionsPanel.add(interactionsLabel);
+        interactionsPanel.add(scrollPane);
+
+        if(item.getType() != Inventory.InventoryType.MEDICATION)
+        {
+            interactionsLabel.setVisible(false);
+            interactionsField.setVisible(false);
+            dosageField.setVisible(false);
+            dosageLabel.setVisible(false);
+        }
+
+
         inventoryDetails.add(inventoryIDPanel);
         inventoryDetails.add(namePanel);
         inventoryDetails.add(manufacturerPanel);
@@ -191,6 +256,9 @@ public class InventoryInfo extends JPanel {
         inventoryDetails.add(reorderQuantityPanel);
         inventoryDetails.add(retailCostPanel);
         inventoryDetails.add(wholesaleCostPanel);
+        inventoryDetails.add(dosagePanel);
+        inventoryDetails.add(interactionsPanel);
+
 
         return inventoryDetails;
     }
