@@ -3,9 +3,8 @@ package control;
 import Repository.AppointmentRepository;
 import Repository.ClientRepository;
 import Repository.PetRepository;
-import model.Appointment;
-import model.Client;
-import model.Pet;
+import Repository.StaffRepository;
+import model.*;
 
 import java.time.LocalDateTime;
 
@@ -28,42 +27,30 @@ public class AppointmentController extends ViewController{
     private ClientRepository clientRepository;
     private PetRepository petRepository;
 
+    private StaffRepository staffRepository;
+
     private int currentAppointmentID;
 
     private AppointmentController(){
         appointmentRepository = new AppointmentRepository();
         clientRepository = new ClientRepository();
         petRepository = new PetRepository();
+        staffRepository = new StaffRepository();
     }
 
     public Appointment getAppointment(int appointmentID){return appointmentRepository.GetApp(appointmentID);}
 
     public Appointment[] getAppointments(){return appointmentRepository.getAll();}
 
-    public void addNewAppointment(LocalDateTime appDate, LocalDateTime checkinTime, String description, int clientID, int petID, int staffID){
-        Appointment app = new Appointment();
-        app.setDescription(description);
-        app.setAppointmentDate(appDate);
-        app.setCheckInTime(checkinTime);
-        app.setClientID(clientID);
-        app.setPetID(petID);
-        app.setStaffID(staffID);
+    public void addNewAppointment(Appointment add){
 
-        appointmentRepository.addAppointment(app);
+        appointmentRepository.addAppointment(add);
         refreshViews();
     }
 
-    public void updateAppointment(int appID, LocalDateTime appDate, LocalDateTime checkinTime, String description, int clientID, int petID, int staffID){
-        Appointment app = new Appointment();
-        app.setAppointmentID(appID);
-        app.setDescription(description);
-        app.setAppointmentDate(appDate);
-        app.setCheckInTime(checkinTime);
-        app.setClientID(clientID);
-        app.setPetID(petID);
-        app.setStaffID(staffID);
+    public void updateAppointment(Appointment update){
 
-        appointmentRepository.addAppointment(app);
+        appointmentRepository.updateAppointment(update);
         refreshViews();
 
     }
@@ -75,4 +62,11 @@ public class AppointmentController extends ViewController{
     public Client[] getClients(){
         return clientRepository.getAll();
     }
+
+    public Client getClient(int clientID){return clientRepository.getSpecificClient(clientID);}
+    public Pet getPet(int petID){return petRepository.getSpecificPet(petID);}
+
+    public Vet getVet(int vetID){return staffRepository.getVet(vetID);}
+
+    public Vet[] getVets(){return staffRepository.getVets();}
 }

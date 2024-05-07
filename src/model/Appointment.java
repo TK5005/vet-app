@@ -7,7 +7,7 @@ public class Appointment {
     private int appointmentID;
     private int clientID;
     private int petID;
-    private int staffID;
+    private Integer staffID;
     private LocalDateTime appointmentDate;
     private String description;
     private LocalDateTime checkInTime;
@@ -48,11 +48,11 @@ public class Appointment {
         this.petID = petID;
     }
 
-    public int getStaffID() {
+    public Integer getStaffID() {
         return staffID;
     }
 
-    public void setStaffID(int staffID) {
+    public void setStaffID(Integer staffID) {
         this.staffID = staffID;
     }
 

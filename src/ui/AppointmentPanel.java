@@ -14,13 +14,16 @@ import javax.swing.table.TableModel;
 
 import control.AppController;
 import control.AppointmentController;
+import control.IVetAppView;
 import model.Appointment;
+import model.Client;
+import model.Pet;
 import view.appointmentView.*;
 
 /**
  * AppointmentPanel
  */
-public class AppointmentPanel extends JPanel {
+public class AppointmentPanel extends JPanel implements IVetAppView {
     private AppointmentController controller;
     private final JPanel topPanel = new JPanel();
     private final CardLayout cardLayout = new CardLayout();
@@ -36,6 +39,7 @@ public class AppointmentPanel extends JPanel {
 
     public AppointmentPanel(){
         this.controller = AppointmentController.getInstance();
+        controller.registerView(this);
         createUI();
     }
 
@@ -45,15 +49,20 @@ public class AppointmentPanel extends JPanel {
         Appointment[] appointments = controller.getAppointments();
 
         for(Appointment app : appointments){
-            Object[] rowData = {app.getAppointmentID(), app.getClientID(), app.getPetID(), app.getAppointmentDate()};
+            Client client = controller.getClient(app.getClientID());
+            Pet pet = controller.getPet(app.getPetID());
+            Object[] rowData = {app.getAppointmentID(),client.getName(), pet.getName(),
+                    app.getAppointmentDate()};
+
             tableModel.addRow(rowData);
         }
+
     }
 
     private void createUI() {
         setLayout(new BorderLayout());
         
-        Object[] columns = {"Owner Name", "Pet Name", "Appointment Time","Action"};
+        Object[] columns = {"Appointment ID", "Owner Name", "Pet Name", "Appointment Time","Action"};
         Appointment[] returnedData = controller.getAppointments();
         JButton newButton = new JButton("+ New Appointment");
         newButton.addActionListener(new ActionListener() {
@@ -69,12 +78,13 @@ public class AppointmentPanel extends JPanel {
     private void setTable(Appointment[] data, Object[] col) {
          tableModel = new DefaultTableModel(){
             public boolean isCellEditable(int row, int column){
-                return column==3;
+                return column==4;
             }
         };
 
         tableModel.setColumnIdentifiers(col);
         JTable table = new JTable(tableModel);
+
         setCellsAlignment(table, SwingConstants.CENTER);
         Dimension d = table.getPreferredSize();
         table.setPreferredScrollableViewportSize(d);
@@ -85,6 +95,8 @@ public class AppointmentPanel extends JPanel {
         table.getColumnModel().getColumn(table.getModel().getColumnCount()-1).setPreferredWidth(150);;
         table.getColumnModel().getColumn(table.getModel().getColumnCount()-1).setCellRenderer(new ButtonRenderer());
         table.getColumnModel().getColumn(table.getModel().getColumnCount()-1).setCellEditor(new ButtonEditor());
+        //Remove the ID column from customer view
+        table.getColumnModel().removeColumn(table.getColumnModel().getColumn(0));
         table.setRowHeight(50);
         table.setVisible(true);
 
@@ -204,14 +216,14 @@ public class AppointmentPanel extends JPanel {
             // Add action listener for the View button
             viewButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    int appID = Integer.parseInt(table.getValueAt(currentRow, 0).toString());
+                    int appID = Integer.parseInt(table.getModel().getValueAt(currentRow, 0).toString());
                     app = new NewAppointment(controller,appID);
                 }
             });
 
             // Add action listener for the Remove button
             removeButton.addActionListener(e -> {
-                int appID = Integer.parseInt(table.getValueAt(currentRow, 0).toString());
+                int appID = Integer.parseInt(table.getModel().getValueAt(currentRow, 0).toString());
                 ConfirmDeletion(appID);
             });
         }

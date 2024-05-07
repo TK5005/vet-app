@@ -5,6 +5,7 @@ import model.Appointment;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,15 +107,16 @@ public class AppointmentRepository {
     }
     public Appointment addAppointment(Appointment mod){
         String sql
-                = "INSERT INTO APPOINTMENT (clientID, petID, staffID, start_time, description) " +
-                "VALUES(?,?,?,?,?)";
+                = "INSERT INTO APPOINTMENT (clientID, petID, staffID, start_time, checkin_time, description) " +
+                "VALUES(?,?,?,?,?,?)";
 
         try(Connection conn = ConnectionManager.getConnection();
                 PreparedStatement create = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)){
             create.setInt(1, mod.getClientID());
             create.setInt(2, mod.getPetID());
-            create.setInt(3, mod.getStaffID());
+            if(mod.getStaffID() == null){create.setNull(3,Types.INTEGER);}else{create.setInt(3,mod.getStaffID());}
             create.setTimestamp(4, java.sql.Timestamp.valueOf(mod.getAppointmentDate()));
+            if(mod.getCheckInTime() == null){create.setNull(5,Types.DATE);}else{create.setTimestamp(5,java.sql.Timestamp.valueOf(mod.getCheckInTime()));}
             create.setString(5, mod.getDescription());
 
             create.executeUpdate();
@@ -141,10 +143,11 @@ public class AppointmentRepository {
 
             update.setInt(1,mod.getClientID());
             update.setInt(2,mod.getPetID());
-            update.setInt(3,mod.getStaffID());
+            if(mod.getStaffID() == null){update.setNull(3,Types.INTEGER);}else{update.setInt(3,mod.getStaffID());}
             update.setTimestamp(4,java.sql.Timestamp.valueOf(mod.getAppointmentDate()));
-            update.setTimestamp(5,java.sql.Timestamp.valueOf(mod.getCheckInTime()));
+            if(mod.getCheckInTime() == null){update.setNull(5,Types.DATE);}else{update.setTimestamp(5,java.sql.Timestamp.valueOf(mod.getCheckInTime()));}
             update.setString(6,mod.getDescription());
+            update.setInt(7,mod.getAppointmentID());
 
             update.executeUpdate();
             conn.commit();

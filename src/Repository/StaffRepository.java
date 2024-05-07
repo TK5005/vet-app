@@ -27,7 +27,7 @@ public class StaffRepository {
         try(Connection conn = ConnectionManager.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-           ResultSet rs = stmt.executeQuery(sql);
+           ResultSet rs = stmt.executeQuery();
             Staff staff = new Staff();
             while(rs.next()){
                 staff.setEmpID(rs.getInt("empID")); 
