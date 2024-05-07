@@ -22,6 +22,7 @@ public class AppController {
     ClientController clientController;
     InvoiceController invoiceController;
     InventoryController inventoryController;
+    DashboardController dashboardController;
 
 
     public AppController() {
@@ -29,6 +30,7 @@ public class AppController {
         clientController = ClientController.getInstance();
         invoiceController = InvoiceController.getInstance();
         inventoryController = InventoryController.getInstance();
+        dashboardController = DashboardController.getInstance();
     }
 
     public void refreshViews()
@@ -36,6 +38,7 @@ public class AppController {
         clientController.refreshViews();
         invoiceController.refreshViews();
         inventoryController.refreshViews();
+        dashboardController.refreshViews();
     }
 
     public String[][] loadStaff() {

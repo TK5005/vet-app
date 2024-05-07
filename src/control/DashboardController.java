@@ -8,6 +8,7 @@ import model.Appointment;
 import model.Client;
 import model.Pet;
 import model.Staff;
+import ui.DashboardPanel;
 
 public class DashboardController extends ViewController{
     private static DashboardController instance;
@@ -15,6 +16,7 @@ public class DashboardController extends ViewController{
     private ClientRepository clientRepository;
     private PetRepository petRepository;
     private StaffRepository staffRepository;
+    private DashboardPanel panel;
 
     private DashboardController() {
         appointmentRepository = new AppointmentRepository();
@@ -32,6 +34,22 @@ public class DashboardController extends ViewController{
             }
         }
         return instance;
+    }
+
+    public void setPanel(DashboardPanel panel) {
+        this.panel = panel;
+    }
+
+    public void showApptView()
+    {
+        panel.setApptView();
+        refreshViews();
+    }
+
+    public void showPatientView()
+    {
+        panel.setPatientView();
+        refreshViews();
     }
 
     public Client getClientByID(int ID) {

@@ -40,6 +40,7 @@ public class DashboardPanel extends JPanel implements IVetAppView
     public DashboardPanel() {
         controller = DashboardController.getInstance();
         controller.registerView(this);
+        controller.setPanel(this);
         createUI();
         createActionListeners();
         refresh();
@@ -80,13 +81,13 @@ public class DashboardPanel extends JPanel implements IVetAppView
         apptButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setApptView();
+                controller.showApptView();
             }
         });
         patientButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setPatientView();
+                controller.showPatientView();
             }
         });
     }
