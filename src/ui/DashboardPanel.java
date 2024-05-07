@@ -106,7 +106,7 @@ public class DashboardPanel extends JPanel implements IVetAppView
             Pet pet = controller.getPetByID(appointment.getPetID());
             if(client != null && pet != null)
             {
-                appointmentModel.addRow(new Object[]{client.getName(),pet.getName(), client.getPhone(), appointment.getAppointmentTime()});
+                appointmentModel.addRow(new Object[]{client.getName(),pet.getName(), client.getPhone(), 0});
             }
         }
     }
@@ -119,7 +119,7 @@ public class DashboardPanel extends JPanel implements IVetAppView
             Staff staff = controller.getStaffByID(appointment.getStaffID());
             if(pet != null && staff != null)
             {
-                patientModel.addRow(new Object[]{pet.getName(), appointment.getAppointmentTime(), staff.getName(), appointment.getDescription()});
+                patientModel.addRow(new Object[]{pet.getName(), 0, staff.getName(), appointment.getDescription()});
             }
         }
     }

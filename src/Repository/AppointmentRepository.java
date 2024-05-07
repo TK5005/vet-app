@@ -29,8 +29,10 @@ public class AppointmentRepository {
                 add.setClientID(rs.getInt("clientID"));
                 add.setPetID(rs.getInt("petID"));
                 add.setStaffID(rs.getInt("staffID"));
-                add.setAppointmentDate(rs.getTimestamp("start_time").toLocalDateTime().toLocalDate());
-                add.setCheckInTime(rs.getTimestamp("checkin_time").toLocalDateTime());
+                add.setAppointmentDate(rs.getTimestamp("start_time").toLocalDateTime());
+                java.sql.Timestamp checkin = rs.getTimestamp("checkin_time");
+                if(!rs.wasNull())
+                    add.setCheckInTime(rs.getTimestamp("checkin_time").toLocalDateTime());
                 add.setDescription(rs.getString("description"));
 
                 ret.add(add);
@@ -55,10 +57,12 @@ public class AppointmentRepository {
                 add.setClientID(rs.getInt("clientID"));
                 add.setPetID(rs.getInt("petID"));
                 add.setStaffID(rs.getInt("staffID"));
-                add.setAppointmentDate(rs.getTimestamp("start_time").toLocalDateTime().toLocalDate());
-                add.setAppointmentTime(rs.getTimestamp("start_time").toLocalDateTime().toString());
-                add.setCheckInTime(rs.getTimestamp("checkin_time").toLocalDateTime());
+                add.setAppointmentDate(rs.getTimestamp("start_time").toLocalDateTime());
+                java.sql.Timestamp checkin = rs.getTimestamp("checkin_time");
+                if(!rs.wasNull())
+                    add.setCheckInTime(rs.getTimestamp("checkin_time").toLocalDateTime());
                 add.setDescription(rs.getString("description"));
+
                 ret.add(add);
             }
         }catch (SQLException ex) {
@@ -69,33 +73,31 @@ public class AppointmentRepository {
         return ret.toArray(new Appointment[0]);
     }
 
-    public Appointment[] GetApp(int appID){
-        String sql = "SELECT * FROM APPOINTMENT WHERE appID=?";
-        List<Appointment> ret = new ArrayList<>();
+    public Appointment GetApp(int appID){
+        String sql = "SELECT * FROM APPOINTMENT WHERE apptNo=?";
+       Appointment ret = new Appointment();
         try (Connection conn = ConnectionManager.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)){
 
             stmt.setInt(1, appID);
-            ResultSet rs = stmt.executeQuery(sql);
+            ResultSet rs = stmt.executeQuery();
             Appointment app = new Appointment();
             while(rs.next()){
-                Appointment add = new Appointment();
-                add.setAppointmentID(rs.getInt("apptNo"));
-                add.setClientID(rs.getInt("clientID"));
-                add.setPetID(rs.getInt("petID"));
-                add.setStaffID(rs.getInt("staffID"));
-                add.setAppointmentDate(rs.getTimestamp("start_time").toLocalDateTime().toLocalDate());
-                add.setCheckInTime(rs.getTimestamp("checkin_time").toLocalDateTime());
-                add.setDescription(rs.getString("description"));
-                ret.add(app);                    
+                ret.setAppointmentID(rs.getInt("apptNo"));
+                ret.setClientID(rs.getInt("clientID"));
+                ret.setPetID(rs.getInt("petID"));
+                ret.setStaffID(rs.getInt("staffID"));
+                ret.setAppointmentDate(rs.getTimestamp("start_time").toLocalDateTime());
+                java.sql.Timestamp checkin = rs.getTimestamp("checkin_time");
+                if(!rs.wasNull())
+                    ret.setCheckInTime(rs.getTimestamp("checkin_time").toLocalDateTime());
+                ret.setDescription(rs.getString("description"));
             }
         }catch (SQLException ex) {
             System.out.println("Error running Appointment Get statement");
             ex.printStackTrace();
         }
-        Appointment[] cli = new Appointment[ret.size()];
-        cli = ret.toArray(new Appointment[ret.size()]);
-        return cli;
+        return ret;
     }
 
     public void deleteAppointment(int id){
@@ -112,7 +114,7 @@ public class AppointmentRepository {
             create.setInt(1, mod.getClientID());
             create.setInt(2, mod.getPetID());
             create.setInt(3, mod.getStaffID());
-            create.setTimestamp(4, java.sql.Timestamp.valueOf(mod.getAppointmentTime()));
+            create.setTimestamp(4, java.sql.Timestamp.valueOf(mod.getAppointmentDate()));
             create.setString(5, mod.getDescription());
 
             create.executeUpdate();
@@ -140,7 +142,7 @@ public class AppointmentRepository {
             update.setInt(1,mod.getClientID());
             update.setInt(2,mod.getPetID());
             update.setInt(3,mod.getStaffID());
-            update.setTimestamp(4,java.sql.Timestamp.valueOf(mod.getAppointmentTime()));
+            update.setTimestamp(4,java.sql.Timestamp.valueOf(mod.getAppointmentDate()));
             update.setTimestamp(5,java.sql.Timestamp.valueOf(mod.getCheckInTime()));
             update.setString(6,mod.getDescription());
 

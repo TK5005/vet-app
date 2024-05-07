@@ -22,7 +22,6 @@ public class AppController {
     ClientController clientController;
     InvoiceController invoiceController;
     InventoryController inventoryController;
-    AppointmentController appointmentController;
 
 
     public AppController() {
@@ -76,16 +75,6 @@ public class AppController {
     }
     public void addStaff(Staff user) {
         staffRepo.addStaff(user);
-    }
-    public Appointment[] showAppointmentDetail(int appID) {
-        return appRepo.GetApp(appID);
-    }
-
-    public void deleteAppointment(int appID) {
-        appRepo.deleteAppointment(appID);
-    }
-    public void addAppointment(Appointment appointment) {
-        appRepo.addAppointment(appointment);
     }
         
     public void removeVet(int empID) {

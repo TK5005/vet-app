@@ -1,16 +1,14 @@
 package view.appointmentView;
 
 import java.awt.*;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
 import javax.swing.*;
-import com.github.lgooddatepicker.components.DatePicker;
 
+import com.github.lgooddatepicker.components.DateTimePicker;
+import control.AppointmentController;
 import model.Appointment;
-import control.AppController;
 
 public class NewAppointment {
     Appointment appt;
@@ -18,33 +16,37 @@ public class NewAppointment {
     JTextField clientID;
     JTextField petID;
     JTextField staffID;
-    DatePicker datePicker;
-    JTextField time;
+    DateTimePicker datePicker;
+    DateTimePicker checkInTime;
     JTextField description;
 
     private final Color selectedColor = new Color(173, 216, 230);
-    private AppController controller;
+    private AppointmentController controller;
 
-    public NewAppointment(AppController controller){
+    public NewAppointment(AppointmentController controller){
         appt = new Appointment();
         this.controller = controller;
         createUI();
     }
+
+    public NewAppointment(AppointmentController controller, int appointmentID){
+        this.controller = controller;
+        appt = controller.getAppointment(appointmentID);
+        createUI();
+
+    }
     private void createUI(){
-        int selection = JOptionPane.showConfirmDialog(null, getPanel(), "New Appointment : "
+        int selection = JOptionPane.showConfirmDialog(null, getPanel(), "Appointment : "
                                 , JOptionPane.OK_CANCEL_OPTION
                                 , JOptionPane.PLAIN_MESSAGE);
         if (selection == JOptionPane.OK_OPTION) 
-        { 
-            appt.setAppointmentID(Integer.parseInt(appID.getText())); 
-            appt.setClientID(Integer.parseInt(clientID.getText()));
-            appt.setStaffID(Integer.parseInt(staffID.getText()));
-            appt.setPetID(Integer.parseInt(petID.getText()));
-            java.util.Date date = java.sql.Date.valueOf(datePicker.getText());
-            LocalDate date2 = convertToLocalDate(date);
-            appt.setAppointmentDate(date2);
-            appt.setAppointmentTime(time.getText());
-            appt.setDescription(description.getText());
+        {
+              appt.setAppointmentID(Integer.parseInt(appID.getText()));
+              appt.setClientID(Integer.parseInt(clientID.getText()));
+              appt.setStaffID(Integer.parseInt(staffID.getText()));
+              appt.setPetID(Integer.parseInt(petID.getText()));
+              appt.setAppointmentDate(datePicker.getDateTimeStrict());
+              appt.setDescription(description.getText());
         }
     
     }
@@ -66,6 +68,7 @@ public class NewAppointment {
 
         JLabel appIDLabel = new JLabel("Appointment ID : ");
         appID = new JTextField();
+        appID.setEditable(false);
 
         JLabel clientIDLabel = new JLabel("Client ID : ");
         clientID = new JTextField();
@@ -77,13 +80,21 @@ public class NewAppointment {
         staffID = new JTextField();
 
         JLabel dateLabel = new JLabel("Date : ");
-        datePicker = new DatePicker();
+        datePicker = new DateTimePicker();
 
-        JLabel timeLabel = new JLabel("Time : ");
-        time = new JTextField();
+        JLabel checkinLabel = new JLabel("Check-in Time : ");
+        checkInTime = new DateTimePicker();
 
-        JLabel discriptionLabel = new JLabel("Discription :");
+        JLabel descriptionLabel = new JLabel("Description :");
         description = new JTextField();
+
+        appID.setText(String.valueOf(appt.getAppointmentID()));
+        clientID.setText(String.valueOf(appt.getClientID()));
+        staffID.setText(String.valueOf(appt.getStaffID()));
+        petID.setText(String.valueOf(appt.getPetID()));
+        datePicker.setDateTimeStrict(appt.getAppointmentDate());
+        description.setText(appt.getDescription());
+        checkInTime.setDateTimeStrict(appt.getCheckInTime());
 
         centerPanel.add(appIDLabel);
         centerPanel.add(appID);
@@ -100,10 +111,10 @@ public class NewAppointment {
         centerPanel.add(dateLabel);
         centerPanel.add(datePicker);
 
-        centerPanel.add(timeLabel);
-        centerPanel.add(time);
+        centerPanel.add(checkinLabel);
+        centerPanel.add(checkInTime);
 
-        centerPanel.add(discriptionLabel);
+        centerPanel.add(descriptionLabel);
         centerPanel.add(description);
 
         basePanel.add(centerPanel);
