@@ -12,7 +12,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
-import control.AdminController;
 import control.AppController;
 import control.AppointmentController;
 import model.Appointment;
