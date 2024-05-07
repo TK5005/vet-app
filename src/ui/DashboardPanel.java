@@ -116,11 +116,14 @@ public class DashboardPanel extends JPanel implements IVetAppView
         patientModel.setRowCount(0);
         Appointment[] appointments = controller.getAppointments();
         for (Appointment appointment : appointments) {
-            Pet pet = controller.getPetByID(appointment.getPetID());
-            Staff staff = controller.getStaffByID(appointment.getStaffID());
-            if(pet != null && staff != null)
+            if(appointment.getCheckInTime() != null)
             {
-                patientModel.addRow(new Object[]{pet.getName(), appointment.getAppointmentDate(), staff.getName(), appointment.getDescription()});
+                Pet pet = controller.getPetByID(appointment.getPetID());
+                Staff staff = controller.getStaffByID(appointment.getStaffID());
+                if(pet != null && staff != null)
+                {
+                    patientModel.addRow(new Object[]{pet.getName(), appointment.getAppointmentDate(), staff.getName(), appointment.getDescription()});
+                }
             }
         }
     }
