@@ -314,7 +314,7 @@ values('4','4',200.57, 'UNPAID','2024-04-10');
 insert into INVOICE (examID,custID,amtDue,status,INVOICEDate)
 values('5','5',211.11, 'UNPAID','2024-02-01');
 
---Insert Appointment Data
+-- Insert Appointment Data
 
 insert into APPOINTMENT (clientID,petID,start_time,description)
 values(1,1,'2024-05-15 08:30:00','Yearly Checkup and Vaccines');
