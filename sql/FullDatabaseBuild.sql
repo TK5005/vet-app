@@ -330,3 +330,6 @@ values(4,4,'2024-05-30 08:30:00','Treatment followup');
 
 insert into APPOINTMENT (clientID,petID,start_time,description)
 values(5,5,'2024-06-10 11:30:00','Medication Injection');
+
+insert into APPOINTMENT (clientID,petID,start_time,description)
+values(5,5,'2024-05-07 11:30:00','Medication Injection');
