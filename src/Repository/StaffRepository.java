@@ -56,14 +56,14 @@ public class StaffRepository {
              PreparedStatement stmt = conn.prepareStatement(sql)){
 
             stmt.setInt(1,empID);
-            ResultSet rs = stmt.executeQuery(sql);
+            ResultSet rs = stmt.executeQuery();
             Staff staff = new Staff();
             while(rs.next()){
                 staff.setEmpID(rs.getInt("empID")); 
                 staff.setFirstName(rs.getString("firstName"));
                 staff.setLastName(rs.getString("lastName"));
                 staff.setSex(rs.getString("sex")); 
-                staff.setDob(rs.getObject("date",LocalDate.class)); 
+                staff.setDob(rs.getObject("dob",LocalDate.class)); 
                 staff.setSsn(rs.getString("ssn"));
                 staff.setPhone(rs.getString("phone"));
                 staff.setStreet(rs.getString("street"));
