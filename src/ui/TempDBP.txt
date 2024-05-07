@@ -1,0 +1,196 @@
+package ui;
+
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
+import control.AppController;
+import control.AppointmentController;
+import model.Appointment;
+
+/**
+ * DashboardPanel
+ */
+public class DashboardPanel extends JPanel {
+    private AppController controller;
+    private AppointmentController appointmentController;
+    private DefaultTableModel tableModel;
+    private DefaultTableModel apptModel;
+    private JTable activePatientsTable;
+    private JTable apptTable;
+    private final JPanel topPanel = new JPanel();
+    private final CardLayout cardLayout = new CardLayout();
+    private final JPanel bottomJPanel = new JPanel(cardLayout);
+    private final List<JButton> navigationButtons = new ArrayList<>();
+    private JButton loadDataButton;
+    private JButton loadAppButton;
+
+    public DashboardPanel(AppController controller) {
+        this.appointmentController = AppointmentController.getInstance();
+        this.controller = controller;
+        createUI();
+        createEventListeners();
+        refresh();
+    }
+
+    public void refresh()
+    {
+        refreshApptTable();
+        refreshActivePatientsTable();
+    }
+
+    private void refreshActivePatientsTable()
+    {
+
+    }
+
+    private void refreshApptTable()
+    {
+        System.out.println("REFRESHING APPOINTMENTS");
+        apptModel.setRowCount(0);
+        Appointment[] appointments = appointmentController.getAppointments();
+        for (Appointment appointment : appointments) {
+            Object[] rowData = {appointment.getAppointmentID(), appointment.getClientID(), appointment.getPetID(), appointment.getStaffID(), appointment.getAppointmentDate()};
+            apptModel.addRow(rowData);
+        }
+    }
+
+    private void createUI() {
+        setLayout(new BorderLayout());
+        topPanel.setBackground(Color.WHITE);
+        String[] navButtons = { "Active Patients", "Medication Order", "Today's Appointment" };
+        for (String name : navButtons) {
+            if (name == "Active Patients") {
+                loadPatients(name);
+            }
+            /*if (name == "Medication Order") {
+                loadMedication(name);
+            }*/
+            if (name == "Today's Appointment") {
+                loadAppointments(name);
+            }
+        }
+        add(topPanel, BorderLayout.NORTH);
+        createBottomTables();
+    }
+
+    private void loadPatients(String name) {
+        loadDataButton = new JButton(name);
+        loadDataButton.setContentAreaFilled(false);
+        loadDataButton.setBorderPainted(false);
+        topPanel.add(loadDataButton);
+    }
+
+    private void loadAppointments(String name) {
+        loadAppButton = new JButton(name);
+        navigationButtons.add(loadAppButton);
+        loadAppButton.setContentAreaFilled(false);
+        loadAppButton.setBorderPainted(false);
+        topPanel.add(loadAppButton);
+    }
+
+    private void createEventListeners()
+    {
+        loadDataButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                cardLayout.show(bottomJPanel, "patients");
+                refresh();
+            }
+        });
+
+        loadAppButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                cardLayout.show(bottomJPanel, "appts");
+                refresh();
+            }
+        });
+    }
+
+    private void createBottomTables()
+    {
+        JPanel activePatientsPane = createActivePatientsTable();
+        JScrollPane patientScrollPane = new JScrollPane(activePatientsPane);
+        bottomJPanel.add(patientScrollPane, "patients");
+        JPanel appointmentPane = createApptTable();
+        JScrollPane apptScrollPane = new JScrollPane(appointmentPane);
+        bottomJPanel.add(apptScrollPane, "appts");
+        add(bottomJPanel, BorderLayout.CENTER);
+    }
+
+    private JPanel createActivePatientsTable()
+    {
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel("Active Patients");
+        panel.setLayout(new BorderLayout());
+        panel.add(label, BorderLayout.NORTH);
+        String[] columns = { "Patient", "Check In", "Location", "Doctor/Tech", "Reason for Visit" };
+        tableModel = new DefaultTableModel();
+        for(String c : columns){
+            tableModel.addColumn(c);
+        }
+
+        activePatientsTable = new JTable(tableModel);
+        activePatientsTable.setBackground(Color.WHITE);
+        activePatientsTable.setRowHeight(50);
+        activePatientsTable.getTableHeader().setOpaque(false);
+        activePatientsTable.getTableHeader().setBackground(new Color(173, 216, 230));
+        panel.add(activePatientsTable, BorderLayout.CENTER);
+
+        return panel;
+    }
+
+    private JPanel createApptTable()
+    {
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel("Today's Appointments");
+        panel.setLayout(new BorderLayout());
+        panel.add(label, BorderLayout.NORTH);
+
+        apptModel = new DefaultTableModel();
+
+        apptModel.addColumn("ID");
+        apptModel.addColumn("Owner Name");
+        apptModel.addColumn("Pet Name");
+        apptModel.addColumn("Phone Number");
+        apptModel.addColumn("Appointment");
+
+        apptTable = new JTable(apptModel);
+        apptTable.setBackground(Color.WHITE);
+        apptTable.setRowHeight(50);
+        apptTable.getTableHeader().setBackground(new Color(173, 216, 230));
+
+        panel.add(apptTable, BorderLayout.CENTER);
+        return panel;
+    }
+
+    /*private void loadMedication(String name) {
+        Object[] columns = { "Owner Name", "Pet Name", "Date", "Order Number", "Refill" };
+        Object[][] returnedData = controller.loadMedication();
+        JButton loadDataButton = new JButton(name);
+        navigationButtons.add(loadDataButton);
+        loadDataButton.setContentAreaFilled(false);
+        loadDataButton.setBorderPainted(false);
+        loadDataButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                //setTable(returnedData, columns, name);
+                navButtonPressed(e);
+            }
+        });
+        topPanel.add(loadDataButton);
+    }*/
+}

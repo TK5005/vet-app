@@ -56,8 +56,10 @@ public class AppointmentRepository {
                 add.setPetID(rs.getInt("petID"));
                 add.setStaffID(rs.getInt("staffID"));
                 add.setAppointmentDate(rs.getTimestamp("start_time").toLocalDateTime().toLocalDate());
+                add.setAppointmentTime(rs.getTimestamp("start_time").toLocalDateTime().toString());
                 add.setCheckInTime(rs.getTimestamp("checkin_time").toLocalDateTime());
                 add.setDescription(rs.getString("description"));
+                ret.add(add);
             }
         }catch (SQLException ex) {
             System.err.println("Error running Client Get statement");

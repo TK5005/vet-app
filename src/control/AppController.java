@@ -22,6 +22,7 @@ public class AppController {
     ClientController clientController;
     InvoiceController invoiceController;
     InventoryController inventoryController;
+    AppointmentController appointmentController;
 
 
     public AppController() {
