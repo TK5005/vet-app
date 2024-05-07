@@ -117,7 +117,7 @@ public class AppointmentRepository {
             if(mod.getStaffID() == null){create.setNull(3,Types.INTEGER);}else{create.setInt(3,mod.getStaffID());}
             create.setTimestamp(4, java.sql.Timestamp.valueOf(mod.getAppointmentDate()));
             if(mod.getCheckInTime() == null){create.setNull(5,Types.DATE);}else{create.setTimestamp(5,java.sql.Timestamp.valueOf(mod.getCheckInTime()));}
-            create.setString(5, mod.getDescription());
+            create.setString(6, mod.getDescription());
 
             create.executeUpdate();
 
