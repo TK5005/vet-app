@@ -721,7 +721,7 @@ public class DataModel {
             appointment.setClientID(i % 5);
             appointment.setPetID(i % 10);
             appointment.setStaffID(i % 5);
-            appointment.setAppointmentDate(LocalDate.of(2021, 1, 1));
+            appointment.setAppointmentDate(LocalDateTime.of(2021, 1, 1,0,0,0));
             appointment.setDescription("Appointment Description");
             appointments.add(appointment);
         }

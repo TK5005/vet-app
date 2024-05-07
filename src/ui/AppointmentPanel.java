@@ -8,32 +8,54 @@ import java.beans.PropertyChangeListener;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
+import control.AdminController;
 import control.AppController;
+import control.AppointmentController;
+import model.Appointment;
 import view.appointmentView.*;
 
 /**
  * AppointmentPanel
  */
 public class AppointmentPanel extends JPanel {
-    private AppController controller;
+    private AppointmentController controller;
     private final JPanel topPanel = new JPanel();
     private final CardLayout cardLayout = new CardLayout();
     private final JPanel bottomJPanel = new JPanel(cardLayout);
+    private DefaultTableModel tableModel;
     viewDetails details;
     NewAppointment app;
-    public AppointmentPanel(AppController controller) {
+
+    public AppointmentPanel(AppointmentController controller) {
         this.controller = controller;
         createUI();
+    }
+
+    public AppointmentPanel(){
+        this.controller = AppointmentController.getInstance();
+        createUI();
+    }
+
+    public void refresh(){
+        tableModel.setRowCount(0);
+
+        Appointment[] appointments = controller.getAppointments();
+
+        for(Appointment app : appointments){
+            Object[] rowData = {app.getAppointmentID(), app.getClientID(), app.getPetID(), app.getAppointmentDate()};
+            tableModel.addRow(rowData);
+        }
     }
 
     private void createUI() {
         setLayout(new BorderLayout());
         
-        Object[] columns = { "ID","Owner Name", "Pet Name", "Phone #", "Appointment","Action"};
-        Object[][] returnedData = controller.loadAppointments();
+        Object[] columns = {"Owner Name", "Pet Name", "Appointment Time","Action"};
+        Appointment[] returnedData = controller.getAppointments();
         JButton newButton = new JButton("+ New Appointment");
         newButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -45,9 +67,15 @@ public class AppointmentPanel extends JPanel {
         setTable(returnedData, columns);
         add(topPanel, BorderLayout.NORTH);
     }
-    private void setTable(Object[][] data, Object[] col) {
+    private void setTable(Appointment[] data, Object[] col) {
+         tableModel = new DefaultTableModel(){
+            public boolean isCellEditable(int row, int column){
+                return column==3;
+            }
+        };
 
-        JTable table = new JTable(data, col);
+        tableModel.setColumnIdentifiers(col);
+        JTable table = new JTable(tableModel);
         setCellsAlignment(table, SwingConstants.CENTER);
         Dimension d = table.getPreferredSize();
         table.setPreferredScrollableViewportSize(d);
@@ -58,8 +86,10 @@ public class AppointmentPanel extends JPanel {
         table.getColumnModel().getColumn(table.getModel().getColumnCount()-1).setPreferredWidth(150);;
         table.getColumnModel().getColumn(table.getModel().getColumnCount()-1).setCellRenderer(new ButtonRenderer());
         table.getColumnModel().getColumn(table.getModel().getColumnCount()-1).setCellEditor(new ButtonEditor());
-        adjustHeight(table);
+        table.setRowHeight(50);
         table.setVisible(true);
+
+        refresh();
 
         JScrollPane panel = new JScrollPane(table);
         panel.getViewport().setBackground(Color.WHITE);
@@ -173,14 +203,11 @@ public class AppointmentPanel extends JPanel {
             panel.add(removeButton);
 
             // Add action listener for the View button
-            viewButton.addActionListener(e -> {
-                int appID = Integer.parseInt(table.getValueAt(currentRow, 0).toString());
-                //controller.getAppoitment(appID);
-                String[][] data = { {"1", "Smith Henry", "Brandy", "4/28/2024 8:00AM", "test" },
-                { "2","Mary", "Sassy", "443-890-1234", "5/23/2024 2:30PM", "" } };
-                String[] colName = {"ID", "Name","Pet Name","Appointment Time","Description"};
-                details = new viewDetails(colName, data);
-                details.setVisible(true);
+            viewButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    int appID = Integer.parseInt(table.getValueAt(currentRow, 0).toString());
+                    app = new NewAppointment(controller,appID);
+                }
             });
 
             // Add action listener for the Remove button

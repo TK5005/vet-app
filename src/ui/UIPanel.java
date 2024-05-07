@@ -97,7 +97,7 @@ public class UIPanel extends JPanel {
         clientsView.setBackground(Color.WHITE);
         cards.add(clientsView, "Clients/Patients");
 
-        AppointmentPanel appointmentPanel = new AppointmentPanel(controller);
+        AppointmentPanel appointmentPanel = new AppointmentPanel();
         appointmentPanel.setBackground(Color.WHITE);
         cards.add(appointmentPanel, "Appointments");
 
