@@ -35,7 +35,7 @@ public class StaffRepository {
                 staff.setFirstName(rs.getString("firstName"));
                 staff.setLastName(rs.getString("lastName"));
                 staff.setSex(rs.getString("sex")); 
-                staff.setDob(rs.getDate("date")); 
+                staff.setDob(rs.getObject("dob",LocalDate.class));
                 staff.setSsn(rs.getString("ssn"));
                 staff.setPhone(rs.getString("phone"));
                 staff.setStreet(rs.getString("street"));
@@ -63,7 +63,7 @@ public class StaffRepository {
                 ret.setFirstName(rs.getString("firstName"));
                 ret.setLastName(rs.getString("lastName"));
                 ret.setSex(rs.getString("sex"));
-                ret.setDob(rs.getDate("date"));
+                ret.setDob(rs.getObject("dob",LocalDate.class));
                 ret.setSsn(rs.getString("ssn"));
                 ret.setPhone(rs.getString("phone"));
                 ret.setStreet(rs.getString("street"));
