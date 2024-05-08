@@ -1,9 +1,13 @@
 package ui;
 import java.awt.*;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.sql.Date;
 import javax.swing.*;
+import javax.swing.text.NumberFormatter;
+
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 
@@ -22,34 +26,81 @@ public class AdminNewUser {
     JTextField street;
     JTextField city;
     JTextField state;
-    JTextField zip;
+    JFormattedTextField zip;
     private final Color selectedColor = new Color(173, 216, 230);
     private AdminController controller;
+
+    NumberFormat integerFormat;
+
+    NumberFormatter numberFormatter;
     
     public AdminNewUser(AdminController controller){
         user = new Staff();
         this.controller = controller;
+        setNumberFormatter();
         createUI();
     }
 
     public AdminNewUser (AdminController controller, int empID){
         this.controller = controller;
         user = controller.getStaffByID(empID);
+        setNumberFormatter();
         createUI();
+    }
+    private void setNumberFormatter(){
+        integerFormat = NumberFormat.getIntegerInstance();
+        integerFormat.setGroupingUsed(false);
+        numberFormatter = new NumberFormatter(integerFormat) {
+            @Override
+            public Object stringToValue(String string) throws ParseException {
+                Number number = (Number) super.stringToValue(string);
+                return number.intValue(); // Always return an Integer
+            }
+        };
     }
     private void createUI(){
         int selection = JOptionPane.showConfirmDialog(null, getPanel(), "New Staff : "
                                 , JOptionPane.OK_CANCEL_OPTION
                                 , JOptionPane.PLAIN_MESSAGE);
         if (selection == JOptionPane.OK_OPTION) 
-        { 
-            //java.util.Date date = java.sql.Date.valueOf(datePicker.getText());
-           // LocalDate date2 = convertToLocalDate(date);
-            controller.addNewStaff(fName.getText(), lName.getText(),datePicker.getDate(), street.getText(), city.getText(), state.getText(), Integer.parseInt(zip.getText()), phone.getText(), sex.getText(), ssn.getText());
+        {
+            user.setEmpID(Integer.parseInt(id.getText()));
+            user.setFirstName(fName.getText());
+            user.setLastName(lName.getText());
+            user.setDob(datePicker.getDate());
+            user.setStreet(street.getText());
+            user.setCity(city.getText());
+            user.setState(state.getText());
+            user.setZip((Integer)zip.getValue());
+            user.setPhone(phone.getText());
+            user.setSex(sex.getText());
+            user.setSsn(ssn.getText());
+            if(Validate()) {
+                if (user.getEmpID() == 0)
+                    controller.addNewStaff(user);
+                else
+                    controller.updateStaff(user);
+            }else{
+                createUI();
+            }
         }
     }
     public LocalDate convertToLocalDate(java.util.Date date) {
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+    private void loadData(){
+        id.setText(String.valueOf(user.getEmpID()));
+        fName.setText(user.getFirstName());
+        lName.setText(user.getLastName());
+        sex.setText(user.getSex());
+        datePicker.setDate(user.getDob());
+        ssn.setText(user.getSsn());
+        phone.setText(user.getPhone());
+        street.setText(user.getStreet());
+        city.setText(user.getCity());
+        state.setText(user.getState());
+        zip.setValue(user.getZip());
     }
     private JPanel getPanel()
     {
@@ -65,7 +116,7 @@ public class AdminNewUser {
         centerPanel.setBackground(Color.WHITE);
 
        // JLabel idLabel = new JLabel("ID : ");
-        //id = new JTextField();
+        id = new JTextField();
        // id.setEnabled(false);
 
         JLabel fNameLabel = new JLabel("First Name : ");
@@ -96,7 +147,7 @@ public class AdminNewUser {
         state = new JTextField();
 
         JLabel zipLabel = new JLabel("Zip :");
-        zip = new JTextField();
+        zip = new JFormattedTextField(numberFormatter);
 
         //centerPanel.add(idLabel);
        // centerPanel.add(id);
@@ -133,6 +184,44 @@ public class AdminNewUser {
 
         basePanel.add(centerPanel);
 
+        loadData();
+
         return basePanel;
+    }
+
+    private boolean Validate(){
+        if(fName.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "First Name is required");
+            return false;
+        }else if(lName.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Last Name is required");
+            return false;
+        }else if(sex.getText().length() != 1){
+            JOptionPane.showMessageDialog(null, "Sex needs to be 1 Character");
+            return false;
+        }else if(datePicker.getDate() == null){
+            JOptionPane.showMessageDialog(null, "DOB is required");
+            return false;
+        }else if(ssn.getText().isEmpty() || ssn.getText().length() > 9){
+            JOptionPane.showMessageDialog(null, "SSN is required and cannot be longer than 9 characters");
+            return false;
+        }else if(phone.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Phone is required");
+            return false;
+        }else if(street.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Street is required");
+            return false;
+        }else if(city.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "City is required");
+            return false;
+        }else if(state.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "State is required");
+            return false;
+        }else if(zip.getText().isEmpty() || (Integer)zip.getValue() > 99999){
+            JOptionPane.showMessageDialog(null, "Zip is required and must be less than 5 digits");
+            return false;
+        }
+        return true;
+
     }
 }

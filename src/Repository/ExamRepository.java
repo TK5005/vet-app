@@ -121,12 +121,12 @@ public class ExamRepository {
             update.setString(5, mod.getLocation());
             update.setInt(6, mod.getExamID());
             update.executeUpdate();
+            conn.commit();
+
             if(mod.getVetID() != null)
                 addOrUpdateVetExam(mod.getExamID(), mod.getVetID());
             if(mod.getTechID() != null)
                 addOrUpdateTechExam(mod.getExamID(), mod.getTechID());
-
-            conn.commit();
 
         }catch (SQLException ex) {
             System.err.println("Error updating Exam entry");
@@ -143,6 +143,8 @@ public class ExamRepository {
             create.setInt(2,examID);
 
             create.executeUpdate();
+
+            conn.commit();
 
         }catch (SQLException ex) {
             System.err.println("Error inserting vet_exams entry");
@@ -161,6 +163,7 @@ public class ExamRepository {
             update.setInt(2, examID);
 
             update.executeUpdate();
+            conn.commit();
 
         } catch (SQLException ex) {
             System.err.println("Error inserting vet_exams entry");
@@ -178,6 +181,7 @@ public class ExamRepository {
             create.setInt(2,examID);
 
             create.executeUpdate();
+            conn.commit();
 
         }catch (SQLException ex) {
             System.err.println("Error inserting tech_exams entry");
@@ -195,6 +199,7 @@ public class ExamRepository {
             update.setInt(2,examID);
 
             update.executeUpdate();
+            conn.commit();
 
         }catch (SQLException ex) {
             System.err.println("Error updating tech_exams entry");
@@ -276,6 +281,32 @@ public class ExamRepository {
             conn.commit();
         } catch (SQLException ex) {
             System.err.println("Error deleting Vet Exam entry");
+            ex.printStackTrace();
+        }
+    }
+
+    public void deleteVetExams(int vetID){
+        String sql = "DELETE FROM VET_EXAMS WHERE empID = ?";
+        try(Connection conn = ConnectionManager.getConnection();
+        PreparedStatement del = conn.prepareStatement(sql)){
+            del.setInt(1,vetID);
+            del.executeUpdate();
+            conn.commit();
+        }catch(SQLException ex){
+            System.err.println("Error delete Vet Exam Entries");
+            ex.printStackTrace();
+        }
+    }
+
+    public void deleteTechExams(int techID){
+        String sql = "DELETE FROM TECH_EXAMS WHERE empID = ?";
+        try(Connection conn = ConnectionManager.getConnection();
+        PreparedStatement del = conn.prepareStatement(sql)){
+            del.setInt(1,techID);
+            del.executeUpdate();
+            conn.commit();
+        }catch(SQLException ex){
+            System.err.println("Error deleting tech Exam Entries");
             ex.printStackTrace();
         }
     }

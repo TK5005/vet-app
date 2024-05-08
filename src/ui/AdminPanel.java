@@ -183,7 +183,7 @@ public class AdminPanel extends JPanel implements IVetAppView {
         }
     }
    
-    public void ConfirmDeletion(int id){
+    public void ConfirmDeletion(int id, String type){
         JFrame frame = new JFrame("Confirm");
         final JOptionPane optionPane = new JOptionPane(
                 "Are you sure to delete?",
@@ -214,7 +214,13 @@ public class AdminPanel extends JPanel implements IVetAppView {
 
         int value = ((Integer)optionPane.getValue()).intValue();
         if (value == JOptionPane.YES_OPTION) {
-            //controller.removeStaff(id);
+            if(type.equals("Veterinarian")) {
+                controller.deleteVet(id);
+            }else if(type.equals("Veterinary Technician")){
+                controller.deleteTech(id);
+            }else{
+                controller.deleteStaff(id);
+            }
         } else if (value == JOptionPane.NO_OPTION) {
            //no - close window
         }
@@ -274,7 +280,8 @@ public class AdminPanel extends JPanel implements IVetAppView {
             // Add action listener for the Remove button
             removeButton.addActionListener(e -> {
                 int empID = Integer.parseInt(table.getValueAt(currentRow, 0).toString());
-                ConfirmDeletion(empID);
+                String type = String.valueOf(table.getValueAt(currentRow,2));
+                ConfirmDeletion(empID, type);
             });
         }
 

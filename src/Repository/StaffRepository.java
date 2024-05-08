@@ -124,7 +124,7 @@ public class StaffRepository {
                 add.setDob(rs.getDate("dob").toLocalDate());
                 add.setSsn(rs.getString("ssn"));
                 add.setPhone(rs.getString("phone"));
-                add.setState(rs.getString("street"));
+                add.setStreet(rs.getString("street"));
                 add.setCity(rs.getString("city"));
                 add.setState(rs.getString("state"));
                 add.setZip(Integer.parseInt(rs.getString("zip")));
@@ -158,7 +158,7 @@ public class StaffRepository {
                 ret.setDob(rs.getDate("dob").toLocalDate());
                 ret.setSsn(rs.getString("ssn"));
                 ret.setPhone(rs.getString("phone"));
-                ret.setState(rs.getString("street"));
+                ret.setStreet(rs.getString("street"));
                 ret.setCity(rs.getString("city"));
                 ret.setState(rs.getString("state"));
                 ret.setZip(Integer.parseInt(rs.getString("zip")));
@@ -189,7 +189,7 @@ public class StaffRepository {
                 add.setDob(rs.getDate("dob").toLocalDate());
                 add.setSsn(rs.getString("ssn"));
                 add.setPhone(rs.getString("phone"));
-                add.setState(rs.getString("street"));
+                add.setStreet(rs.getString("street"));
                 add.setCity(rs.getString("city"));
                 add.setState(rs.getString("state"));
                 add.setZip(Integer.parseInt(rs.getString("zip")));
@@ -225,7 +225,7 @@ public class StaffRepository {
                 ret.setDob(rs.getDate("dob").toLocalDate());
                 ret.setSsn(rs.getString("ssn"));
                 ret.setPhone(rs.getString("phone"));
-                ret.setState(rs.getString("street"));
+                ret.setStreet(rs.getString("street"));
                 ret.setCity(rs.getString("city"));
                 ret.setState(rs.getString("state"));
                 ret.setZip(Integer.parseInt(rs.getString("zip")));
@@ -241,6 +241,16 @@ public class StaffRepository {
     }
 
     public void deleteStaff(int empID){
+        String sql = "DELETE FROM STAFF WHERE empID =?";
+        try(Connection conn = ConnectionManager.getConnection();
+        PreparedStatement del = conn.prepareStatement(sql)){
+            del.setInt(1,empID);
+            del.executeUpdate();
+            conn.commit();
+        }catch(SQLException ex){
+            System.err.println("Error deleting Staff entry");
+            ex.printStackTrace();
+        }
     }
 
     public Staff addStaff(Staff mod){
@@ -291,6 +301,7 @@ public class StaffRepository {
             update.setString(8, mod.getCity());
             update.setString(9, mod.getState());
             update.setString(10, Integer.toString(mod.getZip()));
+            update.setInt(11,mod.getEmpID());
 
             update.executeUpdate();
             conn.commit();
@@ -337,6 +348,22 @@ public class StaffRepository {
         }
     }
 
+    public void deleteVet(int empID){
+        deleteSpecialties(empID);
+        blankAppointments(empID);
+        String sql = "DELETE FROM VET WHERE empID =?";
+        try(Connection conn = ConnectionManager.getConnection();
+            PreparedStatement del = conn.prepareStatement(sql)){
+            del.setInt(1,empID);
+            del.executeUpdate();
+            conn.commit();
+        }catch(SQLException ex){
+            System.err.println("Error deleting vet entry");
+            ex.printStackTrace();
+        }
+        deleteStaff(empID);
+    }
+
     public Tech addTech(Tech mod){
         Staff newStaff = addStaff(mod);
         mod.setEmpID(newStaff.getEmpID());
@@ -374,11 +401,93 @@ public class StaffRepository {
 
         }
     }
+    public void deleteTech(int empID){
+        deleteCertifications(empID);
+        String sql = "DELETE FROM TECH WHERE empID =?";
+        try(Connection conn = ConnectionManager.getConnection();
+            PreparedStatement del = conn.prepareStatement(sql)){
+            del.setInt(1,empID);
+            del.executeUpdate();
+            conn.commit();
+        }catch(SQLException ex){
+            System.err.println("Error deleting tech entry");
+            ex.printStackTrace();
+        }
+        deleteStaff(empID);
+    }
     public void updateSpecialties(int vetID, String[] specialties){
-        System.out.println("addSpecialties needs to be implemented");
+        deleteSpecialties(vetID);
+        String sql = "INSERT INTO SPECIALTIES VALUES(?,?)";
+
+        try(Connection conn = ConnectionManager.getConnection();
+            PreparedStatement create = conn.prepareStatement(sql)){
+
+            for(String spec : specialties){
+                create.setInt(1,vetID);
+                create.setString(2,spec);
+                create.addBatch();
+            }
+
+            create.executeBatch();
+            conn.commit();
+
+        }catch(SQLException ex){
+            System.err.println("Error inserting specialties");
+            ex.printStackTrace();
+        }
+    }
+
+    public void deleteSpecialties(int vetID){
+        String sql = "DELETE FROM SPECIALTIES WHERE empID = ?";
+
+        try(Connection conn = ConnectionManager.getConnection();
+            PreparedStatement del = conn.prepareStatement(sql)){
+
+            del.setInt(1,vetID);
+            del.executeUpdate();
+            conn.commit();
+
+        }catch(SQLException ex){
+            System.err.println("Error deleting specialties");
+            ex.printStackTrace();
+        }
     }
     public void updateCertifications(int techID, String[] certs){
-        System.out.println("addCertifications needs to be implemented");
+        deleteCertifications(techID);
+        String sql = "INSERT INTO CERTIFICATIONS VALUES(?,?)";
+
+        try(Connection conn = ConnectionManager.getConnection();
+        PreparedStatement create = conn.prepareStatement(sql)){
+
+            for(String cert : certs){
+                create.setInt(1,techID);
+                create.setString(2,cert);
+                create.addBatch();
+            }
+
+            create.executeBatch();
+            conn.commit();
+
+        }catch(SQLException ex){
+            System.err.println("Error inserting certifications");
+            ex.printStackTrace();
+        }
+    }
+
+    public void deleteCertifications(int techID){
+        String sql = "DELETE FROM CERTIFICATIONS WHERE empID = ?";
+
+        try(Connection conn = ConnectionManager.getConnection();
+        PreparedStatement del = conn.prepareStatement(sql)){
+
+            del.setInt(1,techID);
+            del.executeUpdate();
+            conn.commit();
+
+        }catch(SQLException ex){
+            System.err.println("Error deleting certifications");
+            ex.printStackTrace();
+        }
     }
     public Specialty[] getSpecialties(int vetID){
         String sql = "SELECT * FROM SPECIALTIES WHERE empID = ?";
@@ -424,6 +533,25 @@ public class StaffRepository {
 
         }
         return ret.toArray(new Certification[0]);
+    }
+
+    public void blankAppointments(int empID){
+        String sql = "UPDATE APPOINTMENT SET staffID = ? WHERE staffID = ?";
+
+        try(Connection conn = ConnectionManager.getConnection();
+            PreparedStatement update = conn.prepareStatement(sql)){
+
+            update.setNull(1, Types.INTEGER);
+            update.setInt(2, empID);
+
+            update.executeUpdate();
+
+            conn.commit();
+
+        }catch(SQLException ex){
+            System.err.println("Error inserting certifications");
+            ex.printStackTrace();
+        }
     }
 }
 
