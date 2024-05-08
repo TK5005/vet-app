@@ -1,13 +1,14 @@
 package model;
 
 import java.time.LocalDate;
+import java.sql.Date;
 
 public class Staff {
     private int empID;
     private String firstName;
     private String lastName;
     private String sex;
-    private LocalDate dob;
+    private Date dob;
     private String ssn;
     private String phone;
     private String street;
@@ -51,11 +52,11 @@ public class Staff {
         this.sex = sex;
     }
 
-    public LocalDate getDob() {
+    public Date getDob() {
         return dob;
     }
 
-    public void setDob(LocalDate dob) {
+    public void setDob(Date dob) {
         this.dob = dob;
     }
 

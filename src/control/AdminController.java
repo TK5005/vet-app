@@ -5,7 +5,7 @@ import model.Staff;
 import model.Tech;
 import model.Vet;
 import ui.AdminPanel;
-
+import java.sql.Date;
 import java.time.LocalDate;
 
 public class AdminController extends ViewController{
@@ -33,7 +33,7 @@ public class AdminController extends ViewController{
 
     public void setAdminListView(AdminPanel adminView){this.adminView = adminView;}
 
-    public void addNewStaff(String firstName, String lastName, LocalDate dob, String street, String city,
+    public void addNewStaff(String firstName, String lastName, Date dob, String street, String city,
                             String state, int zip, String phone, String sex, String ssn){
         Staff staff = new Staff();
         staff.setDob(dob);
@@ -55,7 +55,7 @@ public class AdminController extends ViewController{
                             String state, int zip, String phone, String sex, String ssn){
         Staff staff = new Staff();
         staff.setEmpID(empID);
-        staff.setDob(dob);
+       // staff.setDob(dob);
         staff.setFirstName(firstName);
         staff.setLastName(lastName);
         staff.setStreet(street);
@@ -70,7 +70,7 @@ public class AdminController extends ViewController{
         refreshViews();
     }
 
-    public void addNewVet(String firstName, String lastName, LocalDate dob, String street, String city,
+    public void addNewVet(String firstName, String lastName, Date dob, String street, String city,
                           String state, int zip, String phone, String sex, String ssn, String licenseNo, String[] specialties){
 
         Vet vet = new Vet();
@@ -90,7 +90,7 @@ public class AdminController extends ViewController{
         refreshViews();
     }
 
-    public void updateVet(int empID,String firstName, String lastName, LocalDate dob, String street, String city,
+    public void updateVet(int empID,String firstName, String lastName, Date dob, String street, String city,
                           String state, int zip, String phone, String sex, String ssn, String licenseNo, String[] specialties){
 
         Vet vet = new Vet();
@@ -112,10 +112,10 @@ public class AdminController extends ViewController{
     }
 
     public void addNewTech(String firstName, String lastName, LocalDate dob, String street, String city,
-                           String state, int zip, String phone, String sex, String ssn, String licenseNo, String[] certifications){
+                           String state, int zip, String phone, String sex, String ssn, String[] certifications){
 
         Tech tech = new Tech();
-        tech.setDob(dob);
+       // tech.setDob(dob);
         tech.setFirstName(firstName);
         tech.setLastName(lastName);
         tech.setStreet(street);
@@ -132,11 +132,11 @@ public class AdminController extends ViewController{
     }
 
     public void updateTech(int empID, String firstName, String lastName, LocalDate dob, String street, String city,
-                           String state, int zip, String phone, String sex, String ssn, String licenseNo, String[] certifications){
+                           String state, int zip, String phone, String sex, String ssn, String[] certifications){
 
         Tech tech = new Tech();
         tech.setEmpID(empID);
-        tech.setDob(dob);
+       // tech.setDob(dob);
         tech.setFirstName(firstName);
         tech.setLastName(lastName);
         tech.setStreet(street);

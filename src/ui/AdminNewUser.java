@@ -2,12 +2,13 @@ package ui;
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.ZoneId;
-
+import java.sql.Date;
 import javax.swing.*;
 import com.github.lgooddatepicker.components.DatePicker;
+import com.github.lgooddatepicker.components.DatePickerSettings;
 
 import model.Staff;
-import control.AppController;
+import control.AdminController;
 
 public class AdminNewUser {
     Staff user;
@@ -23,9 +24,9 @@ public class AdminNewUser {
     JTextField state;
     JTextField zip;
     private final Color selectedColor = new Color(173, 216, 230);
-    private AppController controller;
+    private AdminController controller;
     
-    public AdminNewUser(AppController controller){
+    public AdminNewUser(AdminController controller){
         user = new Staff();
         this.controller = controller;
         createUI();
@@ -36,20 +37,9 @@ public class AdminNewUser {
                                 , JOptionPane.PLAIN_MESSAGE);
         if (selection == JOptionPane.OK_OPTION) 
         { 
-            user.setEmpID(Integer.parseInt(id.getText())); 
-            user.setFirstName(fName.getText());
-            user.setLastName(lName.getText());
-            user.setSex(sex.getText());
-            java.util.Date date = java.sql.Date.valueOf(datePicker.getText());
-            LocalDate date2 = convertToLocalDate(date);
-            user.setDob(date2);
-            user.setSsn(ssn.getText());
-            user.setPhone(phone.getText());
-            user.setStreet(street.getText());
-            user.setCity(city.getText());
-            user.setState(state.getText());
-            user.setZip(Integer.parseInt(zip.getText()));
-            controller.addStaff(user);
+            //java.util.Date date = java.sql.Date.valueOf(datePicker.getText());
+           // LocalDate date2 = convertToLocalDate(date);
+            controller.addNewStaff(fName.getText(), lName.getText(),Date.valueOf(datePicker.getText()), street.getText(), city.getText(), state.getText(), Integer.parseInt(zip.getText()), phone.getText(), sex.getText(), ssn.getText());
         }
     }
     public LocalDate convertToLocalDate(java.util.Date date) {
@@ -62,15 +52,15 @@ public class AdminNewUser {
         basePanel.setBackground(selectedColor);
 
         JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new GridLayout(11, 2, 5, 2));
+        centerPanel.setLayout(new GridLayout(10, 2, 5, 2));
         centerPanel.setBorder(
             BorderFactory.createEmptyBorder(5, 5, 5, 5));
         centerPanel.setOpaque(true);
         centerPanel.setBackground(Color.WHITE);
 
-        JLabel idLabel = new JLabel("ID : ");
-        id = new JTextField();
-        id.setEnabled(false);
+       // JLabel idLabel = new JLabel("ID : ");
+        //id = new JTextField();
+       // id.setEnabled(false);
 
         JLabel fNameLabel = new JLabel("First Name : ");
         fName = new JTextField();
@@ -82,7 +72,9 @@ public class AdminNewUser {
         sex = new JTextField();
 
         JLabel dateLabel = new JLabel("DOB :");
-        datePicker = new DatePicker();
+        DatePickerSettings dateSetting = new DatePickerSettings();
+        datePicker = new DatePicker(dateSetting);
+        dateSetting.setFormatForDatesCommonEra("yyyy-MM-dd");
 
         JLabel ssnLabel = new JLabel("SSN :");
         ssn = new JTextField();
@@ -102,8 +94,8 @@ public class AdminNewUser {
         JLabel zipLabel = new JLabel("Zip :");
         zip = new JTextField();
 
-        centerPanel.add(idLabel);
-        centerPanel.add(id);
+        //centerPanel.add(idLabel);
+       // centerPanel.add(id);
 
         centerPanel.add(fNameLabel);
         centerPanel.add(fName);
