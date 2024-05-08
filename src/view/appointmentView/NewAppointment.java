@@ -146,9 +146,9 @@ public class NewAppointment {
         centerPanel.setOpaque(true);
         centerPanel.setBackground(Color.WHITE);
 
-        JLabel appIDLabel = new JLabel("Appointment ID : ");
-        appID = new JTextField();
-        appID.setEditable(false);
+//        JLabel appIDLabel = new JLabel("Appointment ID : ");
+          appID = new JTextField();
+          appID.setVisible(false);
 
         JLabel clientIDLabel = new JLabel("Client : ");
         clientBox = new JComboBox<Client>();
@@ -171,8 +171,8 @@ public class NewAppointment {
         JLabel descriptionLabel = new JLabel("Description :");
         description = new JTextField();
 
-        centerPanel.add(appIDLabel);
-        centerPanel.add(appID);
+//        centerPanel.add(appIDLabel);
+//        centerPanel.add(appID);
 
         centerPanel.add(clientIDLabel);
         centerPanel.add(clientBox);

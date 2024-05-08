@@ -6,11 +6,14 @@ import java.time.ZoneId;
 import javax.swing.*;
 import com.github.lgooddatepicker.components.DatePicker;
 
+import model.Certification;
 import model.Staff;
 import control.AdminController;
+import model.Tech;
 
 public class NewTech {
-    Staff user;
+    Tech user;
+    Certification[] certs;
     JTextField id;
     JTextField fName;
     JTextField lName;
@@ -27,9 +30,17 @@ public class NewTech {
     private AdminController controller;
     
     public NewTech(AdminController controller){
-        user = new Staff();
+        user = new Tech();
         this.controller = controller;
         createUI();
+    }
+
+    public NewTech(AdminController controller, int empID){
+        this.controller = controller;
+        user = controller.getTechByID(empID);
+        certs = controller.getCertificationsByTechID(empID);
+        createUI();
+
     }
     private void createUI(){
         int selection = JOptionPane.showConfirmDialog(null, getPanel(), "New Tech : "
@@ -53,9 +64,9 @@ public class NewTech {
         basePanel.setBackground(selectedColor);
 
         JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new GridLayout(11, 2, 5, 2));
-        centerPanel.setBorder(
-            BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        centerPanel.setLayout(new BoxLayout(centerPanel,BoxLayout.Y_AXIS));
+//        centerPanel.setBorder(
+//            BorderFactory.createEmptyBorder(5, 5, 5, 5));
         centerPanel.setOpaque(true);
         centerPanel.setBackground(Color.WHITE);
 
@@ -90,11 +101,9 @@ public class NewTech {
         zip = new JTextField();
 
         JLabel certLabel = new JLabel("Certifications :");
-        certification = new JTextArea();
-        certification.setToolTipText("New line to add many certifications");
+        certification = new JTextArea(5,5);
+        certification.setToolTipText("Once Certification Per Line");
         JScrollPane panel = new JScrollPane(certification);
-        panel.getViewport().setBackground(Color.WHITE);
-        panel.setPreferredSize(new Dimension(50, 50));
 
         centerPanel.add(fNameLabel);
         centerPanel.add(fName);

@@ -66,11 +66,11 @@ public class DashboardController extends ViewController{
     }
 
     public Staff getStaffByID(int ID) {
-        Staff[] staff = staffRepository.GetStaff(ID);
-        if(staff.length == 0)
-        {
-            return null;
-        }
-        return staff[0];
+//        Staff[] staff = staffRepository.getStaff(ID);
+//        if(staff.length == 0)
+//        {
+//            return null;
+//        }
+        return staffRepository.getStaff(ID);
     }
 }

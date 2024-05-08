@@ -63,7 +63,6 @@ public class AppointmentPanel extends JPanel implements IVetAppView {
         setLayout(new BorderLayout());
         
         Object[] columns = {"Appointment ID", "Owner Name", "Pet Name", "Appointment Time","Action"};
-        Appointment[] returnedData = controller.getAppointments();
         JButton newButton = new JButton("+ New Appointment");
         newButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -72,10 +71,10 @@ public class AppointmentPanel extends JPanel implements IVetAppView {
             }
         });
         topPanel.add(newButton);
-        setTable(returnedData, columns);
+        setTable(columns);
         add(topPanel, BorderLayout.NORTH);
     }
-    private void setTable(Appointment[] data, Object[] col) {
+    private void setTable(Object[] col) {
          tableModel = new DefaultTableModel(){
             public boolean isCellEditable(int row, int column){
                 return column==4;

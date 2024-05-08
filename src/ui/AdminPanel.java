@@ -17,15 +17,17 @@ import java.util.List;
 
 import control.AdminController;
 import control.AppController;
+import control.IVetAppView;
 import model.Staff;
+import model.Tech;
+import model.Vet;
 
 /**
  * AdminPanel
  */
-public class AdminPanel extends JPanel {
-    private AppController controller;
-
-    private AdminController adminController;
+public class AdminPanel extends JPanel implements IVetAppView {
+    private AdminController controller;
+    
     private final JPanel topPanel = new JPanel();
     private final CardLayout cardLayout = new CardLayout();
     private final JPanel bottomJPanel = new JPanel(cardLayout);
@@ -35,37 +37,63 @@ public class AdminPanel extends JPanel {
     NewVet vet;
     NewTech tech;
 
-    public AdminPanel(AppController controller) {
+    public AdminPanel(AdminController controller) {
         this.controller = controller;
         createUI();
+    }
+    
+    public AdminPanel(){
+        this.controller = AdminController.getInstance();
+        controller.registerView(this);
+        createUI();
+    }
+
+    public void refresh() {
+        tableModel.setRowCount(0);
+        Staff[] genStaff = controller.getGeneralStaff();
+        Vet[] vets = controller.getVets();
+        Tech[] techs = controller.getTechs();
+
+        for(Staff staff : genStaff){
+            Object[] rowData = {staff.getEmpID(), staff.getName(), "Office Staff"};
+            tableModel.addRow(rowData);
+        }
+
+        for (Vet vet : vets){
+            Object[] rowData = {vet.getEmpID(), vet.getName(), "Veterinarian"};
+            tableModel.addRow(rowData);
+        }
+
+        for (Tech tech : techs){
+            Object[] rowData = {tech.getEmpID(), tech.getName(), "Veterinary Technician"};
+            tableModel.addRow(rowData);
+        }
+
     }
 
     private void createUI() {
 
         setLayout(new BorderLayout());
-        Object[] columns = { "ID","User ID", "User Name", "User Role", "Action"};
-        //Staff[] returnedData = adminController.getStaff();
-        //setTable(returnedData, columns);
-        Object[][] returnedData = controller.loadStaff();
-        setTable2(returnedData, columns);
+        Object[] columns = { "ID", "User Name", "User Role", "Action"};
+        setTable2(columns);
         cardLayout.show(bottomJPanel, "View All");
         JButton newButton = new JButton("+ New Staff");
         newButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-              user = new AdminNewUser(adminController);
+              user = new AdminNewUser(controller);
            
             }
         });
         JButton newVet = new JButton("+ New Vet");
         newVet.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-              vet = new NewVet(adminController);
+              vet = new NewVet(controller);
             }
         });
         JButton newTech = new JButton("+ New Tech");
         newTech.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-              tech = new NewTech(adminController);
+              tech = new NewTech(controller);
             }
         });
         topPanel.add(newButton);
@@ -74,9 +102,16 @@ public class AdminPanel extends JPanel {
 
         add(topPanel, BorderLayout.NORTH);
     }
-    private void setTable2(Object[][] data, Object[] col) {
-        tableModel = new DefaultTableModel(data, col);
+    private void setTable2( Object[] col) {
+        tableModel = new DefaultTableModel(){
+            public boolean isCellEditable(int row, int column){
+                return column==3;
+            }
+        };
+
+        tableModel.setColumnIdentifiers(col);
         JTable table = new JTable(tableModel);
+
         setCellsAlignment(table, SwingConstants.CENTER);
         Dimension d = table.getPreferredSize();
         table.setPreferredScrollableViewportSize(d);
@@ -87,8 +122,10 @@ public class AdminPanel extends JPanel {
         table.getColumnModel().getColumn(table.getModel().getColumnCount()-1).setPreferredWidth(150);;
         table.getColumnModel().getColumn(table.getModel().getColumnCount()-1).setCellRenderer(new ButtonRenderer());
         table.getColumnModel().getColumn(table.getModel().getColumnCount()-1).setCellEditor(new ButtonEditor());
-        adjustHeight(table);
+        table.setRowHeight(50);
         table.setVisible(true);
+
+        refresh();
 
         JScrollPane panel = new JScrollPane(table);
         panel.getViewport().setBackground(Color.WHITE);
@@ -224,8 +261,14 @@ public class AdminPanel extends JPanel {
             // Add action listener for the View button
             viewButton.addActionListener(e -> {
                 int empID = Integer.parseInt(table.getValueAt(currentRow, 0).toString());
-                admin = new AdminViewDetails(empID);
-                admin.setVisible(true);
+                String type = String.valueOf(table.getValueAt(currentRow,2));
+                if(type.equals("Veterinarian")) {
+                    vet = new NewVet(controller, empID);
+                }else if(type.equals("Veterinary Technician")){
+                    tech = new NewTech(controller, empID);
+                }else{
+                    user = new AdminNewUser(controller, empID);
+                }
             });
 
             // Add action listener for the Remove button

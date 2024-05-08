@@ -8,7 +8,7 @@ public class Staff {
     private String firstName;
     private String lastName;
     private String sex;
-    private Date dob;
+    private LocalDate dob;
     private String ssn;
     private String phone;
     private String street;
@@ -52,11 +52,11 @@ public class Staff {
         this.sex = sex;
     }
 
-    public Date getDob() {
+    public LocalDate getDob() {
         return dob;
     }
 
-    public void setDob(Date dob) {
+    public void setDob(LocalDate dob) {
         this.dob = dob;
     }
 

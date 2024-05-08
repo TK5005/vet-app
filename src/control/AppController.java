@@ -69,9 +69,9 @@ public class AppController {
         return data;
     }
 
-    public Staff[] showStaffDetail(int empID) {
-        return staffRepo.GetStaff(empID);
-    }
+//    public Staff[] showStaffDetail(int empID) {
+//        return staffRepo.GetStaff(empID);
+//    }
     
     public void removeStaff(int empID) {
         staffRepo.deleteStaff(empID);

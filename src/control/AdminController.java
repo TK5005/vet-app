@@ -1,9 +1,7 @@
 package control;
 
 import Repository.StaffRepository;
-import model.Staff;
-import model.Tech;
-import model.Vet;
+import model.*;
 import ui.AdminPanel;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -33,7 +31,7 @@ public class AdminController extends ViewController{
 
     public void setAdminListView(AdminPanel adminView){this.adminView = adminView;}
 
-    public void addNewStaff(String firstName, String lastName, Date dob, String street, String city,
+    public void addNewStaff(String firstName, String lastName, LocalDate dob, String street, String city,
                             String state, int zip, String phone, String sex, String ssn){
         Staff staff = new Staff();
         staff.setDob(dob);
@@ -70,7 +68,7 @@ public class AdminController extends ViewController{
         refreshViews();
     }
 
-    public void addNewVet(String firstName, String lastName, Date dob, String street, String city,
+    public void addNewVet(String firstName, String lastName, LocalDate dob, String street, String city,
                           String state, int zip, String phone, String sex, String ssn, String licenseNo, String[] specialties){
 
         Vet vet = new Vet();
@@ -90,7 +88,7 @@ public class AdminController extends ViewController{
         refreshViews();
     }
 
-    public void updateVet(int empID,String firstName, String lastName, Date dob, String street, String city,
+    public void updateVet(int empID,String firstName, String lastName, LocalDate dob, String street, String city,
                           String state, int zip, String phone, String sex, String ssn, String licenseNo, String[] specialties){
 
         Vet vet = new Vet();
@@ -153,6 +151,9 @@ public class AdminController extends ViewController{
     }
 
     public Staff[] getStaff(){return staffRepository.Get();}
+    public Staff[] getGeneralStaff(){return staffRepository.getGeneralStaff();}
+    public Vet[] getVets(){return staffRepository.getVets();}
+    public Tech[] getTechs(){return staffRepository.getTechs();}
 
     public Staff getStaffByID(int empID){return staffRepository.getStaff(empID);}
 
@@ -160,4 +161,6 @@ public class AdminController extends ViewController{
 
     public Tech getTechByID(int empID){return staffRepository.getTech(empID);}
 
+    public Certification[] getCertificationsByTechID(int empID) { return staffRepository.getCertifications(empID);}
+    public Specialty[] getSpecialtiesByVetID(int empID){return staffRepository.getSpecialties(empID);}
 }

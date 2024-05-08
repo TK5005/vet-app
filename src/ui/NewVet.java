@@ -9,12 +9,16 @@ import javax.swing.*;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 
+import model.Specialty;
 import model.Staff;
 import control.AdminController;
+import model.Vet;
+
 import java.sql.Date;
 
 public class NewVet {
-    Staff user;
+    Vet user;
+    Specialty[] specs;
     JTextField id;
     JTextField fName;
     JTextField lName;
@@ -32,8 +36,14 @@ public class NewVet {
     private AdminController controller;
     
     public NewVet(AdminController controller){
-        user = new Staff();
+        user = new Vet();
         this.controller = controller;
+        createUI();
+    }
+    public NewVet(AdminController controller, int empID){
+        this.controller = controller;
+        user = controller.getVetByID(empID);
+        specs = controller.getSpecialtiesByVetID(empID);
         createUI();
     }
     private void createUI(){
@@ -45,7 +55,7 @@ public class NewVet {
             //java.util.Date date = java.sql.Date.valueOf(datePicker.getText());
             //LocalDate date2 = LocalDate.parse(datePicker.getText(),formatter);
             String[] item = specialties.getText().split("\n");
-            controller.addNewVet(fName.getText(), lName.getText(), Date.valueOf(datePicker.getText()), street.getText(), city.getText(), state.getText(), Integer.parseInt(zip.getText()), phone.getText(), sex.getText(), ssn.getText(),licenseNo.getText(),item);
+            controller.addNewVet(fName.getText(), lName.getText(), datePicker.getDate(), street.getText(), city.getText(), state.getText(), Integer.parseInt(zip.getText()), phone.getText(), sex.getText(), ssn.getText(),licenseNo.getText(),item);
         }
     }
     public LocalDate convertToLocalDate(java.util.Date date) {

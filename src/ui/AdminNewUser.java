@@ -31,6 +31,12 @@ public class AdminNewUser {
         this.controller = controller;
         createUI();
     }
+
+    public AdminNewUser (AdminController controller, int empID){
+        this.controller = controller;
+        user = controller.getStaffByID(empID);
+        createUI();
+    }
     private void createUI(){
         int selection = JOptionPane.showConfirmDialog(null, getPanel(), "New Staff : "
                                 , JOptionPane.OK_CANCEL_OPTION
@@ -39,7 +45,7 @@ public class AdminNewUser {
         { 
             //java.util.Date date = java.sql.Date.valueOf(datePicker.getText());
            // LocalDate date2 = convertToLocalDate(date);
-            controller.addNewStaff(fName.getText(), lName.getText(),Date.valueOf(datePicker.getText()), street.getText(), city.getText(), state.getText(), Integer.parseInt(zip.getText()), phone.getText(), sex.getText(), ssn.getText());
+            controller.addNewStaff(fName.getText(), lName.getText(),datePicker.getDate(), street.getText(), city.getText(), state.getText(), Integer.parseInt(zip.getText()), phone.getText(), sex.getText(), ssn.getText());
         }
     }
     public LocalDate convertToLocalDate(java.util.Date date) {
@@ -72,9 +78,7 @@ public class AdminNewUser {
         sex = new JTextField();
 
         JLabel dateLabel = new JLabel("DOB :");
-        DatePickerSettings dateSetting = new DatePickerSettings();
-        datePicker = new DatePicker(dateSetting);
-        dateSetting.setFormatForDatesCommonEra("yyyy-MM-dd");
+        datePicker = new DatePicker();
 
         JLabel ssnLabel = new JLabel("SSN :");
         ssn = new JTextField();

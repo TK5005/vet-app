@@ -109,7 +109,7 @@ public class UIPanel extends JPanel {
         inventoryPanel.setBackground(Color.WHITE);
         cards.add(inventoryPanel, "Inventory");
 
-        AdminPanel adminPanel = new AdminPanel(controller);
+        AdminPanel adminPanel = new AdminPanel();
         adminPanel.setBackground(Color.WHITE);
         cards.add(adminPanel, "Administration");
 

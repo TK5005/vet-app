@@ -1,10 +1,8 @@
 package Repository;
 
 import DAL.ConnectionManager;
-import model.DataModel;
-import model.Staff;
-import model.Tech;
-import model.Vet;
+import com.mysql.cj.x.protobuf.MysqlxPrepare;
+import model.*;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -77,6 +75,39 @@ public class StaffRepository {
         return ret;
 
     }
+
+    public Staff[] getGeneralStaff(){
+        String sql= "SELECT * FROM STAFF WHERE empID NOT IN (SELECT empID FROM TECH) " +
+                "AND empID NOT IN (SELECT empID FROM VET)";
+        List<Staff> ret = new ArrayList<>();
+        try(Connection conn = ConnectionManager.getConnection();
+            PreparedStatement get = conn.prepareStatement(sql)){
+
+            ResultSet rs = get.executeQuery();
+
+            while(rs.next()){
+                Staff add = new Staff();
+                add.setEmpID(rs.getInt("empID"));
+                add.setFirstName(rs.getString("firstName"));
+                add.setLastName(rs.getString("lastName"));
+                add.setSex(rs.getString("sex"));
+                add.setDob(rs.getObject("dob",LocalDate.class));
+                add.setSsn(rs.getString("ssn"));
+                add.setPhone(rs.getString("phone"));
+                add.setStreet(rs.getString("street"));
+                add.setCity(rs.getString("city"));
+                add.setState(rs.getString("state"));
+                add.setZip(Integer.parseInt(rs.getString("zip")));
+                ret.add(add);
+            }
+
+        }catch (SQLException ex) {
+            System.out.println("Error running Staff Get statement");
+            ex.printStackTrace();
+        }
+        return ret.toArray(new Staff[0]);
+    }
+
     public Vet[] getVets(){
         String sql
                 = "SELECT s.*, v.licenseNo FROM STAFF s JOIN VET v ON v.empID = s.empID";
@@ -348,6 +379,51 @@ public class StaffRepository {
     }
     public void updateCertifications(int techID, String[] certs){
         System.out.println("addCertifications needs to be implemented");
+    }
+    public Specialty[] getSpecialties(int vetID){
+        String sql = "SELECT * FROM SPECIALTIES WHERE empID = ?";
+        List<Specialty> ret = new ArrayList<>();
+        try(Connection conn = ConnectionManager.getConnection();
+        PreparedStatement get = conn.prepareStatement(sql)){
+
+            get.setInt(1,vetID);
+            ResultSet rs = get.executeQuery();
+            while(rs.next()){
+                Specialty add = new Specialty();
+                add.setSpecialty(rs.getString("name"));
+                add.setEmpID(rs.getInt("empID"));
+                ret.add(add);
+            }
+
+        }catch (SQLException ex) {
+            System.err.println("Error running get Specialties");
+            ex.printStackTrace();
+
+        }
+        return ret.toArray(new Specialty[0]);
+    }
+
+    public Certification[] getCertifications(int techID){
+        String sql = "SELECT * FROM CERTIFICATIONS WHERE empID = ?";
+        List<Certification> ret = new ArrayList<>();
+        try(Connection conn = ConnectionManager.getConnection();
+            PreparedStatement get = conn.prepareStatement(sql)){
+
+            get.setInt(1,techID);
+            ResultSet rs = get.executeQuery();
+            while(rs.next()){
+                Certification add = new Certification();
+                add.setCertification(rs.getString("name"));
+                add.setEmpID(rs.getInt("empID"));
+                ret.add(add);
+            }
+
+        }catch (SQLException ex) {
+            System.err.println("Error running get Certifications");
+            ex.printStackTrace();
+
+        }
+        return ret.toArray(new Certification[0]);
     }
 }
 
