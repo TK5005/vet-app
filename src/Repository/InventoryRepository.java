@@ -307,6 +307,7 @@ public class InventoryRepository {
     }
 
     public void deleteMedicationEntry(int itemID){
+        blankMedications(itemID);
         String sql
                 = "DELETE FROM MEDICATION WHERE itemID = ?";
         try(Connection conn = ConnectionManager.getConnection();
@@ -316,6 +317,25 @@ public class InventoryRepository {
             conn.commit();
         }catch (SQLException ex) {
             System.err.println("Error deleting Medication entry");
+            ex.printStackTrace();
+        }
+    }
+
+    private void blankMedications(int itemID){
+        String sql
+                = "UPDATE TREATMENT SET medID = ? WHERE medID = ?";
+
+        try(Connection conn = ConnectionManager.getConnection();
+        PreparedStatement del = conn.prepareStatement(sql)){
+
+            del.setNull(1, Types.INTEGER);
+            del.setInt(2,itemID);
+
+            del.executeUpdate();
+            conn.commit();
+
+        }catch (SQLException ex) {
+            System.err.println("Error Blanking Medication from treatment entry");
             ex.printStackTrace();
         }
     }

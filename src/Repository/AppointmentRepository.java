@@ -102,8 +102,20 @@ public class AppointmentRepository {
     }
 
     public void deleteAppointment(int id){
-        //TODO: Imlement deleteAppointment
-        System.out.println("deleteAppointment not implemented");
+        String sql
+                = "DELETE FROM APPOINTMENT WHERE apptNo = ?";
+
+        try(Connection conn = ConnectionManager.getConnection();
+        PreparedStatement del = conn.prepareStatement(sql)){
+            del.setInt(1,id);
+
+            del.executeUpdate();
+            conn.commit();
+
+        }catch (SQLException ex) {
+            System.out.println("Error running Appointment Delete statement");
+            ex.printStackTrace();
+        }
     }
     public Appointment addAppointment(Appointment mod){
         String sql

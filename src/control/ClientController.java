@@ -119,21 +119,12 @@ public class ClientController extends ViewController {
     }
 
     public void deleteClient(int clientID) {
+        //Delete Appointments
+
         for(Pet pet : petRepository.getPetsByClientID(clientID)){
-            for(Exam exam : examRepository.getExamsByPetID(pet.getPetID())){
-                Invoice[] invoices = invoiceRepository.getInvoicesByExamID(exam.getExamID());
-                for(Invoice invoice : invoices){
-                    invoiceRepository.deleteInvoice(invoice.getInvoiceID());
-                }
-                for(Treatment treatment : treatmentRepository.getTreatmentsByExamID(exam.getExamID())){
-                    treatmentRepository.removeTreatment(treatment.getTreatmentID());
-                }
-                examRepository.deleteTechExam(exam.getExamID());
-                examRepository.deleteVetExam(exam.getExamID());
-                examRepository.deleteExam(exam.getExamID());
-            }
-            petRepository.removePet(pet.getPetID());
+            deletePet(pet.getPetID());
         }
+
         clientRepository.deleteClient(clientID);
         refreshViews();
     }
@@ -188,7 +179,25 @@ public class ClientController extends ViewController {
     }
 
     public void deletePet(int petID) {
+
+        for(Exam exam : examRepository.getExamsByPetID(petID)){
+            Invoice[] invoices = invoiceRepository.getInvoicesByExamID(exam.getExamID());
+            for(Invoice invoice : invoices){
+                invoiceRepository.deleteInvoice(invoice.getInvoiceID());
+            }
+            for(Treatment treatment : treatmentRepository.getTreatmentsByExamID(exam.getExamID())){
+                treatmentRepository.removeTreatment(treatment.getTreatmentID());
+            }
+            examRepository.deleteTechExam(exam.getExamID());
+            examRepository.deleteVetExam(exam.getExamID());
+            examRepository.deleteExam(exam.getExamID());
+        }
+
+        for (Appointment app: appointmentRepository.getAppointmentsByPetID(petID)){
+            appointmentRepository.deleteAppointment(app.getAppointmentID());
+        }
         petRepository.removePet(petID);
+
         refreshViews();
     }
 
