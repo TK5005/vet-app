@@ -22,6 +22,7 @@ public class AppController {
     ClientController clientController;
     InvoiceController invoiceController;
     InventoryController inventoryController;
+    DashboardController dashboardController;
 
 
     public AppController() {
@@ -29,6 +30,7 @@ public class AppController {
         clientController = ClientController.getInstance();
         invoiceController = InvoiceController.getInstance();
         inventoryController = InventoryController.getInstance();
+        dashboardController = DashboardController.getInstance();
     }
 
     public void refreshViews()
@@ -36,6 +38,7 @@ public class AppController {
         clientController.refreshViews();
         invoiceController.refreshViews();
         inventoryController.refreshViews();
+        dashboardController.refreshViews();
     }
 
     public String[][] loadStaff() {
@@ -65,15 +68,16 @@ public class AppController {
         String[][] data = model.loadMedication();
         return data;
     }
-    public Appointment[] showAppointmentDetail(int appID) {
-        return appRepo.GetApp(appID);
-    }
 
-    public void deleteAppointment(int appID) {
-        appRepo.deleteAppointment(appID);
+    public Staff[] showStaffDetail(int empID) {
+        return staffRepo.GetStaff(empID);
     }
-    public void addAppointment(Appointment appointment) {
-        appRepo.addAppointment(appointment);
+    
+    public void removeStaff(int empID) {
+        staffRepo.deleteStaff(empID);
+    }
+    public void addStaff(Staff user) {
+        staffRepo.addStaff(user);
     }
         
     public void removeVet(int empID) {

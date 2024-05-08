@@ -28,10 +28,9 @@ public class StaffRepository {
         PreparedStatement stmt = conn.prepareStatement(sql)) {
 
            ResultSet rs = stmt.executeQuery();
-           
+            Staff staff = new Staff();
             while(rs.next()){
-                Staff staff = new Staff();
-                staff.setEmpID(rs.getInt("empID")); 
+                staff.setEmpID(rs.getInt("empID"));
                 staff.setFirstName(rs.getString("firstName"));
                 staff.setLastName(rs.getString("lastName"));
                 staff.setSex(rs.getString("sex")); 
@@ -91,7 +90,7 @@ public class StaffRepository {
                 add.setFirstName(rs.getString("firstName"));
                 add.setLastName(rs.getString("lastName"));
                 add.setSex(rs.getString("sex"));
-                //add.setDob(rs.getDate("dob").toLocalDate());
+                add.setDob(rs.getDate("dob").toLocalDate());
                 add.setSsn(rs.getString("ssn"));
                 add.setPhone(rs.getString("phone"));
                 add.setState(rs.getString("street"));
@@ -125,7 +124,7 @@ public class StaffRepository {
                 ret.setFirstName(rs.getString("firstName"));
                 ret.setLastName(rs.getString("lastName"));
                 ret.setSex(rs.getString("sex"));
-              //  ret.setDob(rs.getDate("dob").toLocalDate());
+                ret.setDob(rs.getDate("dob").toLocalDate());
                 ret.setSsn(rs.getString("ssn"));
                 ret.setPhone(rs.getString("phone"));
                 ret.setState(rs.getString("street"));
@@ -156,7 +155,7 @@ public class StaffRepository {
                 add.setFirstName(rs.getString("firstName"));
                 add.setLastName(rs.getString("lastName"));
                 add.setSex(rs.getString("sex"));
-               // add.setDob(rs.getDate("dob").toLocalDate());
+                add.setDob(rs.getDate("dob").toLocalDate());
                 add.setSsn(rs.getString("ssn"));
                 add.setPhone(rs.getString("phone"));
                 add.setState(rs.getString("street"));
@@ -192,7 +191,7 @@ public class StaffRepository {
                 ret.setFirstName(rs.getString("firstName"));
                 ret.setLastName(rs.getString("lastName"));
                 ret.setSex(rs.getString("sex"));
-               // ret.setDob(rs.getDate("dob").toLocalDate());
+                ret.setDob(rs.getDate("dob").toLocalDate());
                 ret.setSsn(rs.getString("ssn"));
                 ret.setPhone(rs.getString("phone"));
                 ret.setState(rs.getString("street"));
@@ -223,7 +222,7 @@ public class StaffRepository {
             create.setString(1,mod.getFirstName());
             create.setString(2,mod.getLastName());
             create.setString(3,mod.getSex());
-            create.setDate(4, mod.getDob());
+            create.setDate(4, java.sql.Date.valueOf(mod.getDob()));
             create.setString(5,mod.getSsn());
             create.setString(6,mod.getPhone());
             create.setString(7,mod.getStreet());
@@ -254,7 +253,7 @@ public class StaffRepository {
             update.setString(1, mod.getFirstName());
             update.setString(2, mod.getLastName());
             update.setString(3, mod.getSex());
-          //  update.setDate(4, java.sql.Date.valueOf(mod.getDob()));
+            update.setDate(4, java.sql.Date.valueOf(mod.getDob()));
             update.setString(5, mod.getSsn());
             update.setString(6, mod.getPhone());
             update.setString(7, mod.getStreet());

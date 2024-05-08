@@ -7,22 +7,20 @@ public class Appointment {
     private int appointmentID;
     private int clientID;
     private int petID;
-    private int staffID;
-    private String appointmentTime;
-    private LocalDate appointmentDate;
+    private Integer staffID;
+    private LocalDateTime appointmentDate;
     private String description;
     private LocalDateTime checkInTime;
 
     public Appointment(){}
     public Appointment (Integer appointmentID, int clientID, int petID, int staffID,
-                        LocalDate appointmentDate, String appointmentTime,
+                        LocalDateTime appointmentDate,
                         String description){
         this.appointmentID = appointmentID;
         this.clientID = clientID;
         this.petID = petID;
         this.staffID = staffID;
         this.appointmentDate = appointmentDate;
-        this.appointmentTime = appointmentTime;
         this.description = description;
     }
 
@@ -50,32 +48,20 @@ public class Appointment {
         this.petID = petID;
     }
 
-    public int getStaffID() {
+    public Integer getStaffID() {
         return staffID;
     }
 
-    public void setStaffID(int staffID) {
+    public void setStaffID(Integer staffID) {
         this.staffID = staffID;
     }
 
-    public LocalDate getAppointmentDate() {
+    public LocalDateTime getAppointmentDate() {
         return appointmentDate;
     }
 
-    public LocalDate setAppointmentDate() {
-        return appointmentDate;
-    }
-
-    public void setAppointmentDate(LocalDate appointmentDate) {
+    public void setAppointmentDate(LocalDateTime appointmentDate) {
         this.appointmentDate = appointmentDate;
-    }
-
-    public String getAppointmentTime() {
-        return appointmentTime;
-    }
-
-    public void setAppointmentTime(String appointmentTime) {
-        this.appointmentTime = appointmentTime;
     }
 
     public String getDescription() {

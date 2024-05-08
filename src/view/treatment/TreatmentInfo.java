@@ -7,15 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.ListCellRenderer;
+import javax.swing.*;
 
 import com.github.lgooddatepicker.components.DatePicker;
 
@@ -150,8 +142,9 @@ public class TreatmentInfo extends JPanel {
         directionsPanel.setBackground(Color.WHITE);
         JLabel directionsLabel = new JLabel("Directions");
         treatmentDirectionsField = new JTextArea(10, 50);
+        JScrollPane treatScroll = new JScrollPane(treatmentDirectionsField);
         directionsPanel.add(directionsLabel);
-        directionsPanel.add(treatmentDirectionsField);
+        directionsPanel.add(treatScroll);
 
         treatmentDetails.add(treatmentHeader, BorderLayout.NORTH);
         treatmentDetails.add(directionsPanel, BorderLayout.CENTER);

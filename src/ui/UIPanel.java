@@ -89,7 +89,7 @@ public class UIPanel extends JPanel {
         }
 
         // Create and add application panels
-        DashboardPanel dashboardPanel = new DashboardPanel(controller);
+        DashboardPanel dashboardPanel = new DashboardPanel();
         dashboardPanel.setBackground(Color.WHITE);
         cards.add(dashboardPanel, "Dashboard");
 
@@ -97,7 +97,7 @@ public class UIPanel extends JPanel {
         clientsView.setBackground(Color.WHITE);
         cards.add(clientsView, "Clients/Patients");
 
-        AppointmentPanel appointmentPanel = new AppointmentPanel(controller);
+        AppointmentPanel appointmentPanel = new AppointmentPanel();
         appointmentPanel.setBackground(Color.WHITE);
         cards.add(appointmentPanel, "Appointments");
 

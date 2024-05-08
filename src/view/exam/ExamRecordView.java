@@ -8,17 +8,7 @@ import java.awt.FlowLayout;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.ListCellRenderer;
+import javax.swing.*;
 
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DateTimePicker;
@@ -189,16 +179,18 @@ public class ExamRecordView extends JPanel implements IVetAppView {
         descriptionPanel.setBackground(Color.WHITE);
         JLabel descriptionLabel = new JLabel("Description");
         descriptionField = new JTextArea(10, 50);
+        JScrollPane desScrollpane = new JScrollPane(descriptionField);
         descriptionPanel.add(descriptionLabel);
-        descriptionPanel.add(descriptionField);
+        descriptionPanel.add(desScrollpane);
 
         JPanel vitalsPanel = new JPanel();
         vitalsPanel.setLayout(new BoxLayout(vitalsPanel, BoxLayout.Y_AXIS));
         vitalsPanel.setBackground(Color.WHITE);
         JLabel vitalsLabel = new JLabel("Vitals");
         vitalsField = new JTextArea(10, 50);
+        JScrollPane vitalScroll = new JScrollPane(vitalsField);
         vitalsPanel.add(vitalsLabel);
-        vitalsPanel.add(vitalsField);
+        vitalsPanel.add(vitalScroll);
 
         examDetails.add(descriptionPanel);
         examDetails.add(vitalsPanel);
