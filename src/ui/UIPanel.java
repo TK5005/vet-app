@@ -52,12 +52,12 @@ public class UIPanel extends JPanel {
         // Navigation buttons
         String[] navButtons = { "Dashboard", "Clients/Patients", "Appointments", "Invoices", "Inventory",
                 "Administration" };
-        ImageIcon menu = new ImageIcon(UIPanel.class.getResource("../menu.png"));
-        ImageIcon armup = new ImageIcon(UIPanel.class.getResource("../armup.png"));
-        ImageIcon appointment = new ImageIcon(UIPanel.class.getResource("../appointment.png"));
-        ImageIcon invoice = new ImageIcon(UIPanel.class.getResource("../invoice.png"));
-        ImageIcon inventory = new ImageIcon(UIPanel.class.getResource("../inventory.png"));
-        ImageIcon admin = new ImageIcon(UIPanel.class.getResource("../lock.png"));
+        ImageIcon menu = new ImageIcon(UIPanel.class.getResource("/menu.png"));
+        ImageIcon armup = new ImageIcon(UIPanel.class.getResource("/armup.png"));
+        ImageIcon appointment = new ImageIcon(UIPanel.class.getResource("/appointment.png"));
+        ImageIcon invoice = new ImageIcon(UIPanel.class.getResource("/invoice.png"));
+        ImageIcon inventory = new ImageIcon(UIPanel.class.getResource("/inventory.png"));
+        ImageIcon admin = new ImageIcon(UIPanel.class.getResource("/lock.png"));
 
         for (String name : navButtons) {
             JButton button = null;

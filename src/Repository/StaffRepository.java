@@ -240,6 +240,41 @@ public class StaffRepository {
         return ret;
     }
 
+    public Staff[] getVetsAndTechs() {
+        String sql
+                = "SELECT s.* FROM STAFF s WHERE EXISTS (SELECT empID FROM VET WHERE s.empID = empID) " +
+                "OR EXISTS(SELECT empID FROM TECH WHERE s.empID = empID);";
+        List<Staff> ret = new ArrayList<>();
+        try(Connection conn = ConnectionManager.getConnection();
+            PreparedStatement get = conn.prepareStatement(sql)){
+
+            ResultSet rs = get.executeQuery();
+
+            while(rs.next()){
+                Staff add = new Staff();
+                add.setEmpID(rs.getInt("empID"));
+                add.setFirstName(rs.getString("firstName"));
+                add.setLastName(rs.getString("lastName"));
+                add.setSex(rs.getString("sex"));
+                add.setDob(rs.getDate("dob").toLocalDate());
+                add.setSsn(rs.getString("ssn"));
+                add.setPhone(rs.getString("phone"));
+                add.setStreet(rs.getString("street"));
+                add.setCity(rs.getString("city"));
+                add.setState(rs.getString("state"));
+                add.setZip(Integer.parseInt(rs.getString("zip")));
+
+                ret.add(add);
+            }
+
+        }catch (SQLException ex) {
+            System.out.println("Error running Tech Get statement");
+            ex.printStackTrace();
+        }
+
+        return ret.toArray(new Staff[0]);
+    }
+
     public void deleteStaff(int empID){
         String sql = "DELETE FROM STAFF WHERE empID =?";
         try(Connection conn = ConnectionManager.getConnection();
@@ -553,5 +588,7 @@ public class StaffRepository {
             ex.printStackTrace();
         }
     }
+
+
 }
 

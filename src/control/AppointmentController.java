@@ -69,4 +69,10 @@ public class AppointmentController extends ViewController{
     public Vet getVet(int vetID){return staffRepository.getVet(vetID);}
 
     public Vet[] getVets(){return staffRepository.getVets();}
+
+    public Staff[] getVetsAndTechs(){return staffRepository.getVetsAndTechs();}
+
+    public Staff getStaff(int staffID) {
+        return staffRepository.getStaff(staffID);
+    }
 }

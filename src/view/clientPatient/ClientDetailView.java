@@ -9,17 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 
-import javax.swing.BoxLayout;
-import javax.swing.CellEditor;
-import javax.swing.DefaultCellEditor;
-import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
@@ -269,17 +259,18 @@ public class ClientDetailView extends JPanel implements IVetAppView {
     }
 
     private void updateClient() {
-        String fName = firstNameField.getText();
-        String lName = lastNameField.getText();
-        String email = emailField.getText();
-        String street = streetField.getText();
-        String city = cityField.getText();
-        String state = stateField.getText();
-        int zip = Integer.parseInt(zipField.getText());
-        String phone = phoneField.getText();
-
-        clientController.updateClient(clientController.getCurrentClientID(), fName, lName, phone, email, street, city,
-                state, zip);
+        if(Validate()) {
+            String fName = firstNameField.getText();
+            String lName = lastNameField.getText();
+            String email = emailField.getText();
+            String street = streetField.getText();
+            String city = cityField.getText();
+            String state = stateField.getText();
+            int zip = Integer.parseInt(zipField.getText());
+            String phone = phoneField.getText();
+            clientController.updateClient(clientController.getCurrentClientID(), fName, lName, phone, email, street, city,
+                    state, zip);
+        }
     }
 
     private void refreshPetTable() {
@@ -294,6 +285,35 @@ public class ClientDetailView extends JPanel implements IVetAppView {
             Object[] rowData = { pet, "" };
             tableModel.addRow(rowData);
         }
+    }
+    private boolean Validate(){
+        if(firstNameField.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "First Name is required");
+            return false;
+        }else if(lastNameField.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Last Name is required");
+            return false;
+        }else if(emailField.getText().isEmpty() || !emailField.getText().contains("@")){
+            JOptionPane.showMessageDialog(null, "Email is required");
+            return false;
+        }else if(phoneField.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Phone is required");
+            return false;
+        }else if(streetField.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Street is required");
+            return false;
+        }else if(cityField.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "City is required");
+            return false;
+        }else if(stateField.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "State is required");
+            return false;
+        }else if(zipField.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Zip is required and must be less than 5 digits");
+            return false;
+        }
+        return true;
+
     }
 
     // Custom renderer

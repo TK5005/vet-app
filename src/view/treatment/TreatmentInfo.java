@@ -1,9 +1,6 @@
 package view.treatment;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.FlowLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -50,9 +47,11 @@ public class TreatmentInfo extends JPanel {
 
     private void saveTreatment()
     {
-        Medication meds = (Medication) medicationBox.getSelectedItem();
-        clientController.updateTreatment(this.treatmentID, clientController.getCurrentExamID(), meds == null ? null : meds.getItemID() , (String) treatTypeBox.getSelectedItem(),
-                                        treatmentStartDateField.getDate(), treatmentEndDateField.getDate(), treatmentDirectionsField.getText());
+        if(Validate()) {
+            Medication meds = (Medication) medicationBox.getSelectedItem();
+            clientController.updateTreatment(this.treatmentID, clientController.getCurrentExamID(), meds == null ? null : meds.getItemID(), (String) treatTypeBox.getSelectedItem(),
+                    treatmentStartDateField.getDate(), treatmentEndDateField.getDate(), treatmentDirectionsField.getText());
+        }
     }
 
     private void createUI() {
@@ -85,6 +84,7 @@ public class TreatmentInfo extends JPanel {
         JPanel treatmentDetails = new JPanel();
         treatmentDetails.setLayout(new BorderLayout());
         treatmentDetails.setBackground(Color.WHITE);
+
         JPanel treatmentHeader = new JPanel();
         treatmentHeader.setLayout(new FlowLayout(FlowLayout.LEFT));
         treatmentHeader.setBackground(Color.WHITE);
@@ -138,7 +138,7 @@ public class TreatmentInfo extends JPanel {
         treatmentHeader.add(treatmentEndDatePanel);
 
         JPanel directionsPanel = new JPanel();
-        directionsPanel.setLayout(new BoxLayout(directionsPanel, BoxLayout.Y_AXIS));
+        directionsPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         directionsPanel.setBackground(Color.WHITE);
         JLabel directionsLabel = new JLabel("Directions");
         treatmentDirectionsField = new JTextArea(10, 50);
@@ -150,6 +150,17 @@ public class TreatmentInfo extends JPanel {
         treatmentDetails.add(directionsPanel, BorderLayout.CENTER);
 
         return treatmentDetails;
+    }
+    private boolean Validate(){
+        if(treatmentStartDateField.getDate() == null){
+            JOptionPane.showMessageDialog(null, "Start Date is required");
+            return false;
+        }else if(treatmentEndDateField.getDate() == null) {
+            JOptionPane.showMessageDialog(null, "End Date is required");
+            return false;
+        }
+        return true;
+
     }
 
     private class MedicationComboBoxRenderer extends JLabel implements ListCellRenderer<Medication>{

@@ -1,10 +1,6 @@
 package view.exam;
 
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.FlowLayout;
+import java.awt.*;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
 
@@ -172,10 +168,11 @@ public class ExamRecordView extends JPanel implements IVetAppView {
 
     private JPanel createExamDetails() {
         JPanel examDetails = new JPanel();
-        examDetails.setLayout(new BoxLayout(examDetails, BoxLayout.Y_AXIS));
+        examDetails.setLayout(new GridLayout(2,1));
         examDetails.setBackground(Color.WHITE);
+
         JPanel descriptionPanel = new JPanel();
-        descriptionPanel.setLayout(new BoxLayout(descriptionPanel, BoxLayout.Y_AXIS));
+        descriptionPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         descriptionPanel.setBackground(Color.WHITE);
         JLabel descriptionLabel = new JLabel("Description");
         descriptionField = new JTextArea(10, 50);
@@ -184,7 +181,7 @@ public class ExamRecordView extends JPanel implements IVetAppView {
         descriptionPanel.add(desScrollpane);
 
         JPanel vitalsPanel = new JPanel();
-        vitalsPanel.setLayout(new BoxLayout(vitalsPanel, BoxLayout.Y_AXIS));
+        vitalsPanel.setLayout(new FlowLayout(FlowLayout.LEFT,22,0));
         vitalsPanel.setBackground(Color.WHITE);
         JLabel vitalsLabel = new JLabel("Vitals");
         vitalsField = new JTextArea(10, 50);
@@ -287,22 +284,40 @@ public class ExamRecordView extends JPanel implements IVetAppView {
     }
 
     private void updateExam() {
-        LocalDateTime date = dateField.getDateTimeStrict();
-        Vet vet = (Vet) examinerBox.getSelectedItem();
-        Tech tech = (Tech) techBox.getSelectedItem();
-        String description = descriptionField.getText();
-        String vitals = vitalsField.getText();
-        int weight = Integer.parseInt(weightField.getText());
-        String location = locationField.getText();
-        //LocalTime time = timeField.getTime();
-        clientController.updateExam(clientController.getCurrentExamID(), date,
-                vet == null ? null : vet.getEmpID(), tech == null ? null : tech.getEmpID(), description, vitals,
-                weight, location);
+        if(Validate()) {
+            LocalDateTime date = dateField.getDateTimeStrict();
+            Vet vet = (Vet) examinerBox.getSelectedItem();
+            Tech tech = (Tech) techBox.getSelectedItem();
+            String description = descriptionField.getText();
+            String vitals = vitalsField.getText();
+            int weight = weightField.getText().isEmpty() ? 0 : Integer.parseInt(weightField.getText());
+            String location = locationField.getText();
+            //LocalTime time = timeField.getTime();
+            clientController.updateExam(clientController.getCurrentExamID(), date,
+                    vet == null ? null : vet.getEmpID(), tech == null ? null : tech.getEmpID(), description, vitals,
+                    weight, location);
+        }
     }
 
     private void refreshExam() {
         Exam exam = clientController.getExam(clientController.getCurrentExamID());
+
         if (exam != null) {
+            examinerBox.removeAllItems();
+            examinerBox.addItem(null);
+            for(Vet vet : clientController.getVets()){
+                examinerBox.addItem(vet);
+                if(vet.getEmpID() == exam.getVetID())
+                    examinerBox.setSelectedItem(vet);
+            }
+
+            techBox.removeAllItems();
+            techBox.addItem(null);
+            for(Tech tech: clientController.getTechs()){
+                techBox.addItem(tech);
+                if(tech.getEmpID() == exam.getTechID())
+                    techBox.setSelectedItem(tech);
+            }
             petNameField.setText(clientController.getPet(exam.getPetID()).getName());
             examIDField.setText(Long.toString(exam.getExamID()));
             examinerBox.setSelectedItem(clientController.getVet(exam.getVetID()));
@@ -326,5 +341,17 @@ public class ExamRecordView extends JPanel implements IVetAppView {
             treatmentEndDateField.setDate(treatment.getEndDate());
             treatmentDirectionsField.setText(treatment.getDirections());
         }*/
+    }
+
+    private boolean Validate(){
+        if(locationField.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Location is required");
+            return false;
+        }else if(dateField.getDateTimeStrict() == null){
+            JOptionPane.showMessageDialog(null, "Date/Time is required");
+            return false;
+        }
+        return true;
+
     }
 }

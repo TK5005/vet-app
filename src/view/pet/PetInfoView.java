@@ -9,12 +9,7 @@ import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.time.LocalDate;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 import com.github.lgooddatepicker.components.DatePicker;
 
@@ -256,18 +251,20 @@ public class PetInfoView extends JPanel implements IVetAppView {
     }
 
     private void updatePet() {
-        LocalDate dateOfBirth = dateOfBirthPicker.getDate();
-        String name = nameField.getText();
-        String species = speciesField.getText();
-        String breed = breedField.getText();
-        String color = colorField.getText();
-        String sex = sexField.getText();
-        int weight = numberFormat.parse(weightField.getText(), new ParsePosition(0)).intValue();
-        long microchipNumber = numberFormat.parse(microchipField.getText(), new ParsePosition(0)).longValue();
-        long rabiesTag = numberFormat.parse(rabiesTagField.getText(), new ParsePosition(0)).longValue();
+        if(Validate()) {
+            LocalDate dateOfBirth = dateOfBirthPicker.getDate();
+            String name = nameField.getText();
+            String species = speciesField.getText();
+            String breed = breedField.getText();
+            String color = colorField.getText();
+            String sex = sexField.getText();
+            int weight = weightField.getText().isEmpty() ? 0 : numberFormat.parse(weightField.getText(), new ParsePosition(0)).intValue();
+            long microchipNumber = microchipField.getText().isEmpty() ? 0 : numberFormat.parse(microchipField.getText(), new ParsePosition(0)).longValue();
+            long rabiesTag = rabiesTagField.getText().isEmpty() ? 0 : numberFormat.parse(rabiesTagField.getText(), new ParsePosition(0)).longValue();
 
-        clientController.updatePet(clientController.getCurrentPetID(), name, sex, color, species, breed,
-                dateOfBirth, weight, microchipNumber, rabiesTag);
+            clientController.updatePet(clientController.getCurrentPetID(), name, sex, color, species, breed,
+                    dateOfBirth, weight, microchipNumber, rabiesTag);
+        }
     }
 
     public void refresh() {
@@ -286,5 +283,22 @@ public class PetInfoView extends JPanel implements IVetAppView {
             weightField.setText(Long.toString(pet.getWeight()));
             dateOfBirthPicker.setDate(pet.getBirthdate());
         }
+    }
+    private boolean Validate(){
+        if(nameField.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Name is required");
+            return false;
+        }else if(sexField.getText().length() != 1){
+            JOptionPane.showMessageDialog(null, "Sex must be 1 Character");
+            return false;
+        }else if(dateOfBirthPicker.getDate() == null){
+            JOptionPane.showMessageDialog(null, "Date of Birth is required");
+            return false;
+        }else if(speciesField.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Species is required");
+            return false;
+        }
+        return true;
+
     }
 }

@@ -16,7 +16,7 @@ public class NewAppointment {
     Appointment appt;
     Client client;
     Pet pet;
-    Vet vet;
+    Staff vet;
     JTextField appID;
     JTextField clientID;
     JComboBox<Client> clientBox;
@@ -24,7 +24,7 @@ public class NewAppointment {
     JComboBox<Pet> petBox;
     JTextField staffID;
 
-    JComboBox<Vet> vetBox;
+    JComboBox<Staff> vetBox;
     DateTimePicker datePicker;
     DateTimePicker checkInTime;
     JTextField description;
@@ -43,7 +43,7 @@ public class NewAppointment {
         appt = controller.getAppointment(appointmentID);
         client = controller.getClient(appt.getClientID());
         pet = controller.getPet(appt.getPetID());
-        vet = controller.getVet(appt.getStaffID());
+        vet = controller.getStaff(appt.getStaffID());
 
         createUI();
 
@@ -59,7 +59,7 @@ public class NewAppointment {
                 //appt.setClientID(Integer.parseInt(clientID.getText()));
                 if(clientBox.getSelectedItem()!= null){appt.setClientID(((Client) clientBox.getSelectedItem()).getClientID());}
                 //appt.setStaffID(Integer.parseInt(staffID.getText()));
-                appt.setStaffID(vetBox.getSelectedItem() == null ? null : ((Vet) vetBox.getSelectedItem()).getEmpID());
+                appt.setStaffID(vetBox.getSelectedItem() == null ? null : ((Staff) vetBox.getSelectedItem()).getEmpID());
                 //appt.setPetID(Integer.parseInt(petID.getText()));
                 if(petBox.getSelectedItem() != null){appt.setPetID(((Pet) petBox.getSelectedItem()).getPetID());}
                 appt.setAppointmentDate(datePicker.getDateTimeStrict());
@@ -109,10 +109,10 @@ public class NewAppointment {
         }
         loadPetDropDown();
 
-        Vet[] vets = controller.getVets();
+        Staff[] vets = controller.getVetsAndTechs();
         vetBox.removeAllItems();
         vetBox .addItem(null);
-        for(Vet vet: vets){
+        for(Staff vet: vets){
             vetBox.addItem(vet);
             if(appt.getAppointmentID() != 0 && vet.getEmpID() == appt.getStaffID()){
                 vetBox.setSelectedItem(vet);
@@ -158,8 +158,8 @@ public class NewAppointment {
         petBox = new JComboBox<Pet>();
         petBox.setRenderer(new PetComboBoxRenderer());
 
-        JLabel staffIDLabel = new JLabel("Vet : ");
-        vetBox = new JComboBox<Vet>();
+        JLabel staffIDLabel = new JLabel("Vet/Tech : ");
+        vetBox = new JComboBox<Staff>(controller.getVetsAndTechs());
         vetBox.setRenderer(new VetComboBoxRenderer());
 
         JLabel dateLabel = new JLabel("Date : ");
@@ -234,9 +234,9 @@ public class NewAppointment {
         }
     }
 
-    private class VetComboBoxRenderer extends JLabel implements ListCellRenderer<Vet>{
+    private class VetComboBoxRenderer extends JLabel implements ListCellRenderer<Staff>{
         @Override
-        public Component getListCellRendererComponent(JList<? extends Vet> list, Vet value, int index,
+        public Component getListCellRendererComponent(JList<? extends Staff> list, Staff value, int index,
                                                       boolean isSelected, boolean cellHasFocus){
             if(value != null){
                 setText(value.getName());

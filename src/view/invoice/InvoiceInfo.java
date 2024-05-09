@@ -8,19 +8,15 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.time.LocalDate;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.text.NumberFormatter;
 
 import com.github.lgooddatepicker.components.DatePicker;
 
 import control.InvoiceController;
+import model.Exam;
 import model.Invoice;
+import model.Treatment;
 
 public class InvoiceInfo extends JPanel{
     InvoiceController controller;
@@ -29,7 +25,7 @@ public class InvoiceInfo extends JPanel{
     JButton saveButton;
 
     JTextField invoiceIDField;
-    JComboBox<Integer> examIDField;
+    JComboBox<Exam> examIDField;
     JTextField clientNameField;
     JFormattedTextField amtDueField;
     JComboBox<String> statusField;
@@ -61,10 +57,10 @@ public class InvoiceInfo extends JPanel{
         examIDField.removeAllItems();
         statusField.removeAllItems();
 
-        int[] examIDs = controller.getExamIDs();
-        for (int id : examIDs)
+        Exam[] examIDs = controller.getExams();
+        for (Exam exam : examIDs)
         {
-            examIDField.addItem(id);
+            examIDField.addItem(exam);
         }
 
         clientNameField.setText(controller.getClientName(invoice.getExamID()));
@@ -83,17 +79,19 @@ public class InvoiceInfo extends JPanel{
 
     private void saveItem()
     {
-        int id = Integer.parseInt(invoiceIDField.getText());
-        int examID = (Integer) examIDField.getSelectedItem();
-        float amtDue = 0.0f;
-        try{
-            amtDue = NumberFormat.getCurrencyInstance().parse(amtDueField.getText()).floatValue();
-        } catch(ParseException e) {
-            e.printStackTrace();
+        if(Validate()) {
+            int id = Integer.parseInt(invoiceIDField.getText());
+            int examID = ((Exam) examIDField.getSelectedItem()).getExamID();
+            float amtDue = 0.0f;
+            try {
+                amtDue = NumberFormat.getCurrencyInstance().parse(amtDueField.getText()).floatValue();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            String status = (String) statusField.getSelectedItem();
+            LocalDate invoiceDate = invoiceDateField.getDate();
+            controller.updateInvoice(id, examID, status, invoiceDate, amtDue);
         }
-        String status = (String) statusField.getSelectedItem();
-        LocalDate invoiceDate = invoiceDateField.getDate();
-        controller.updateInvoice(id, examID, status, invoiceDate, amtDue);
     }
 
     private void createUI()
@@ -117,7 +115,8 @@ public class InvoiceInfo extends JPanel{
         examIDField.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                clientNameField.setText(controller.getClientName((Integer) examIDField.getSelectedItem()));
+                clientNameField.setText(controller.getClientName(((Exam) examIDField.getSelectedItem()).getExamID()));
+                amtDueField.setValue(controller.getAmtDue(((Exam) examIDField.getSelectedItem()).getExamID()));
             }
         });
     }
@@ -141,7 +140,7 @@ public class InvoiceInfo extends JPanel{
         examIDPanel.setLayout(new BoxLayout(examIDPanel, BoxLayout.Y_AXIS));
         examIDPanel.setBackground(Color.WHITE);
         JLabel examIDLabel = new JLabel("Exam ID");
-        examIDField = new JComboBox<Integer>();
+        examIDField = new JComboBox<Exam>();
         examIDPanel.add(examIDLabel);
         examIDPanel.add(examIDField);
 
@@ -186,5 +185,16 @@ public class InvoiceInfo extends JPanel{
         invoiceDetails.add(invoiceDatePanel);
 
         return invoiceDetails;
+    }
+    private boolean Validate(){
+        if(amtDueField.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Amount Due is required");
+            return false;
+        }else if(invoiceDateField.getDate() == null){
+            JOptionPane.showMessageDialog(null, "Invoice Date is required");
+            return false;
+        }
+        return true;
+
     }
 }

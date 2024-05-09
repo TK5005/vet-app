@@ -2,15 +2,9 @@ package control;
 
 import java.time.LocalDate;
 
-import Repository.ClientRepository;
-import Repository.ExamRepository;
-import Repository.InvoiceRepository;
-import Repository.PetRepository;
-import model.Client;
-import model.Exam;
-import model.Invoice;
+import Repository.*;
+import model.*;
 import model.Invoice.Status;
-import model.Pet;
 import view.invoice.InvoiceView;
 
 public class InvoiceController extends ViewController{
@@ -32,6 +26,8 @@ public class InvoiceController extends ViewController{
     private ExamRepository examRepository;
     private ClientRepository clientRepository;
     private PetRepository petRepository;
+    private TreatmentRepository treatmentRepository;
+    private InventoryRepository inventoryRepository;
 
     private int currentInvoiceID;
 
@@ -40,6 +36,8 @@ public class InvoiceController extends ViewController{
         examRepository = new ExamRepository();
         clientRepository = new ClientRepository();
         petRepository = new PetRepository();
+        treatmentRepository = new TreatmentRepository();
+        inventoryRepository = new InventoryRepository();
     }
 
     public void setInvoicePanel(InvoiceView invoiceView) {
@@ -154,5 +152,24 @@ public class InvoiceController extends ViewController{
             tableData[i] = new Object[] { invoiceID, clientName, petName, invoiceDate, amtDue, status, "" };
         }
         return tableData;
+    }
+
+    public Exam[] getExams() {
+        return examRepository.getAllBasicExamData();
+    }
+
+    public float getAmtDue(int examID) {
+        Treatment[] treats = treatmentRepository.getTreatmentsByExamID(examID);
+        float amtDue = 75.0F;
+        for (Treatment t : treats) {
+            if (t.getTreatmentTypeString().equals("TEST")) {
+                amtDue += 40F;
+            } else if (t.getTreatmentTypeString().equals("VACCINE") ||
+                    t.getTreatmentTypeString().equals("MEDICATION")) {
+                amtDue += inventoryRepository.getSpecificItem(t.getMedicationID()).getRetailCost();
+
+            }
+        }
+        return amtDue;
     }
 }
