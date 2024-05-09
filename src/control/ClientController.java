@@ -237,6 +237,11 @@ public class ClientController extends ViewController {
         treatment.setEndDate(endDate);
         treatment.setDirections(directions);
         treatmentRepository.updateTreatment(treatment);
+        if(treatment.getMedicationID() != null){
+            Medication med = inventoryRepository.getSpecificMedication(treatment.getMedicationID());
+            med.setQuantity(med.getQuantity() - 1);
+            inventoryRepository.addOrUpdateMedication(med);
+        }
         refreshViews();
     }
 
