@@ -55,6 +55,11 @@ public class AppointmentController extends ViewController{
 
     }
 
+    public void deleteAppointment(int apptID){
+        appointmentRepository.deleteAppointment(apptID);
+        refreshViews();
+    }
+
     public Pet[] getPetsByClientID(int clientID){
         return petRepository.getPetsByClientID(clientID);
     }

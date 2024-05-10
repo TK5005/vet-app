@@ -47,7 +47,7 @@ public class AppointmentRepository {
     }
 
     public Appointment[] getAll(){
-        String sql = "SELECT * FROM APPOINTMENT";
+        String sql = "SELECT * FROM APPOINTMENT ORDER BY start_time";
         List<Appointment> ret = new ArrayList<>();
         try (Connection conn = ConnectionManager.getConnection();
                 PreparedStatement get = conn.prepareStatement(sql)){

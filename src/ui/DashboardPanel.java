@@ -101,7 +101,8 @@ public class DashboardPanel extends JPanel implements IVetAppView
         appointmentModel.setRowCount(0);
         Appointment[] appointments = controller.getAppointments();
         for (Appointment appointment : appointments) {
-            if(appointment.getAppointmentDate().getMonth().equals(LocalDate.now().getMonth()) && appointment.getAppointmentDate().getDayOfMonth() == LocalDate.now().getDayOfMonth())
+            if(appointment.getAppointmentDate().getMonth().equals(LocalDate.now().getMonth()) && appointment.getAppointmentDate().getDayOfMonth() == LocalDate.now().getDayOfMonth()
+            && appointment.getCheckInTime() == null)
             {
                 Client client = controller.getClientByID(appointment.getClientID());
                 Pet pet = controller.getPetByID(appointment.getPetID());
@@ -117,7 +118,7 @@ public class DashboardPanel extends JPanel implements IVetAppView
         patientModel.setRowCount(0);
         Appointment[] appointments = controller.getAppointments();
         for (Appointment appointment : appointments) {
-            if(appointment.getCheckInTime() != null)
+            if(appointment.getCheckInTime() != null && appointment.getCheckInTime().getDayOfYear() == LocalDate.now().getDayOfYear())
             {
                 Pet pet = controller.getPetByID(appointment.getPetID());
                 Staff staff = controller.getStaffByID(appointment.getStaffID());

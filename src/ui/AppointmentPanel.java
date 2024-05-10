@@ -168,7 +168,7 @@ public class AppointmentPanel extends JPanel implements IVetAppView {
 
         int value = ((Integer)optionPane.getValue()).intValue();
         if (value == JOptionPane.YES_OPTION) {
-          // controller.deleteAppoitment();
+            controller.deleteAppointment(id);
         } else if (value == JOptionPane.NO_OPTION) {
            //no - close window
         }
