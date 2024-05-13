@@ -2,6 +2,9 @@ package DAL;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.util.Properties;
 
@@ -28,7 +31,7 @@ public class ConnectionManager {
     public static void populateProps(){
         prop = new Properties();
         try {
-            prop.load(new FileInputStream("Resources/config.properties"));
+            prop.load(ConnectionManager.class.getResourceAsStream("/config.properties"));
         }catch(IOException ex){
             System.out.println("Error Reading Config File");
             ex.printStackTrace();
